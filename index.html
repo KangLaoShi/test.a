@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- PWA Primary Meta Tags -->
+    <title>Uzbek Master</title>
+    <meta name="application-name" content="Uzbek Master">
+    <meta name="apple-mobile-web-app-title" content="Uzbek Master">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Icons (Generated SVG Data URIs for single-file portability) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%232563eb'/%3E%3Cpath d='M140 160 C 140 160, 200 160, 200 240 C 200 320, 140 320, 140 320' stroke='white' stroke-width='40' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='300' cy='240' r='30' fill='white'/%3E%3Cpath d='M360 180 L370 205 L395 205 L375 220 L385 245 L360 230 L335 245 L345 220 L325 205 L350 205 Z' fill='white'/%3E%3Cpath d='M100 400 L412 400' stroke='%2310b981' stroke-width='30' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%232563eb'/%3E%3Cpath d='M140 160 C 140 160, 200 160, 200 240 C 200 320, 140 320, 140 320' stroke='white' stroke-width='40' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='300' cy='240' r='30' fill='white'/%3E%3Cpath d='M360 180 L370 205 L395 205 L375 220 L385 245 L360 230 L335 245 L345 220 L325 205 L350 205 Z' fill='white'/%3E%3Cpath d='M100 400 L412 400' stroke='%2310b981' stroke-width='30' stroke-linecap='round'/%3E%3C/svg%3E">
+
+    <!-- Web App Manifest (Embedded Data URI) -->
+    <link rel="manifest" href='data:application/manifest+json;base64,eyJuYW1lIjoiVXpiZWsgTWFzdGVyIC0gQ2g3Iiwic2hvcnRfbmFtZSI6IlV6YmVrIiwiZGVzY3JpcHRpb24iOiJVemJlayBMYW5ndWFnZSBMZWFybmluZyBBcHAiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiI2YzZjRmNiIsInRoZW1lX2NvbG9yIjoiIzI1NjNlYiIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWw7Y2hhcnNldD11dGYtOCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMic%2BJTNDeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMic%2BJTNQcmVjdCB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMicgZmlsbD0nIzI1NjNlYicvJTNFJTNDcGF0aCBkPSdNMTQwIDE2MCBDIDE0MCAxNjAsIDIwMCAxNjAsIDIwMCAyNDAgQyAyMDAgMzIwLCAxNDAgMzIwLCAxNDAgMzIwJyBzdHJva2U9J3doaXRlJyBzdHJva2Utd2lkdGg9JzQwJyBmaWxsPSdub25lJyBzdHJva2UtbGluZWNhcD0ncm91bmQnLyUzRSUzQ2NpcmNsZSBjeD0nMzAwJyBjeT0nMjQwJyByPSczMCcgZmlsbD0nd2hpdGUnLyUzRSUzQ3BhdGggZD0nTTM2MCAxODAgTDM3MCAyMDUgTDM5NSAyMDUgTDM3NSAyMjAgTDM4NSAyNDUgTDM2MCAyMzAgTDMzNSAyNDUgTDM0NSAyMjAgTDMyNSAyMDUgTDM1MCAyMDUgWicgZmlsbD0nd2hpdGUnLyUzRSUzQ3BhdGggZD0nTTEwMCA0MDAgTDQxMiA0MDAnIHN0cm9rZT0nIzEwYjk4MScgc3Ryb2tlLXdpZHRoPSczMCcgc3Ryb2tlLWxpbmVjYXA9J3JvdW5QJy8lM0UlM0Mvc3ZnJTNFIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJzaXplcyI6IjUxMng1MTIifV19'>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+        
+        /* 核心修复：使用 100dvh 适配移动端视口 (Mobile Viewport Fix) */
+        html {
+            height: 100%;
+            width: 100%;
+            -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
+        }
+        
+        body { 
+            /* 使用 100dvh 解决移动端浏览器地址栏遮挡问题 */
+            min-height: 100vh;
+            height: 100dvh; 
+            width: 100%;
+            overflow: hidden; /* 防止整体页面滚动 (Prevent body scroll) */
+            position: fixed;  /* 锁定页面 (Lock page) */
+            font-family: 'Nunito', sans-serif; 
+            background-color: #f3f4f6; 
+            overscroll-behavior: none; 
+            user-select: none; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 底部安全区域适配 (Safe Area for iPhone X+) */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        /* PWA Status Bar area filler (for standalone mode) */
+        .safe-top {
+            padding-top: env(safe-area-inset-top);
+        }
+
+        /* 3D Flip Card */
+        .perspective { perspective: 1000px; }
+        .card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .card-inner.is-flipped { transform: rotateY(180deg); }
+        .card-face {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .card-front { background: white; color: #1f2937; z-index: 2; }
+        .card-back { background: #2563eb; color: white; transform: rotateY(180deg); z-index: 1; }
+
+        /* Game Grid */
+        #game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .game-card { 
+            aspect-ratio: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            line-height: 1.1;
+            padding: 0.25rem;
+            text-align: center;
+            word-break: break-word;
+            transition: transform 0.1s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            background-color: white;
+            border: 1px solid #e5e7eb;
+        }
+        .game-card:active { transform: scale(0.95); }
+        .game-card.selected { background-color: #fbbf24; border: 2px solid #d97706; transform: scale(1.05); z-index: 10; font-weight: 800;}
+        .game-card.matched { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .game-card.wrong { background-color: #fee2e2; border: 2px solid #ef4444; animation: shake 0.4s; }
+
+        @keyframes shake { 
+            0%, 100% { transform: translateX(0); } 
+            25% { transform: translateX(-4px); } 
+            75% { transform: translateX(4px); } 
+        }
+
+        /* Navigation */
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #9ca3af; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
+        .nav-item:hover { color: #60a5fa; }
+        .nav-item.active { color: #2563eb; font-weight: bold; }
+        .nav-item svg { width: 1.5rem; height: 1.5rem; margin-bottom: 2px; }
+
+        /* Scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Install Prompt Modal */
+        #install-prompt {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        #install-prompt.hidden-prompt {
+            transform: translateY(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Guide Steps highlight */
+        .guide-step {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        .guide-step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.4rem;
+            width: 0.5rem;
+            height: 0.5rem;
+            background: #2563eb;
+            border-radius: 50%;
+        }
+
+        /* Desktop Hover Enhancements */
+        @media (hover: hover) {
+            .cat-btn:hover { background-color: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+            .cat-btn.bg-blue-600:hover { background-color: #1d4ed8; color: white; }
+            button:hover { transform: translateY(-1px); }
+            button:active { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex flex-col bg-gray-50">
+
+    <!-- Top Header -->
+    <header class="h-auto min-h-[3.5rem] bg-blue-600 shadow-md flex items-center justify-between z-20 px-4 py-2 shrink-0 relative safe-top">
+        <div class="flex flex-col">
+            <h1 class="text-base font-bold text-white tracking-tight flex items-center gap-2">
+                <!-- Mini Logo -->
+                <svg width="20" height="20" viewBox="0 0 512 512" class="rounded-sm bg-white p-0.5">
+                    <path d="M140 160 C 140 160, 200 160, 200 240 C 200 320, 140 320, 140 320" stroke="#2563eb" stroke-width="40" fill="none" stroke-linecap="round"/>
+                    <circle cx="300" cy="240" r="30" fill="#2563eb"/>
+                    <path d="M360 180 L370 205 L395 205 L375 220 L385 245 L360 230 L335 245 L345 220 L325 205 L350 205 Z" fill="#2563eb"/>
+                </svg>
+                Uzbek Oila
+            </h1>
+            <p class="text-[10px] text-blue-100 scale-95 origin-top-left mt-0.5">Design by Dilfuza (telegram@diffila)</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <div id="header-score" class="text-xs font-bold text-blue-600 hidden bg-white px-3 py-1 rounded-full shadow-sm">Score: 0</div>
+            <!-- PWA Install Icon (visible if not installed) -->
+            <button id="pwa-install-btn" onclick="showInstallGuide()" class="hidden bg-blue-500 text-white p-1.5 rounded-full hover:bg-blue-400 transition flex items-center gap-1 border border-blue-400" title="安装到桌面">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span class="text-[10px] font-bold">安装</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 relative w-full overflow-hidden flex flex-col">
+        
+        <!-- VIEW 1: FLASHCARDS -->
+        <div id="view-flashcards" class="w-full h-full flex flex-col pt-2 pb-2 px-4">
+            
+            <!-- Category Filter -->
+            <div class="w-full overflow-x-auto no-scrollbar mb-2 shrink-0">
+                <div class="flex space-x-2 px-1 py-1">
+                    <button onclick="filterCards('all')" class="cat-btn bg-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">All</button>
+                    <!-- Added Person Category -->
+                    <button onclick="filterCards('person')" class="cat-btn bg-white text-gray-600 px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-sm border transition-colors">人物 Person</button>
+                    <button onclick="filterCards('verb')" class="cat-btn bg-white text-gray-600 px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-sm border transition-colors">动词 Verbs</button>
+                    <button onclick="filterCards('adj')" class="cat-btn bg-white text-gray-600 px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-sm border transition-colors">形容词 Adj</button>
+                    <button onclick="filterCards('place')" class="cat-btn bg-white text-gray-600 px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-sm border transition-colors">地点 Place</button>
+                </div>
+            </div>
+
+            <!-- Card Container -->
+            <div class="flex-1 flex items-center justify-center min-h-0 w-full mb-4 relative" id="card-touch-area">
+                <div class="w-full max-w-sm h-full max-h-[60vh] perspective relative group">
+                    <div class="card-inner bg-white cursor-pointer" id="flashcard" onclick="flipCard()">
+                        <!-- Front -->
+                        <div class="card-face card-front border border-gray-100 relative overflow-hidden">
+                            <!-- Background pattern -->
+                            <div class="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 rounded-full bg-blue-50 z-0"></div>
+                            
+                            <div class="absolute top-4 right-4 text-xs font-bold text-gray-300 bg-gray-50 px-2 py-1 rounded z-10" id="card-cat">VERB</div>
+                            <div class="text-blue-500 w-20 h-20 mb-4 z-10" id="card-icon"></div>
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2 text-center px-2 z-10" id="card-uzbek">...</h2>
+                            <p class="text-gray-400 text-xs mt-2 animate-pulse z-10">空格翻转 / 左右键切换</p>
+                        </div>
+                        <!-- Back -->
+                        <div class="card-face card-back bg-gradient-to-br from-blue-500 to-blue-600 relative overflow-hidden">
+                             <!-- Background pattern -->
+                             <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 rounded-full bg-white/10 z-0"></div>
+
+                            <h3 class="text-2xl font-bold mb-1 z-10" id="card-chinese">...</h3>
+                            <div class="w-8 h-0.5 bg-white/30 my-2 rounded z-10"></div>
+                            <h3 class="text-lg font-semibold text-blue-100 italic mb-4 z-10" id="card-english">...</h3>
+                            <div class="absolute bottom-6 opacity-50 w-8 h-8 z-10" id="card-icon-sm"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Swipe Hints (Desktop: Arrow Keys) -->
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 text-gray-300 opacity-20 pointer-events-none text-4xl hidden sm:block">←</div>
+                <div class="absolute right-0 top-1/2 -translate-y-1/2 text-gray-300 opacity-20 pointer-events-none text-4xl hidden sm:block">→</div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex items-center justify-between w-full max-w-sm px-2 shrink-0 pb-2 mx-auto h-20">
+                <button onclick="prevCard()" class="p-4 rounded-full bg-white shadow text-gray-500 active:bg-gray-100 touch-manipulation transition-transform active:scale-95 hover:bg-gray-50" title="上一个 (左箭头)">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <div class="flex flex-col items-center justify-center">
+                    <button onclick="speakWord()" class="p-5 rounded-full bg-blue-600 shadow-lg shadow-blue-200 text-white active:scale-95 transition transform touch-manipulation mb-1 hover:bg-blue-700" title="发音">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                    </button>
+                    <div class="text-xs font-mono text-gray-400" id="card-counter">0/0</div>
+                </div>
+                <button onclick="nextCard()" class="p-4 rounded-full bg-white shadow text-gray-500 active:bg-gray-100 touch-manipulation transition-transform active:scale-95 hover:bg-gray-50" title="下一个 (右箭头)">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 2: GAME -->
+        <div id="view-game" class="w-full h-full hidden flex flex-col px-4 pt-4 pb-4">
+            <div class="flex justify-between items-end mb-4 shrink-0">
+                <div>
+                    <h2 class="text-lg font-bold text-gray-800">配对消除</h2>
+                    <p class="text-xs text-gray-500">点击单词和对应中文</p>
+                </div>
+                <button onclick="initGame()" class="text-xs bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-bold shadow-sm active:scale-95 transition hover:bg-blue-200">
+                    <span class="mr-1">↻</span> 刷新
+                </button>
+            </div>
+            
+            <div class="flex-1 flex flex-col justify-center w-full overflow-hidden pb-12">
+                <div id="game-grid">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: QUIZ -->
+        <div id="view-quiz" class="w-full h-full hidden flex flex-col items-center justify-center pt-4 pb-20 px-6">
+            <div class="w-full max-w-sm bg-white rounded-2xl shadow-lg p-6 relative border border-gray-100">
+                <!-- Progress Bar -->
+                <div class="absolute top-0 left-0 h-1.5 bg-green-500 rounded-tl-2xl rounded-tr-2xl transition-all duration-300" id="quiz-progress" style="width: 10%"></div>
+                
+                <div class="text-center mb-6 mt-2">
+                    <div id="quiz-icon" class="w-16 h-16 text-blue-500 mx-auto mb-3"></div>
+                    <h2 class="text-2xl font-bold text-gray-800 leading-tight" id="quiz-question">...</h2>
+                </div>
+
+                <div id="quiz-options" class="flex flex-col gap-2.5">
+                    <!-- Options injected here -->
+                </div>
+
+                <div id="quiz-feedback" class="mt-4 text-center font-bold text-sm hidden py-2 rounded"></div>
+            </div>
+        </div>
+        
+        <!-- PWA INSTALL GUIDE MODAL -->
+        <div id="install-prompt" class="hidden-prompt fixed bottom-0 left-0 w-full bg-white z-50 rounded-t-2xl shadow-[0_-5px_20px_rgba(0,0,0,0.1)] p-6 pb-safe border-t border-gray-100 max-h-[80vh] overflow-y-auto">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">安装应用</h3>
+                    <p class="text-sm text-gray-500">获得更好的全屏体验</p>
+                </div>
+                <button onclick="hideInstallGuide()" class="text-gray-400 p-1 bg-gray-100 rounded-full hover:bg-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <!-- Desktop Guide -->
+            <div id="desktop-guide" class="hidden text-sm text-gray-600 space-y-3">
+                 <div class="p-3 bg-blue-50 rounded-lg border border-blue-100 mb-2">
+                    <p class="font-bold text-blue-800 text-xs mb-1">💻 电脑端安装方法 (Chrome/Edge):</p>
+                </div>
+                <p class="guide-step">1. 留意浏览器地址栏(URL栏)的最右侧。</p>
+                <p class="guide-step">2. 点击 <span class="inline-flex items-center justify-center p-0.5 bg-gray-200 rounded mx-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></span> 或 <span class="font-bold">⊕</span> 图标。</p>
+                <p class="guide-step">3. 点击 <span class="font-bold text-gray-800">"安装"</span> (Install)。</p>
+                <div class="text-xs text-gray-400 mt-2 pl-6">
+                    安装后，应用将以独立窗口运行，体验更佳！
+                </div>
+            </div>
+
+            <!-- iOS Guide -->
+            <div id="ios-guide" class="hidden text-sm text-gray-600 space-y-3">
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-100 mb-2">
+                    <p class="font-bold text-blue-800 text-xs mb-1">⚠️ 微信/钉钉用户：</p>
+                    <p class="text-xs">请先点击右上角 <span class="font-bold">...</span> 选择 <span class="font-bold">"在 Safari 中打开"</span></p>
+                </div>
+                <p class="guide-step">1. 确保在 <span class="font-bold text-gray-800">Safari 浏览器</span> 中打开。</p>
+                <p class="guide-step">2. 点击屏幕<span class="font-bold text-blue-600">正下方</span>的分享图标：<br>
+                    <span class="inline-flex items-center justify-center w-8 h-8 bg-gray-100 rounded border mt-1 mx-auto shadow-sm">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                    </span>
+                </p>
+                <p class="guide-step">3. 下滑选择 <span class="font-bold text-gray-800">"添加到主屏幕"</span>。</p>
+            </div>
+            
+            <!-- Android Guide -->
+             <div id="android-guide" class="hidden text-sm text-gray-600 space-y-3">
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-100 mb-2">
+                    <p class="font-bold text-blue-800 text-xs mb-1">⚠️ 微信/预览用户：</p>
+                    <p class="text-xs">请先点击右上角 <span class="font-bold">...</span> 选择 <span class="font-bold">"在浏览器中打开"</span></p>
+                </div>
+                <p class="guide-step">1. 确保在 <span class="font-bold text-gray-800">Chrome 浏览器</span> 中打开。</p>
+                <p class="guide-step">2. 点击右上角三个点 <span class="font-bold">⋮</span></p>
+                <p class="guide-step">3. 选择 <span class="font-bold text-gray-800">"安装应用"</span> 或 <span class="font-bold text-gray-800">"添加到主屏幕"</span>。</p>
+            </div>
+            
+            <button onclick="hideInstallGuide()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition hover:bg-blue-700">明白啦 (Got it)</button>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bg-white border-t border-gray-100 flex justify-around items-center shrink-0 z-30 pb-safe pt-2 min-h-[4rem] shadow-[0_-1px_3px_rgba(0,0,0,0.05)] w-full relative">
+        <div onclick="switchView('flashcards')" class="nav-item active" id="nav-flashcards">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <span class="text-[10px]">背单词</span>
+        </div>
+        <div onclick="switchView('game')" class="nav-item" id="nav-game">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/></svg>
+            <span class="text-[10px]">连连看</span>
+        </div>
+        <div onclick="switchView('quiz')" class="nav-item" id="nav-quiz">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="text-[10px]">测试</span>
+        </div>
+    </nav>
+
+    <script>
+        // --- PWA INSTALLATION LOGIC ---
+        function checkInstallState() {
+            // Check if running in standalone mode (already installed)
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            
+            if (!isStandalone) {
+                // Show Install Icon in Header
+                document.getElementById('pwa-install-btn').classList.remove('hidden');
+            }
+        }
+
+        function showInstallGuide() {
+            const modal = document.getElementById('install-prompt');
+            const iosGuide = document.getElementById('ios-guide');
+            const androidGuide = document.getElementById('android-guide');
+            const desktopGuide = document.getElementById('desktop-guide');
+            
+            // UA detection
+            const ua = navigator.userAgent;
+            const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+            const isAndroid = /Android/.test(ua);
+            
+            // Reset logic
+            iosGuide.classList.add('hidden');
+            androidGuide.classList.add('hidden');
+            desktopGuide.classList.add('hidden');
+            
+            if(isIOS) {
+                iosGuide.classList.remove('hidden');
+            } else if (isAndroid) {
+                androidGuide.classList.remove('hidden');
+            } else {
+                // Default to Desktop for everything else
+                desktopGuide.classList.remove('hidden');
+            }
+            
+            modal.classList.remove('hidden-prompt');
+        }
+
+        function hideInstallGuide() {
+            document.getElementById('install-prompt').classList.add('hidden-prompt');
+        }
+
+        // --- KEYBOARD SHORTCUTS FOR DESKTOP ---
+        document.addEventListener('keydown', (e) => {
+            if(document.getElementById('view-flashcards').classList.contains('hidden')) return;
+            
+            if (e.code === 'Space') {
+                e.preventDefault(); // prevent scroll
+                flipCard();
+            } else if (e.code === 'ArrowRight') {
+                nextCard();
+            } else if (e.code === 'ArrowLeft') {
+                prevCard();
+            }
+        });
+
+        // --- AUDIO SYSTEM (SFX ONLY) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+
+            if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                osc.start(now);
+                osc.stop(now + 0.6);
+            } else {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+        }
+
+        // --- TTS Logic (Only used in Flashcards) ---
+        function speakWord(text) {
+            const word = text || cardList[cardIndex].u;
+            
+            // Try Google Translate TTS first
+            const onlineUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=uz&client=tw-ob&q=${encodeURIComponent(word)}`;
+            const audio = new Audio(onlineUrl);
+            
+            audio.play().catch(e => {
+                // Fallback to System TTS
+                if ('speechSynthesis' in window) {
+                    const u = new SpeechSynthesisUtterance(word);
+                    const voices = window.speechSynthesis.getVoices();
+                    const tr = voices.find(v => v.lang.includes('tr')); // Turkish is close to Uzbek
+                    if(tr) u.voice = tr;
+                    u.rate = 0.85;
+                    window.speechSynthesis.speak(u);
+                }
+            });
+        }
+
+        // --- DATA ---
+        // Icons
+        const SVG = {
+            verb: '<path d="M13 10V3L4 14h7v7l9-11h-7z" />',
+            time: '<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />',
+            place: '<path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />',
+            noun: '<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />',
+            food: '<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />',
+            person: '<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />',
+            adj: '<path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />'
+        };
+
+        // Full Vocabulary - Replaced with user's list (Chapter 6: Oila/Family)
+        const rawVocab = [
+            { u: "ajrashgan", c: "离婚的", e: "divorced", t: "adj" },
+            { u: "aka", c: "哥哥", e: "older brother", t: "person" },
+            { u: "amaki", c: "叔叔(父系)", e: "uncle (paternal)", t: "person" },
+            { u: "amakivachcha", c: "堂亲", e: "cousin (child of amaki)", t: "person" },
+            { u: "amma", c: "姑姑", e: "aunt (paternal)", t: "person" },
+            { u: "ammavachcha", c: "表亲(姑)", e: "cousin (child of amma)", t: "person" },
+            { u: "beva", c: "寡妇/鳏夫", e: "widow", t: "person" },
+            { u: "bola", c: "孩子", e: "child", t: "person" },
+            { u: "burun", c: "鼻子", e: "nose", t: "noun" },
+            { u: "buva", c: "爷爷/外公", e: "grandfather", t: "person" },
+            { u: "buvi", c: "奶奶/外婆", e: "grandmother", t: "person" },
+            { u: "egizak", c: "双胞胎", e: "twin", t: "person" },
+            { u: "er", c: "丈夫", e: "husband", t: "person" },
+            { u: "esa", c: "至于/而", e: "and, as for", t: "adj" },
+            { u: "farzand", c: "子女", e: "child", t: "person" },
+            { u: "hisobchi", c: "会计", e: "accountant", t: "person" },
+            { u: "jarroh", c: "外科医生", e: "surgeon", t: "person" },
+            { u: "jiyan", c: "侄子/外甥", e: "nephew/niece", t: "person" },
+            { u: "katta buva", c: "曾祖父", e: "great grandfather", t: "person" },
+            { u: "katta buvi", c: "曾祖母", e: "great grandmother", t: "person" },
+            { u: "kelin", c: "儿媳/新娘", e: "daughter-in-law; bride", t: "person" },
+            { u: "kuyov", c: "女婿/新郎", e: "son-in-law; groom", t: "person" },
+            { u: "mehribon", c: "仁慈的", e: "nice, kind", t: "adj" },
+            { u: "nabira", c: "孙辈", e: "grandchild", t: "person" },
+            { u: "ona", c: "母亲", e: "mother", t: "person" },
+            { u: "opa", c: "姐姐", e: "older sister", t: "person" },
+            { u: "ota", c: "父亲", e: "father", t: "person" },
+            { u: "qaynona", c: "婆婆/岳母", e: "mother-in-law", t: "person" },
+            { u: "qaynota", c: "公公/岳父", e: "father-in-law", t: "person" },
+            { u: "qishloq", c: "村庄", e: "village", t: "place" },
+            { u: "qiz", c: "女儿/女孩", e: "daughter; girl", t: "person" },
+            { u: "rafiqa", c: "妻子", e: "wife", t: "person" },
+            { u: "rasm", c: "图片/画", e: "picture, drawing", t: "noun" },
+            { u: "singil", c: "妹妹", e: "younger sister", t: "person" },
+            { u: "tanimoq", c: "认识", e: "to be acquainted, to know", t: "verb" },
+            { u: "to'ng'ich", c: "长子/长女", e: "eldest", t: "adj" },
+            { u: "tog'a", c: "舅舅", e: "uncle (maternal)", t: "person" },
+            { u: "tog'avachcha", c: "表亲(舅)", e: "cousin (child of tog'a)", t: "person" },
+            { u: "toza", c: "干净", e: "clean", t: "adj" },
+            { u: "turmushga chiqmagan", c: "未婚(女)", e: "single, unmarried (for women)", t: "adj" },
+            { u: "turmushga chiqqan", c: "已婚(女)", e: "married (for women)", t: "adj" },
+            { u: "U to'rt yoshda", c: "他四岁", e: "He is 4 years old", t: "adj" },
+            { u: "uka", c: "弟弟", e: "younger brother", t: "person" },
+            { u: "uncha", c: "不太", e: "not so, not very", t: "adj" },
+            { u: "uylangan", c: "已婚(男)", e: "married (for men)", t: "adj" },
+            { u: "uylanmagan", c: "未婚(男)", e: "single, unmarried (for men)", t: "adj" },
+            { u: "vafot etgan", c: "已故", e: "passed away", t: "verb" },
+            { u: "vafot etmoq", c: "去世", e: "to pass away", t: "verb" },
+            { u: "xola", c: "姨妈", e: "aunt (maternal)", t: "person" },
+            { u: "xolavachcha", c: "表亲(姨)", e: "cousin (child of xola)", t: "person" },
+            { u: "xotin", c: "妻子", e: "wife, woman", t: "person" },
+            { u: "yaqin", c: "近/亲近", e: "close", t: "adj" },
+            { u: "yolg'iz", c: "孤独/唯一", e: "only, lonely", t: "adj" },
+            { u: "yuvmoq", c: "洗", e: "to wash", t: "verb" },
+            { u: "o'g'il", c: "儿子", e: "son", t: "person" },
+            { u: "o'ynamoq", c: "玩", e: "to play", t: "verb" },
+            { u: "shahar", c: "城市", e: "city", t: "place" }
+        ];
+
+        // Process Vocabulary
+        const vocabulary = rawVocab.map((item, idx) => ({
+            id: idx,
+            ...item,
+            iconPath: SVG[item.t] || SVG.noun
+        }));
+
+        // --- APP STATE ---
+        let currentView = 'flashcards';
+        let cardList = [...vocabulary];
+        let cardIndex = 0;
+        let isFlipped = false;
+        
+        let gameCards = [];
+        let firstSelection = null;
+        let gameScore = 0;
+        let matchedPairs = 0;
+        let isGameProcessing = false;
+
+        let quizList = [];
+        let quizIndex = 0;
+        let currentQuizItem = null;
+
+        // --- SWIPE HANDLER ---
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function initSwipe() {
+            const cardTouchArea = document.getElementById('card-touch-area');
+            if(!cardTouchArea) return;
+
+            cardTouchArea.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            cardTouchArea.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, {passive: true});
+        }
+
+        function handleSwipe() {
+            const threshold = 50; // min swipe distance
+            if (touchEndX < touchStartX - threshold) {
+                // Swipe Left -> Next
+                nextCard();
+            }
+            if (touchEndX > touchStartX + threshold) {
+                // Swipe Right -> Prev
+                prevCard();
+            }
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            cardList = shuffleArray([...vocabulary]); 
+            renderCard();
+            initGame();
+            initQuiz();
+            initSwipe();
+            checkInstallState(); // Check PWA state
+        };
+
+        // --- UTILS ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function switchView(viewId) {
+            // Hide all
+            document.getElementById('view-flashcards').classList.add('hidden');
+            document.getElementById('view-game').classList.add('hidden');
+            document.getElementById('view-quiz').classList.add('hidden');
+            document.getElementById('header-score').classList.add('hidden');
+            
+            // Deactivate nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active', 'text-blue-600'));
+            
+            // Show Target
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            document.getElementById(`nav-${viewId}`).classList.add('active', 'text-blue-600');
+            
+            if(viewId === 'game') document.getElementById('header-score').classList.remove('hidden');
+
+            currentView = viewId;
+        }
+
+        // --- FLASHCARD LOGIC ---
+        function filterCards(cat) {
+            let filtered;
+            if (cat === 'all') filtered = [...vocabulary];
+            else filtered = vocabulary.filter(v => v.t === cat);
+            
+            // Visual feedback for buttons
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-600');
+                if(btn.textContent.toLowerCase().includes(cat)) {
+                    btn.classList.remove('bg-white', 'text-gray-600');
+                    btn.classList.add('bg-blue-600', 'text-white');
+                }
+            });
+
+            cardList = shuffleArray(filtered); 
+            cardIndex = 0;
+            isFlipped = false;
+            document.getElementById('flashcard').classList.remove('is-flipped');
+            renderCard();
+        }
+
+        function renderCard() {
+            if (cardList.length === 0) {
+                // Handle empty state if filter yields no results
+                document.getElementById('card-uzbek').innerText = "无单词";
+                document.getElementById('card-chinese').innerText = "No words";
+                document.getElementById('card-english').innerText = "Select another category";
+                return;
+            }
+            const item = cardList[cardIndex];
+            
+            document.getElementById('card-uzbek').innerText = item.u;
+            document.getElementById('card-chinese').innerText = item.c;
+            document.getElementById('card-english').innerText = item.e;
+            document.getElementById('card-cat').innerText = item.t.toUpperCase();
+            document.getElementById('card-counter').innerText = `${cardIndex + 1}/${cardList.length}`;
+            
+            // Render Icon
+            const iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${item.iconPath}</svg>`;
+            document.getElementById('card-icon').innerHTML = iconSvg;
+            document.getElementById('card-icon-sm').innerHTML = iconSvg;
+        }
+
+        function flipCard() {
+            const el = document.getElementById('flashcard');
+            isFlipped = !isFlipped;
+            el.classList.toggle('is-flipped', isFlipped);
+        }
+
+        function nextCard() {
+            if (cardList.length === 0) return;
+            cardIndex = (cardIndex + 1) % cardList.length;
+            resetFlip();
+            setTimeout(renderCard, 150);
+        }
+
+        function prevCard() {
+            if (cardList.length === 0) return;
+            cardIndex = (cardIndex - 1 + cardList.length) % cardList.length;
+            resetFlip();
+            setTimeout(renderCard, 150);
+        }
+
+        function resetFlip() {
+            const el = document.getElementById('flashcard');
+            isFlipped = false;
+            el.classList.remove('is-flipped');
+        }
+
+        // --- GAME LOGIC ---
+        function initGame() {
+            const grid = document.getElementById('game-grid');
+            grid.innerHTML = '';
+            gameScore = 0;
+            matchedPairs = 0;
+            firstSelection = null;
+            isGameProcessing = false;
+            document.getElementById('header-score').innerText = "Score: 0";
+
+            // Safety check: ensure we have enough cards
+            const count = Math.min(6, vocabulary.length);
+            const subset = [...vocabulary].sort(() => 0.5 - Math.random()).slice(0, count);
+            let deck = [];
+            subset.forEach(item => {
+                deck.push({ id: item.id, content: item.u, type: 'u' }); 
+                deck.push({ id: item.id, content: item.c, type: 'c' });
+            });
+            deck.sort(() => 0.5 - Math.random());
+
+            deck.forEach(card => {
+                const el = document.createElement('div');
+                el.className = 'game-card bg-white text-gray-800 font-bold border border-gray-200 cursor-pointer select-none';
+                el.innerText = card.content;
+                if (card.type === 'c') el.classList.add('text-blue-600');
+                
+                el.onclick = () => handleGameClick(el, card);
+                grid.appendChild(el);
+            });
+        }
+
+        function handleGameClick(el, card) {
+            if (isGameProcessing) return; 
+            if (el.classList.contains('matched') || el.classList.contains('selected')) return;
+            
+            // NO AUDIO for Game click initially
+
+            el.classList.add('selected');
+
+            if (!firstSelection) {
+                firstSelection = { el, card };
+            } else {
+                isGameProcessing = true;
+                if (firstSelection.card.id === card.id && firstSelection.card.type !== card.type) {
+                    playSound('correct'); // Correct sound
+                    setTimeout(() => {
+                        el.classList.remove('selected');
+                        firstSelection.el.classList.remove('selected');
+                        el.classList.add('matched');
+                        firstSelection.el.classList.add('matched');
+                        firstSelection = null;
+                        isGameProcessing = false;
+                    }, 200);
+                    gameScore += 10;
+                    matchedPairs++;
+                    
+                    const totalPairs = Math.min(6, vocabulary.length);
+                    if(matchedPairs === totalPairs) {
+                        setTimeout(() => {
+                            if(confirm('恭喜通关！再来一局？')) initGame();
+                        }, 500);
+                    }
+                } else {
+                    el.classList.add('wrong');
+                    firstSelection.el.classList.add('wrong');
+                    setTimeout(() => {
+                        el.classList.remove('selected', 'wrong');
+                        firstSelection.el.classList.remove('selected', 'wrong');
+                        firstSelection = null;
+                        isGameProcessing = false;
+                    }, 600);
+                    gameScore = Math.max(0, gameScore - 2);
+                }
+                document.getElementById('header-score').innerText = `Score: ${gameScore}`;
+            }
+        }
+
+        // --- QUIZ LOGIC ---
+        function initQuiz() {
+            quizList = [...vocabulary].sort(() => 0.5 - Math.random()).slice(0, 10);
+            quizIndex = 0;
+            renderQuiz();
+        }
+
+        function renderQuiz() {
+            if (quizIndex >= quizList.length) {
+                document.getElementById('quiz-question').innerText = "测试完成!";
+                document.getElementById('quiz-icon').innerHTML = '<svg class="w-full h-full text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+                document.getElementById('quiz-options').innerHTML = `<button onclick="initQuiz()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">再测一次 Restart</button>`;
+                document.getElementById('quiz-feedback').classList.add('hidden');
+                return;
+            }
+
+            currentQuizItem = quizList[quizIndex];
+            document.getElementById('quiz-question').innerText = currentQuizItem.u;
+            document.getElementById('quiz-icon').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${currentQuizItem.iconPath}</svg>`;
+            document.getElementById('quiz-progress').style.width = `${((quizIndex)/10)*100}%`;
+            
+            const wrongOpts = vocabulary.filter(v => v.id !== currentQuizItem.id).sort(() => 0.5 - Math.random()).slice(0, 3);
+            const options = [currentQuizItem, ...wrongOpts].sort(() => 0.5 - Math.random());
+
+            const container = document.getElementById('quiz-options');
+            container.innerHTML = '';
+            document.getElementById('quiz-feedback').classList.add('hidden');
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 rounded-xl text-left font-semibold transition active:scale-98';
+                btn.innerHTML = `<div>${opt.c}</div><div class="text-xs text-gray-400 font-normal">${opt.e}</div>`;
+                btn.onclick = () => checkQuiz(btn, opt.id === currentQuizItem.id);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkQuiz(btn, isCorrect) {
+            const btns = document.getElementById('quiz-options').children;
+            for(let b of btns) b.disabled = true;
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+            
+            if (isCorrect) {
+                btn.classList.remove('bg-gray-50');
+                btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                feedback.innerText = "✅ 回答正确! Correct!";
+                feedback.className = "mt-4 text-center font-bold text-sm text-green-600 bg-green-50 p-2 rounded";
+                playSound('correct'); 
+                
+                setTimeout(() => {
+                    nextQuiz();
+                }, 1000);
+
+            } else {
+                btn.classList.remove('bg-gray-50');
+                btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                feedback.innerText = `❌ 正确答案: ${currentQuizItem.c}`;
+                feedback.className = "mt-4 text-center font-bold text-sm text-red-600 bg-red-50 p-2 rounded";
+                playSound('wrong'); 
+                
+                for(let b of btns) {
+                    if (b.innerHTML.includes(currentQuizItem.c)) {
+                        b.classList.add('bg-green-100', 'border-green-500');
+                    }
+                }
+
+                setTimeout(() => {
+                    nextQuiz();
+                }, 1500);
+            }
+        }
+
+        function nextQuiz() {
+            quizIndex++;
+            renderQuiz();
+        }
+
+    </script>
+</body>
+</html>
