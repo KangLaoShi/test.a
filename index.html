@@ -125,6 +125,7 @@
         </header>
 
         <main class="space-y-8">
+            <!-- 更新为四个卡片的 Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div onclick="setStatusFilter('all')" class="card-modern p-6 flex items-center gap-6 hover-lift border-l-8 border-[#2C5F56] cursor-pointer transition-all active:scale-95" title="点击查看所有学生">
                     <div class="w-14 h-14 bg-[#F0F6F5] text-[#2C5F56] rounded-2xl flex items-center justify-center"><i data-lucide="users-2" class="w-6 h-6"></i></div>
@@ -252,8 +253,9 @@
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : defaultFirebaseConfig;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-tracker';
         
-        const teacherList = ["Kanglaoshi", "Lilaoshi", "Pailaoshi", "Anlaoshi", "Tielaoshi", "Lanyinglaoshi", "Zenglaoshi"];
-        const teacherPins = { "Director": "1234", "Kanglaoshi": "1234", "Lilaoshi": "1234", "Pailaoshi": "1234", "Anlaoshi": "1234", "Tielaoshi": "1234", "Lanyinglaoshi": "1234", "Zenglaoshi": "1234" };
+        // Removed Lilaoshi, updated Anlaoshi to Alaoshi
+        const teacherList = ["Kanglaoshi", "Pailaoshi", "Alaoshi", "Tielaoshi", "Lanyinglaoshi", "Zenglaoshi"];
+        const teacherPins = { "Director": "1234", "Kanglaoshi": "1234", "Pailaoshi": "1234", "Alaoshi": "1234", "Tielaoshi": "1234", "Lanyinglaoshi": "1234", "Zenglaoshi": "1234" };
 
         const tDict = {
             zh: { portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名 (例如: Kanglaoshi)", entryPin: "访问识别码 (PIN)", btnEnter: "进入工作台", errPin: "识别码错误，请重新输入。", dashboardTitle: "学生付费跟进管理", subtitle: "协作版 · 实时云同步", addBtn: "添加学生", statTotal: "学生总数", statWarning: "即将到期", statOverdue: "欠费预警", statFrozen: "冻结账户", thName: "学生姓名", thTeacher: "负责", thClass: "班级", thProgress: "进度", thRemaining: "剩余", thLastPay: "最近付费", thStatus: "状态", thActions: "管理", actionPlus: "+1 记课", historyTitle: "上课记录", historyEmpty: "暂无记录", btnClose: "关闭窗口", manualAdd: "补签", btnUpdate: "更新", confirmTitle: "确认操作", confirmDelete: "确定要永久删除该学生吗？", confirmDeleteRecord: "确定删除这条记录吗？", btnOk: "确认", btnAbort: "取消", labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择老师", labelTotal: "总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", filterLabel: "负责人:", filterClassLabel: "班级筛选:", filterStatusLabel: "状态筛选:", filterAll: "全部", statusPaid: "充足", statusWarning: "预警", statusOverdue: "欠费", statusFrozen: "冻结", actionFreeze: "冻结", actionUnfreeze: "解冻", modalTitleAdd: "添加新学生", modalTitleEdit: "编辑信息", days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"] },
@@ -521,6 +523,7 @@
             document.getElementById('page-title-main').innerText = t.dashboardTitle;
             document.getElementById('page-subtitle').innerText = t.subtitle;
             document.getElementById('add-btn-text').innerText = t.addBtn;
+            
             document.getElementById('stat-total-label').innerText = t.statTotal;
             document.getElementById('stat-warning-label').innerText = t.statWarning;
             document.getElementById('stat-overdue-label').innerText = t.statOverdue;
