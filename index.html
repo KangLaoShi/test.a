@@ -296,6 +296,14 @@
                     const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
                     onSnapshot(query(studentsCol), (snapshot) => {
                         students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        
+                        // 自动迁移：将历史数据中记录为 Anlaoshi 的学生更名为 Alaoshi
+                        students.forEach(s => {
+                            if (s.teacher === 'Anlaoshi') {
+                                updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', s.id), { teacher: 'Alaoshi' });
+                            }
+                        });
+
                         render();
                         if (currentHistoryStudentId && document.getElementById('history-modal-overlay').style.display === 'flex') {
                             window.openHistoryModal(currentHistoryStudentId);
@@ -336,7 +344,14 @@
         };
 
         const verifySession = () => {
-            const saved = sessionStorage.getItem('active_staff_session');
+            let saved = sessionStorage.getItem('active_staff_session');
+            
+            // 自动迁移本地登录状态
+            if (saved === 'Anlaoshi') {
+                saved = 'Alaoshi';
+                sessionStorage.setItem('active_staff_session', 'Alaoshi');
+            }
+
             if (saved && (teacherList.includes(saved) || saved === 'Director')) {
                 loggedUser = saved; isAdmin = (saved === 'Director');
                 document.getElementById('entry-gate').classList.add('hidden');
