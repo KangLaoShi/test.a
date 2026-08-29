@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="ntP4lAS8QsT41GBuCxeV4UtMZDQkhIBgchnd-nFOv_4" />
     <title>NSRE Dashboard - Private Tool</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -47,6 +48,7 @@
         
         .lang-item.active { background-color: var(--brand-green); color: white; font-weight: 800; }
 
+        /* 用于伪装密码框的 CSS，机器识别为普通文本，视觉显示为黑点 */
         .pin-mask { -webkit-text-security: disc; }
 
         .bg-mesh {
@@ -56,7 +58,6 @@
         }
 
         .table-row-modern:hover { background-color: rgba(44, 95, 86, 0.04); transform: translateX(4px); }
-        .table-row-modern { transition: transform 0.2s ease, background-color 0.2s ease; }
     </style>
 </head>
 <body class="bg-mesh min-h-screen">
@@ -121,26 +122,26 @@
         </header>
 
         <main class="space-y-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                <div onclick="setStatusFilter('all')" class="card-modern p-6 flex items-center gap-6 hover-lift border-l-8 border-[#2C5F56] cursor-pointer transition-all active:scale-95" title="点击查看所有活跃学生">
-                    <div class="w-14 h-14 bg-[#F0F6F5] text-[#2C5F56] rounded-2xl flex items-center justify-center"><i data-lucide="users-2" class="w-6 h-6"></i></div>
-                    <div><p id="stat-total-label" class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">在读总数</p><p id="stat-total-val" class="text-3xl font-[900] text-[#1A2E35]">0</p></div>
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6">
+                <div onclick="setStatusFilter('all')" class="card-modern p-5 lg:p-6 flex items-center gap-4 lg:gap-6 hover-lift border-l-8 border-[#2C5F56] cursor-pointer transition-all active:scale-95" title="点击查看所有在读">
+                    <div class="w-10 h-10 lg:w-14 lg:h-14 shrink-0 bg-[#F0F6F5] text-[#2C5F56] rounded-2xl flex items-center justify-center"><i data-lucide="users-2" class="w-5 h-5 lg:w-6 lg:h-6"></i></div>
+                    <div><p id="stat-total-label" class="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">在读总数</p><p id="stat-total-val" class="text-2xl lg:text-3xl font-[900] text-[#1A2E35]">0</p></div>
                 </div>
-                <div onclick="setStatusFilter('warning')" class="card-modern p-6 flex items-center gap-6 hover-lift border-l-8 border-[#FFC554] cursor-pointer transition-all active:scale-95" title="点击筛选即将到期">
-                    <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center"><i data-lucide="hourglass" class="w-6 h-6"></i></div>
-                    <div><p id="stat-warning-label" class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">即将到期</p><p id="stat-warning-val" class="text-3xl font-[900] text-[#1A2E35]">0</p></div>
+                <div onclick="setStatusFilter('warning')" class="card-modern p-5 lg:p-6 flex items-center gap-4 lg:gap-6 hover-lift border-l-8 border-[#FFC554] cursor-pointer transition-all active:scale-95" title="点击筛选即将到期">
+                    <div class="w-10 h-10 lg:w-14 lg:h-14 shrink-0 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center"><i data-lucide="hourglass" class="w-5 h-5 lg:w-6 lg:h-6"></i></div>
+                    <div><p id="stat-warning-label" class="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">即将到期</p><p id="stat-warning-val" class="text-2xl lg:text-3xl font-[900] text-[#1A2E35]">0</p></div>
                 </div>
-                <div onclick="setStatusFilter('overdue')" class="card-modern p-6 flex items-center gap-6 hover-lift border-l-8 border-rose-500 cursor-pointer transition-all active:scale-95" title="点击筛选欠费学生">
-                    <div class="w-14 h-14 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center"><i data-lucide="alert-octagon" class="w-6 h-6"></i></div>
-                    <div><p id="stat-overdue-label" class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">欠费预警</p><p id="stat-overdue-val" class="text-3xl font-[900] text-rose-500">0</p></div>
+                <div onclick="setStatusFilter('overdue')" class="card-modern p-5 lg:p-6 flex items-center gap-4 lg:gap-6 hover-lift border-l-8 border-rose-500 cursor-pointer transition-all active:scale-95" title="点击筛选欠费学生">
+                    <div class="w-10 h-10 lg:w-14 lg:h-14 shrink-0 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center"><i data-lucide="alert-octagon" class="w-5 h-5 lg:w-6 lg:h-6"></i></div>
+                    <div><p id="stat-overdue-label" class="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">欠费预警</p><p id="stat-overdue-val" class="text-2xl lg:text-3xl font-[900] text-rose-500">0</p></div>
                 </div>
-                <div onclick="setStatusFilter('frozen')" class="card-modern p-6 flex items-center gap-6 hover-lift border-l-8 border-blue-500 cursor-pointer transition-all active:scale-95" title="点击筛选冻结学生">
-                    <div class="w-14 h-14 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center"><i data-lucide="snowflake" class="w-6 h-6"></i></div>
-                    <div><p id="stat-frozen-label" class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">冻结账户</p><p id="stat-frozen-val" class="text-3xl font-[900] text-blue-500">0</p></div>
+                <div onclick="setStatusFilter('frozen')" class="card-modern p-5 lg:p-6 flex items-center gap-4 lg:gap-6 hover-lift border-l-8 border-blue-500 cursor-pointer transition-all active:scale-95" title="点击筛选冻结学生">
+                    <div class="w-10 h-10 lg:w-14 lg:h-14 shrink-0 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center"><i data-lucide="snowflake" class="w-5 h-5 lg:w-6 lg:h-6"></i></div>
+                    <div><p id="stat-frozen-label" class="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">冻结账户</p><p id="stat-frozen-val" class="text-2xl lg:text-3xl font-[900] text-blue-500">0</p></div>
                 </div>
-                <div onclick="setStatusFilter('archived')" class="card-modern p-6 flex items-center gap-6 hover-lift border-l-8 border-slate-500 cursor-pointer transition-all active:scale-95" title="点击筛选停学学生">
-                    <div class="w-14 h-14 bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center"><i data-lucide="archive" class="w-6 h-6"></i></div>
-                    <div><p id="stat-archived-label" class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">停学归档</p><p id="stat-archived-val" class="text-3xl font-[900] text-slate-500">0</p></div>
+                <div onclick="setStatusFilter('archived')" class="card-modern p-5 lg:p-6 flex items-center gap-4 lg:gap-6 hover-lift border-l-8 border-slate-400 cursor-pointer transition-all active:scale-95 col-span-2 lg:col-span-1" title="点击筛选停学学生">
+                    <div class="w-10 h-10 lg:w-14 lg:h-14 shrink-0 bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center"><i data-lucide="archive" class="w-5 h-5 lg:w-6 lg:h-6"></i></div>
+                    <div><p id="stat-archived-label" class="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">停学归档</p><p id="stat-archived-val" class="text-2xl lg:text-3xl font-[900] text-slate-400">0</p></div>
                 </div>
             </div>
 
@@ -159,9 +160,9 @@
                 </div>
             </div>
 
-            <div class="card-modern overflow-hidden shadow-xl">
-                <div class="overflow-x-auto min-h-[400px]">
-                    <table class="w-full text-left whitespace-nowrap">
+            <div class="card-modern overflow-hidden">
+                <div class="overflow-x-auto pb-4">
+                    <table class="w-full text-left">
                         <thead class="bg-[#F7FAF9]/80 border-b border-slate-100">
                             <tr id="table-head-row"></tr>
                         </thead>
@@ -172,7 +173,6 @@
         </main>
     </div>
 
-    <!-- Edit/Add Modal -->
     <div id="modal-overlay" class="fixed inset-0 bg-[#1A2E35]/90 backdrop-blur-lg hidden items-center justify-center p-4 z-[600]">
         <div class="bg-white rounded-[40px] shadow-2xl w-full max-w-md p-10 overflow-y-auto max-h-[90vh] border-t-8 border-[#FFC554]">
             <div class="flex justify-between items-center mb-10">
@@ -182,51 +182,45 @@
             <form id="student-form" class="space-y-6 text-left">
                 <input type="hidden" id="input-id">
                 <div><label id="label-name" class="text-[10px] font-black text-slate-300 uppercase ml-4">姓名</label>
-                <input id="input-name" type="text" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none" placeholder="输入姓名"></div>
+                <input id="input-name" type="text" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none focus:ring-2 focus:ring-[#2C5F56]/10" placeholder="输入姓名"></div>
                 <div><label id="label-contract" class="text-[10px] font-black text-slate-300 uppercase ml-4">合同号</label>
-                <input id="input-contract" type="text" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none" placeholder="输入号"></div>
+                <input id="input-contract" type="text" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none focus:ring-2 focus:ring-[#2C5F56]/10" placeholder="输入号"></div>
                 <div class="grid grid-cols-2 gap-4">
                     <div><label id="label-teacher" class="text-[10px] font-black text-slate-300 uppercase ml-4">负责老师</label>
-                    <select id="input-teacher" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none appearance-none"></select></div>
+                    <select id="input-teacher" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none appearance-none focus:ring-2 focus:ring-[#2C5F56]/10"></select></div>
                     <div><label id="label-class" class="text-[10px] font-black text-slate-300 uppercase ml-4">班级</label>
-                    <input id="input-class" list="class-list" type="text" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none outline-none" placeholder="选择或输入"></div>
+                    <input id="input-class" list="class-list" type="text" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none focus:ring-2 focus:ring-[#2C5F56]/10" placeholder="选择或输入"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-4 text-center">
                     <div><label id="label-total" class="text-[10px] font-black text-slate-300 uppercase">总量</label>
-                    <select id="input-total" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none outline-none text-center"></select></div>
+                    <select id="input-total" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none text-center focus:ring-2 focus:ring-[#2C5F56]/10"></select></div>
                     <div><label id="label-used" class="text-[10px] font-black text-slate-300 uppercase">已上</label>
-                    <input id="input-used" type="number" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none outline-none text-center"></div>
+                    <input id="input-used" type="number" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none text-center focus:ring-2 focus:ring-[#2C5F56]/10"></div>
                 </div>
                 <div><label id="label-date" class="text-[10px] font-black text-slate-300 uppercase ml-4">付费日期</label>
-                <input id="input-date" type="date" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none outline-none"></div>
+                <input id="input-date" type="date" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none focus:ring-2 focus:ring-[#2C5F56]/10"></div>
                 <div class="flex gap-4 pt-6">
                     <button type="button" onclick="toggleModal(false)" id="btn-cancel" class="flex-1 py-4 font-black text-slate-400">取消</button>
-                    <button type="submit" id="btn-save" class="flex-1 py-4 bg-[#2C5F56] text-white rounded-3xl font-black">保存</button>
+                    <button type="submit" id="btn-save" class="flex-1 py-4 bg-[#2C5F56] text-white rounded-3xl font-black shadow-lg shadow-[#2C5F56]/20">保存</button>
                 </div>
             </form>
-            <datalist id="class-list"></datalist>
         </div>
     </div>
 
-    <!-- Note Modal -->
-    <div id="note-modal-overlay" class="fixed inset-0 bg-[#1A2E35]/90 backdrop-blur-lg hidden items-center justify-center p-4 z-[750]">
-        <div class="bg-white rounded-[40px] shadow-2xl w-full max-w-md p-10 flex flex-col border-t-8 border-[#2C5F56]">
+    <div id="note-modal-overlay" class="fixed inset-0 bg-[#1A2E35]/90 backdrop-blur-lg hidden items-center justify-center p-4 z-[800]">
+        <div class="bg-white rounded-[40px] shadow-2xl w-full max-w-md p-10 border-t-8 border-amber-400">
             <div class="flex justify-between items-center mb-6">
-                <h3 id="note-modal-title" class="text-2xl font-[900] text-[#1A2E35]">学生备注</h3>
-                <button onclick="toggleNoteModal(false)" class="p-3 bg-slate-50 rounded-full text-slate-400 hover:text-rose-500 transition-colors"><i data-lucide="x"></i></button>
+                <h3 id="note-modal-title" class="text-xl font-[900]">学生备注</h3>
+                <button onclick="toggleNoteModal(false)" class="p-3 text-slate-300 hover:text-rose-500"><i data-lucide="x"></i></button>
             </div>
-            <div class="mb-4">
-                <p id="note-student-name" class="text-sm font-bold text-[#2C5F56] mb-2"></p>
-                <textarea id="student-note-input" rows="5" class="w-full p-5 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none resize-none text-sm text-[#1A2E35]" placeholder="输入学员备注..."></textarea>
-            </div>
-            <div class="flex gap-4 pt-2">
-                <button onclick="toggleNoteModal(false)" id="note-btn-cancel" class="flex-1 py-4 font-black text-slate-400 bg-slate-50 rounded-3xl">取消</button>
-                <button onclick="saveStudentNote()" id="note-btn-save" class="flex-1 py-4 bg-[#2C5F56] text-white rounded-3xl font-black shadow-lg shadow-[#2C5F56]/20">保存备注</button>
+            <textarea id="input-note" class="w-full h-40 px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none outline-none resize-none focus:ring-2 focus:ring-[#2C5F56]/10 text-sm" placeholder="输入学生备注，缺课或请假原因，冻结原因，等..."></textarea>
+            <div class="flex gap-4 pt-6">
+                <button onclick="toggleNoteModal(false)" id="btn-note-cancel" class="flex-1 py-4 font-black text-slate-400">取消</button>
+                <button onclick="saveNote()" id="btn-note-save" class="flex-1 py-4 bg-[#2C5F56] text-white rounded-3xl font-black shadow-lg shadow-[#2C5F56]/20">保存</button>
             </div>
         </div>
     </div>
 
-    <!-- History Modal -->
     <div id="history-modal-overlay" class="fixed inset-0 bg-[#1A2E35]/95 backdrop-blur-xl hidden items-center justify-center p-4 z-[700]">
         <div class="bg-white rounded-[40px] shadow-2xl w-full max-w-md p-12 flex flex-col max-h-[90vh] border-t-8 border-[#FFC554]">
             <div class="flex justify-between items-start mb-8 shrink-0">
@@ -242,16 +236,15 @@
                 <button onclick="toggleHistoryModal(false)" class="p-3 bg-slate-50 rounded-full text-slate-400 hover:text-rose-500 transition-colors"><i data-lucide="x"></i></button>
             </div>
             <div class="flex gap-3 mb-8 shrink-0">
-                <input type="date" id="manual-date-input" class="flex-1 px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none outline-none">
-                <button onclick="handleRecordAction()" id="btn-record-action" class="px-8 py-4 bg-[#2C5F56] text-white rounded-3xl font-black transition-all hover:opacity-90">补签</button>
-                <button onclick="cancelRecordEdit()" id="btn-record-cancel" class="hidden px-4 py-4 bg-rose-50 text-rose-500 font-bold rounded-2xl transition-all hover:bg-rose-100">✕</button>
+                <input type="date" id="manual-date-input" class="flex-1 px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none focus:ring-2 focus:ring-[#2C5F56]/10 text-sm">
+                <button onclick="handleRecordAction()" id="btn-record-action" class="px-8 py-4 bg-[#2C5F56] text-white rounded-3xl font-black shadow-lg shadow-[#2C5F56]/20">补签</button>
+                <button onclick="cancelRecordEdit()" id="btn-record-cancel" class="hidden px-4 py-4 bg-rose-50 text-rose-500 font-bold rounded-2xl">✕</button>
             </div>
-            <div id="history-list" class="space-y-4 overflow-y-auto pr-2 no-scrollbar flex-1 mb-8 min-h-[200px]"></div>
-            <button onclick="toggleHistoryModal(false)" id="btn-close-history" class="w-full py-5 bg-[#F7FAF9] text-slate-400 rounded-3xl font-black transition-all hover:bg-slate-100">关闭窗口</button>
+            <div id="history-list" class="space-y-4 overflow-y-auto pr-2 no-scrollbar flex-1 mb-8"></div>
+            <button onclick="toggleHistoryModal(false)" id="btn-close-history" class="w-full py-5 bg-[#F7FAF9] text-slate-400 rounded-3xl font-black transition-colors hover:bg-slate-100">关闭窗口</button>
         </div>
     </div>
 
-    <!-- Confirm Modal -->
     <div id="confirm-modal-overlay" class="fixed inset-0 bg-[#1A2E35]/95 backdrop-blur-xl hidden items-center justify-center p-4 z-[999]">
         <div class="bg-white rounded-[32px] p-8 text-center border-t-8 border-rose-500 w-full max-w-sm">
             <h3 id="confirm-modal-title" class="text-xl font-[900] mb-2">确认操作</h3>
@@ -272,65 +265,18 @@
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : defaultFirebaseConfig;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-tracker';
         
+        // Removed Zenglaoshi, added Tanglaoshi
         const teacherList = ["Kanglaoshi", "Pailaoshi", "Alaoshi", "Tielaoshi", "Lanyinglaoshi", "Tanglaoshi"];
         const teacherPins = { "Director": "1234", "Kanglaoshi": "1234", "Pailaoshi": "1234", "Alaoshi": "1234", "Tielaoshi": "1234", "Lanyinglaoshi": "1234", "Tanglaoshi": "1234" };
 
         const tDict = {
-            zh: { 
-                portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名 (例如: Kanglaoshi)", entryPin: "访问识别码 (PIN)", btnEnter: "进入工作台", errPin: "识别码错误，请重新输入。", 
-                dashboardTitle: "学生付费跟进管理", subtitle: "协作版 · 实时云同步", addBtn: "添加学生", statTotal: "在读总数", statWarning: "即将到期", statOverdue: "欠费预警", statFrozen: "冻结账户", statArchived: "停学归档", 
-                thName: "学生姓名", thTeacher: "负责", thClass: "班级", thProgress: "进度", thRemaining: "剩余", thLastPay: "最近付费", thStatus: "状态", thActions: "管理", 
-                actionPlus: "+1 记课", actionAbsent: "缺勤扣课", historyTitle: "上课记录", historyEmpty: "暂无记录", btnClose: "关闭窗口", manualAdd: "补签", btnUpdate: "更新", 
-                confirmTitle: "确认操作", confirmDelete: "确定要永久删除该学生吗？", confirmDeleteRecord: "确定删除这条记录吗？", btnOk: "确认", btnAbort: "取消", 
-                labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择老师", labelTotal: "总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", 
-                filterLabel: "负责人:", filterClassLabel: "班级:", filterStatusLabel: "状态:", filterAll: "全部在读", statusPaid: "充足", statusWarning: "预警", statusOverdue: "欠费", statusFrozen: "冻结", statusArchived: "已停学", 
-                actionFreeze: "冻结", actionUnfreeze: "解冻", actionArchive: "停学归档", actionUnarchive: "恢复在读", actionEdit: "编辑", actionHistory: "记录", actionDelete: "删除", 
-                modalTitleAdd: "添加新学生", modalTitleEdit: "编辑信息", days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], 
-                absentMark: "[缺勤]", archiveMark: "[已停学归档]", unarchiveMark: "[恢复在读]", freezeMark: "[账号已冻结]", unfreezeMark: "[账号已解冻]", noMatch: "无匹配记录", 
-                noteTitle: "学生备注", notePlaceholder: "输入学生备注，缺课或请假原因，冻结原因，等...", btnSaveNote: "保存备注", cancelNote: "取消", paymentMark: "[更新付费/续费]"
-            },
-            uz: { 
-                portalTitle: "O'qituvchilar Portali", portalSub: "Xususiy Ta'lim Portali", entryName: "O'qituvchi Ismi", entryPin: "Kirish PIN-kodi", btnEnter: "Tizimga kirish", errPin: "PIN noto'g'ri.", 
-                dashboardTitle: "To'lov Monitoringi", subtitle: "Operatsiyalar Portali", addBtn: "Qo'shish", statTotal: "Faol", statWarning: "Ogoh", statOverdue: "Qarz", statFrozen: "Muzlatilgan", statArchived: "Arxiv", 
-                thName: "Ism", thTeacher: "Mas'ul", thClass: "Guruh", thProgress: "Holat", thRemaining: "Qolgan", thLastPay: "To'lov", thStatus: "Holat", thActions: "Amal", 
-                actionPlus: "+1 dars", actionAbsent: "Sababsiz", historyTitle: "Tarix", historyEmpty: "Yo'q", btnClose: "Yopish", manualAdd: "Qo'shish", btnUpdate: "Yangilash", 
-                confirmTitle: "Tasdiqlang", confirmDelete: "O'chirilsinmi?", confirmDeleteRecord: "Yozuv o'chirilsinmi?", btnOk: "Ha", btnAbort: "Yo'q", 
-                labelContract: "Shartnoma", placeholderContract: "Raqam", labelName: "Ismi", placeholderName: "Ismni kiriting", labelTeacher: "O'qituvchi", labelClass: "Guruh", placeholderClass: "Yozing", placeholderTeacher: "Tanlang", labelTotal: "Jami", labelUsed: "O'tilgan", labelPayDate: "Sana", btnCancel: "Bekor", btnSave: "Saqlash", 
-                filterLabel: "Mas'ul:", filterClassLabel: "Guruh:", filterStatusLabel: "Holat:", filterAll: "Barchasi", statusPaid: "Yetarli", statusWarning: "Yaqin", statusOverdue: "Qarz", statusFrozen: "Muzlatilgan", statusArchived: "Arxiv", 
-                actionFreeze: "Muzlatish", actionUnfreeze: "Faollashtirish", actionArchive: "Arxivlash", actionUnarchive: "Arxivdan chiqarish", actionEdit: "Tahrir", actionHistory: "Tarix", actionDelete: "O'chirish", 
-                modalTitleAdd: "Yangi talaba", modalTitleEdit: "Tahrirlash", days: ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"], 
-                absentMark: "[Sababsiz]", archiveMark: "[Arxivlangan]", unarchiveMark: "[Faollashtirilgan]", freezeMark: "[Muzlatilgan]", unfreezeMark: "[Muzlatishdan yechilgan]", noMatch: "Topilmadi", 
-                noteTitle: "Talaba Eslatmasi", notePlaceholder: "Talaba eslatmasi, yo'qlik yoki ta'til sababi, muzlatish sababi va hokazolarni kiriting...", btnSaveNote: "Saqlash", cancelNote: "Bekor", paymentMark: "[To'lov yangilandi]"
-            },
-            ru: { 
-                portalTitle: "Рабочая область учителя", portalSub: "Частный Портал", entryName: "Имя учителя", entryPin: "PIN-код доступа", btnEnter: "Войти", errPin: "Неверный PIN-код.", 
-                dashboardTitle: "Управление Оплатой", subtitle: "Синхронизация", addBtn: "Добавить", statTotal: "Активные", statWarning: "Внимание", statOverdue: "Должники", statFrozen: "Заморожены", statArchived: "Архив", 
-                thName: "ФИО", thTeacher: "Учитель", thClass: "Группа", thProgress: "Прогресс", thRemaining: "Осталось", thLastPay: "Оплата", thStatus: "Статус", thActions: "Действия", 
-                actionPlus: "+1 урок", actionAbsent: "Пропуск", historyTitle: "История", historyEmpty: "Записей нет", btnClose: "Закрыть", manualAdd: "Добавить", btnUpdate: "Обновить", 
-                confirmTitle: "Подтверждение", confirmDelete: "Удалить студента?", confirmDeleteRecord: "Удалить запись?", btnOk: "Да", btnAbort: "Нет", 
-                labelContract: "Контракт", placeholderContract: "Номер", labelName: "ФИО", placeholderName: "Введите имя", labelTeacher: "Учитель", labelClass: "Группа", placeholderClass: "Введите", placeholderTeacher: "Выберите", labelTotal: "Всего", labelUsed: "Пройдено", labelPayDate: "Дата", btnCancel: "Отмена", btnSave: "Сохранить", 
-                filterLabel: "Учитель:", filterClassLabel: "Группа:", filterStatusLabel: "Статус:", filterAll: "Все", statusPaid: "Оплачено", statusWarning: "Срок", statusOverdue: "Долг", statusFrozen: "Заморожен", statusArchived: "В архиве", 
-                actionFreeze: "Заморозить", actionUnfreeze: "Разморозить", actionArchive: "В архив", actionUnarchive: "Восстановить", actionEdit: "Изменить", actionHistory: "Журнал", actionDelete: "Удалить", 
-                modalTitleAdd: "Добавить", modalTitleEdit: "Редактировать", days: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"], 
-                absentMark: "[Пропуск]", archiveMark: "[Добавлен в архив]", unarchiveMark: "[Восстановлен]", freezeMark: "[Заморожен]", unfreezeMark: "[Разморожен]", noMatch: "Нет данных", 
-                noteTitle: "Заметки студента", notePlaceholder: "Введите заметки о студенте, причины пропуска или отпуска, причины заморозки и т.д...", btnSaveNote: "Сохранить", cancelNote: "Отмена", paymentMark: "[Оплата обновлена]"
-            },
-            en: { 
-                portalTitle: "Teacher Workspace", portalSub: "Private Portal", entryName: "Teacher Name", entryPin: "Access PIN", btnEnter: "Unlock Dashboard", errPin: "Invalid PIN.", 
-                dashboardTitle: "Payment Tracking", subtitle: "Live Sync", addBtn: "Add Student", statTotal: "Active", statWarning: "Warning", statOverdue: "Overdue", statFrozen: "Frozen", statArchived: "Archived", 
-                thName: "Name", thTeacher: "Teacher", thClass: "Class", thProgress: "Progress", thRemaining: "Left", thLastPay: "Last Pay", thStatus: "Status", thActions: "Actions", 
-                actionPlus: "+1 Class", actionAbsent: "Absence", historyTitle: "History", historyEmpty: "No Records", btnClose: "Close", manualAdd: "Add", btnUpdate: "Update", 
-                confirmTitle: "Confirm", confirmDelete: "Delete student forever?", confirmDeleteRecord: "Delete this record?", btnOk: "Yes", btnAbort: "No", 
-                labelContract: "Contract", placeholderContract: "Number", labelName: "Name", placeholderName: "Enter name", labelTeacher: "Teacher", labelClass: "Class", placeholderClass: "Type/Select", placeholderTeacher: "Select", labelTotal: "Total", labelUsed: "Used", labelPayDate: "Date", btnCancel: "Cancel", btnSave: "Save", 
-                filterLabel: "Teacher:", filterClassLabel: "Class:", filterStatusLabel: "Status:", filterAll: "All Active", statusPaid: "Paid", statusWarning: "Low", statusOverdue: "Due", statusFrozen: "Frozen", statusArchived: "Archived", 
-                actionFreeze: "Freeze", actionUnfreeze: "Unfreeze", actionArchive: "Archive", actionUnarchive: "Restore", actionEdit: "Edit", actionHistory: "Logs", actionDelete: "Delete", 
-                modalTitleAdd: "Add Student", modalTitleEdit: "Edit Info", days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], 
-                absentMark: "[Absence]", archiveMark: "[Archived]", unarchiveMark: "[Restored]", freezeMark: "[Frozen]", unfreezeMark: "[Unfrozen]", noMatch: "No Match", 
-                noteTitle: "Student Note", notePlaceholder: "Enter student notes, reasons for absence or leave, reasons for freezing, etc...", btnSaveNote: "Save Note", cancelNote: "Cancel", paymentMark: "[Payment Updated]"
-            }
+            zh: { portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名 (例如: Kanglaoshi)", entryPin: "访问识别码 (PIN)", btnEnter: "进入工作台", errPin: "识别码错误，请重新输入。", dashboardTitle: "学生付费跟进管理", subtitle: "协作版 · 实时云同步", addBtn: "添加学生", statTotal: "在读总数", statWarning: "即将到期", statOverdue: "欠费预警", statFrozen: "冻结账户", statArchived: "停学归档", thName: "学生姓名", thTeacher: "负责", thClass: "班级", thProgress: "进度", thRemaining: "剩余", thLastPay: "最近付费", thStatus: "状态", thActions: "管理操作", actionPlus: "+1 记课", actionAbsent: "缺勤扣课", actionFreeze: "冻结", actionUnfreeze: "解冻", actionArchive: "停学归档", actionUnarchive: "恢复在读", historyTitle: "上课记录", historyEmpty: "旧系统数据无具体日期记录，新记课将在此显示。", btnClose: "关闭窗口", manualAdd: "补签", btnUpdate: "更新", confirmTitle: "确认操作", confirmDelete: "确定要永久删除该学生吗？", confirmDeleteRecord: "确定删除这条记录吗？", btnOk: "确认", btnAbort: "取消", labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择老师", labelTotal: "总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", filterLabel: "负责人:", filterClassLabel: "班级筛选:", filterStatusLabel: "状态筛选:", filterAll: "全部在读", statusPaid: "充足", statusWarning: "预警", statusOverdue: "欠费", statusFrozen: "已冻结", statusArchived: "已停学", modalTitleAdd: "添加新学生", modalTitleEdit: "编辑信息", noteTitle: "学生备注", notePlaceholder: "输入学生备注，缺课或请假原因，冻结原因，等...", payUpdate: "[更新付费/续费]", days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], absentMark: "[缺勤扣课]" },
+            uz: { portalTitle: "O'qituvchilar Portali", portalSub: "Xususiy Ta'lim Portali", entryName: "O'qituvchi Ismi", entryPin: "Kirish PIN-kodi", btnEnter: "Tizimga kirish", errPin: "PIN noto'g'ri. Qayta urinib ko'ring.", dashboardTitle: "To'lov Monitoringi", subtitle: "Operatsiyalar Portali", addBtn: "Qo'shish", statTotal: "Faol", statWarning: "Ogoh", statOverdue: "Qarz", statFrozen: "Muzlatilgan", statArchived: "Arxiv", thName: "Ism", thTeacher: "Mas'ul", thClass: "Guruh", thProgress: "Holat", thRemaining: "Qolgan", thLastPay: "To'lov", thStatus: "Holat", thActions: "Amal", actionPlus: "+1 dars", actionAbsent: "Sababsiz kelmagan", actionFreeze: "Muzlatish", actionUnfreeze: "Faollashtirish", actionArchive: "Arxivlash", actionUnarchive: "Tiklash", historyTitle: "Tarix", historyEmpty: "Eski ma'lumotlar tarixda yo'q", btnClose: "Yopish", manualAdd: "Qo'shish", btnUpdate: "Yangilash", confirmTitle: "Tasdiqlang", confirmDelete: "O'chirilsinmi?", confirmDeleteRecord: "Yozuv o'chirilsinmi?", btnOk: "Ha", btnAbort: "Yo'q", labelContract: "Shartnoma", placeholderContract: "Raqam", labelName: "Ismi", placeholderName: "Ismni kiriting", labelTeacher: "O'qituvchi", labelClass: "Guruh", placeholderClass: "Yozing", placeholderTeacher: "Tanlang", labelTotal: "Jami", labelUsed: "O'tilgan", labelPayDate: "Sana", btnCancel: "Bekor", btnSave: "Saqlash", filterLabel: "Mas'ul:", filterClassLabel: "Guruh:", filterStatusLabel: "Holat:", filterAll: "Faol", statusPaid: "Yetarli", statusWarning: "Yaqin", statusOverdue: "Qarz", statusFrozen: "Muzlatilgan", statusArchived: "Arxiv", modalTitleAdd: "Yangi talaba", modalTitleEdit: "Tahrirlash", noteTitle: "Izohlar", notePlaceholder: "Izoh kiriting...", payUpdate: "[To'lov yangilandi]", days: ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"], absentMark: "[Sababsiz kelmagan]" },
+            ru: { portalTitle: "Рабочая область учителя", portalSub: "Частный Образовательный Портал", entryName: "Имя учителя", entryPin: "PIN-код доступа", btnEnter: "Войти", errPin: "Неверный PIN-код.", dashboardTitle: "Управление Оплатой", subtitle: "Синхронизация Данных", addBtn: "Добавить", statTotal: "Актив", statWarning: "Внимание", statOverdue: "Должники", statFrozen: "Заморожены", statArchived: "Архив", thName: "ФИО Студента", thTeacher: "Учитель", thClass: "Группа", thProgress: "Прогресс", thRemaining: "Осталось", thLastPay: "Оплата", thStatus: "Статус", thActions: "Действия", actionPlus: "+1 урок", actionAbsent: "Пропуск", actionFreeze: "Заморозить", actionUnfreeze: "Разморозить", actionArchive: "В архив", actionUnarchive: "Восстановить", historyTitle: "История", historyEmpty: "Старых записей нет", btnClose: "Закрыть", manualAdd: "Добавить", btnUpdate: "Обновить", confirmTitle: "Подтверждение", confirmDelete: "Удалить студента навсегда?", confirmDeleteRecord: "Удалить запись?", btnOk: "Да", btnAbort: "Нет", labelContract: "№ Контракта", placeholderContract: "Номер", labelName: "ФИО", placeholderName: "Введите имя", labelTeacher: "Учитель", labelClass: "Группа", placeholderClass: "Введите", placeholderTeacher: "Выберите учителя", labelTotal: "Всего", labelUsed: "Пройдено", labelPayDate: "Дата оплаты", btnCancel: "Отмена", btnSave: "Сохранить", filterLabel: "Ответственный:", filterClassLabel: "Класс:", filterStatusLabel: "Статус:", filterAll: "Активные", statusPaid: "Оплачено", statusWarning: "Срок", statusOverdue: "Долг", statusFrozen: "Заморожен", statusArchived: "Архив", modalTitleAdd: "Добавить студента", modalTitleEdit: "Редактировать", noteTitle: "Заметки", notePlaceholder: "Введите заметку...", payUpdate: "[Оплата обновлена]", days: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"], absentMark: "[Пропуск]" },
+            en: { portalTitle: "Teacher Workspace", portalSub: "Private Educational Portal", entryName: "Teacher Name", entryPin: "Access PIN", btnEnter: "Unlock Dashboard", errPin: "Invalid PIN.", dashboardTitle: "Dashboard", subtitle: "Sync Portal", addBtn: "Add New", statTotal: "Active", statWarning: "Warning", statOverdue: "Due", statFrozen: "Frozen", statArchived: "Archived", thName: "Full Name", thTeacher: "Rep.", thClass: "Class", thProgress: "Progress", thRemaining: "Left", thLastPay: "Last Pay", thStatus: "Status", thActions: "Actions", actionPlus: "+1", actionAbsent: "Absence", actionFreeze: "Freeze", actionUnfreeze: "Unfreeze", actionArchive: "Archive", actionUnarchive: "Restore", historyTitle: "Logs", historyEmpty: "No older records found", btnClose: "Close", manualAdd: "Add", btnUpdate: "Update", confirmTitle: "Confirm", confirmDelete: "Delete student?", confirmDeleteRecord: "Delete log?", btnOk: "Yes", btnAbort: "No", labelContract: "Contract No.", placeholderContract: "Enter No.", labelName: "Name", placeholderName: "Enter name", labelTeacher: "Teacher", labelClass: "Class", placeholderClass: "Type", placeholderTeacher: "Select", labelTotal: "Total Pack", labelUsed: "Used", labelPayDate: "Date", btnCancel: "Cancel", btnSave: "Save", filterLabel: "Rep:", filterClassLabel: "Level:", filterStatusLabel: "Status:", filterAll: "All Active", statusPaid: "Paid", statusWarning: "Low", statusOverdue: "Due", statusFrozen: "Frozen", statusArchived: "Archived", modalTitleAdd: "Add New Student", modalTitleEdit: "Edit Info", noteTitle: "Notes", notePlaceholder: "Enter notes...", payUpdate: "[Payment Updated]", days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], absentMark: "[Absence]" }
         };
 
-        let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedStatus = 'all', students = [], loggedUser = null, isAdmin = false, currentHistoryStudentId = null, editingRecordIndex = -1, currentNoteStudentId = null, db, auth;
+        let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedStatus = 'all', students = [], loggedUser = null, isAdmin = false, currentHistoryStudentId = null, currentNoteStudentId = null, editingRecordIndex = -1, db, auth;
 
         const customConfirm = (msg, callback) => {
             const overlay = document.getElementById('confirm-modal-overlay');
@@ -344,612 +290,20 @@
             document.getElementById('confirm-btn-cancel').onclick = () => { overlay.style.display = 'none'; };
         };
 
-        const formatDate = (dateStr) => {
-            if (!dateStr) return '-';
-            const d = new Date(dateStr);
-            if (isNaN(d)) return dateStr;
-            const y = d.getFullYear();
-            const m = String(d.getMonth() + 1).padStart(2, '0');
-            const day = String(d.getDate()).padStart(2, '0');
-            return `${y}-${m}-${day}`;
-        };
-
-        const generateId = () => Date.now().toString(36) + Math.random().toString(36).substring(2);
-
-        window.setLang = (l) => { currentLang = l; render(); };
-        window.setTeacherFilter = (t) => { selectedTeacher = t; selectedClass = 'all'; render(); };
-        window.setClassFilter = (c) => { selectedClass = c; render(); };
-        window.setStatusFilter = (s) => { selectedStatus = s; render(); };
-        window.toggleModal = (show) => { document.getElementById('modal-overlay').style.display = show ? 'flex' : 'none'; };
-        window.toggleHistoryModal = (show) => { if (!show) window.cancelRecordEdit(); document.getElementById('history-modal-overlay').style.display = show ? 'flex' : 'none'; };
-        window.toggleNoteModal = (show) => { document.getElementById('note-modal-overlay').style.display = show ? 'flex' : 'none'; };
-        window.logout = () => { sessionStorage.removeItem('active_staff_session'); location.reload(); };
-
-        window.openNoteModal = (id) => {
-            const t = tDict[currentLang];
-            const student = students.find(s => s.id === id);
-            if (!student) return;
-            currentNoteStudentId = id;
-            document.getElementById('note-student-name').innerText = student.name;
-            document.getElementById('student-note-input').value = student.note || '';
-            document.getElementById('student-note-input').placeholder = t.notePlaceholder;
-            document.getElementById('note-modal-title').innerText = t.noteTitle;
-            document.getElementById('note-btn-cancel').innerText = t.cancelNote;
-            document.getElementById('note-btn-save').innerText = t.btnSaveNote;
-            window.toggleNoteModal(true);
-        };
-
-        window.saveStudentNote = async () => {
-            if (!currentNoteStudentId) return;
-            let currentInput = document.getElementById('student-note-input').value.trim();
-            const student = students.find(s => s.id === currentNoteStudentId);
-            const sRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', currentNoteStudentId);
-            
-            try {
-                // 只有当内容发生实质性修改，且内容非空时，自动追加编辑者和日期签名
-                if (student && currentInput !== (student.note || '').trim() && currentInput !== '') {
-                    const dateObj = new Date();
-                    const mmdd = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
-                    const signature = `[${loggedUser} ${mmdd}]`;
-                    
-                    // 防止同一人在同一天连续多次保存导致签名重复堆叠
-                    if (!currentInput.endsWith(signature)) {
-                        currentInput += `\n${signature}`;
-                    }
-                }
-                
-                await updateDoc(sRef, { note: currentInput });
-                window.toggleNoteModal(false);
-            } catch (err) { console.error("Error saving note:", err); }
-        };
-
-        window.openAddModal = () => {
-            const t = tDict[currentLang];
-            document.getElementById('modal-title').innerText = t.modalTitleAdd;
-            document.getElementById('student-form').reset();
-            document.getElementById('input-id').value = '';
-            
-            const teacherSelect = document.getElementById('input-teacher');
-            teacherSelect.innerHTML = `<option value="">${t.placeholderTeacher}</option>` + teacherList.map(tchr => `<option value="${tchr}">${tchr}</option>`).join('');
-            if (!isAdmin && loggedUser !== 'Director') {
-                teacherSelect.value = loggedUser;
-                teacherSelect.disabled = true;
-            } else {
-                teacherSelect.disabled = false;
-            }
-
-            const totalSelect = document.getElementById('input-total');
-            totalSelect.innerHTML = [12, 24, 48, 96, 144].map(n => `<option value="${n}">${n}</option>`).join('');
-            window.toggleModal(true);
-        };
-
-        window.editStudent = (id) => {
-            const t = tDict[currentLang];
-            const s = students.find(x => x.id === id);
-            if (!s) return;
-            document.getElementById('modal-title').innerText = t.modalTitleEdit;
-            document.getElementById('input-id').value = s.id;
-            document.getElementById('input-name').value = s.name;
-            document.getElementById('input-contract').value = s.contract || '';
-            document.getElementById('input-used').value = s.used;
-            document.getElementById('input-date').value = s.payDate || '';
-            document.getElementById('input-class').value = s.class || '';
-
-            const teacherSelect = document.getElementById('input-teacher');
-            teacherSelect.innerHTML = teacherList.map(tchr => `<option value="${tchr}">${tchr}</option>`).join('');
-            teacherSelect.value = s.teacher;
-            if (!isAdmin && loggedUser !== 'Director') { teacherSelect.disabled = true; } else { teacherSelect.disabled = false; }
-
-            const totalSelect = document.getElementById('input-total');
-            totalSelect.innerHTML = [12, 24, 48, 96, 144].map(n => `<option value="${n}">${n}</option>`).join('');
-            if (![12, 24, 48, 96, 144].includes(Number(s.total))) {
-                totalSelect.innerHTML += `<option value="${s.total}">${s.total}</option>`;
-            }
-            totalSelect.value = s.total;
-            window.toggleModal(true);
-        };
-
-        window.toggleFreeze = async (id) => {
-            const s = students.find(x => x.id === id);
-            if (!s) return;
-            const newFrozenState = !s.isFrozen;
-            const t = tDict[currentLang];
-            const dateStr = formatDate(new Date().toISOString());
-            const typeStr = newFrozenState ? 'freeze' : 'unfreeze';
-            const newHistory = [...(s.history || []), { date: dateStr, type: typeStr }];
-            try {
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { isFrozen: newFrozenState, history: newHistory });
-            } catch (err) { console.error("Error toggling freeze:", err); }
-        };
-
-        window.toggleArchive = async (id) => {
-            const s = students.find(x => x.id === id);
-            if (!s) return;
-            const newArchiveState = !s.isArchived;
-            const t = tDict[currentLang];
-            const dateStr = formatDate(new Date().toISOString());
-            const typeStr = newArchiveState ? 'archive' : 'unarchive';
-            const newHistory = [...(s.history || []), { date: dateStr, type: typeStr }];
-            try {
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { isArchived: newArchiveState, history: newHistory });
-            } catch (err) { console.error("Error toggling archive:", err); }
-        };
-
-        window.deleteStudent = (id) => {
-            customConfirm(tDict[currentLang].confirmDelete, async () => {
-                try {
-                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id));
-                } catch (err) { console.error("Error deleting student:", err); }
-            });
-        };
-
-        window.recordClass = async (id, amount) => {
-            const s = students.find(x => x.id === id);
-            if (!s) return;
-            const newUsed = Math.min(s.total, Math.max(0, s.used + amount));
-            if (newUsed === s.used) return;
-            
-            const dateStr = formatDate(new Date().toISOString());
-            const typeStr = amount > 0 ? 'add' : 'absent';
-            const newHistory = [...(s.history || []), { date: dateStr, type: typeStr }];
-            
-            try {
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { used: newUsed, history: newHistory });
-            } catch (err) { console.error("Error recording class:", err); }
-        };
-
-        window.openHistoryModal = (id) => {
-            currentHistoryStudentId = id;
-            const s = students.find(x => x.id === id);
-            if (!s) return;
-            const t = tDict[currentLang];
-            document.getElementById('history-modal-title').innerText = t.historyTitle + ` - ${s.name}`;
-            
-            const contractDiv = document.getElementById('history-contract-container');
-            const contractDisplay = document.getElementById('history-contract-display');
-            if (s.contract) {
-                contractDisplay.innerText = s.contract;
-                contractDiv.setAttribute('data-contract', s.contract);
-                contractDiv.classList.remove('hidden');
-            } else {
-                contractDiv.classList.add('hidden');
-            }
-
-            document.getElementById('manual-date-input').value = formatDate(new Date().toISOString());
-            window.cancelRecordEdit();
-            renderHistoryList();
-            window.toggleHistoryModal(true);
-        };
-
-        window.copyContractNumber = () => {
-            const container = document.getElementById('history-contract-container');
-            const textToCopy = container.getAttribute('data-contract');
-            if (!textToCopy) return;
-            
-            const textArea = document.createElement("textarea");
-            textArea.value = textToCopy;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try { document.execCommand('copy'); } catch (err) { console.error('Copy failed', err); }
-            document.body.removeChild(textArea);
-            
-            const btn = document.getElementById('btn-copy-contract');
-            const origIcon = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-green-500"></i>`;
-            lucide.createIcons();
-            setTimeout(() => { btn.innerHTML = origIcon; lucide.createIcons(); }, 1500);
-        };
-
-        window.editRecord = (index) => {
-            const s = students.find(x => x.id === currentHistoryStudentId);
-            if (!s || !s.history || !s.history[index]) return;
-            editingRecordIndex = index;
-            document.getElementById('manual-date-input').value = s.history[index].date;
-            document.getElementById('btn-record-action').innerText = tDict[currentLang].btnUpdate;
-            document.getElementById('btn-record-action').classList.replace('bg-[#2C5F56]', 'bg-[#FFC554]');
-            document.getElementById('btn-record-action').classList.replace('text-white', 'text-[#1A2E35]');
-            document.getElementById('btn-record-cancel').classList.remove('hidden');
-        };
-
-        window.cancelRecordEdit = () => {
-            editingRecordIndex = -1;
-            document.getElementById('manual-date-input').value = formatDate(new Date().toISOString());
-            document.getElementById('btn-record-action').innerText = tDict[currentLang].manualAdd;
-            document.getElementById('btn-record-action').classList.replace('bg-[#FFC554]', 'bg-[#2C5F56]');
-            document.getElementById('btn-record-action').classList.replace('text-[#1A2E35]', 'text-white');
-            document.getElementById('btn-record-cancel').classList.add('hidden');
-        };
-
-        window.handleRecordAction = async () => {
-            const s = students.find(x => x.id === currentHistoryStudentId);
-            if (!s) return;
-            const newDate = document.getElementById('manual-date-input').value;
-            if (!newDate) return;
-            
-            let updatedHistory = [...(s.history || [])];
-            let newUsed = s.used;
-
-            if (editingRecordIndex > -1) {
-                updatedHistory[editingRecordIndex].date = newDate;
-            } else {
-                updatedHistory.push({ date: newDate, type: 'add' });
-                newUsed = Math.min(s.total, s.used + 1);
-            }
-            
-            try {
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { used: newUsed, history: updatedHistory });
-                window.cancelRecordEdit();
-            } catch (err) { console.error("Error updating record:", err); }
-        };
-
-        window.deleteRecord = (index) => {
-            customConfirm(tDict[currentLang].confirmDeleteRecord, async () => {
-                const s = students.find(x => x.id === currentHistoryStudentId);
-                if (!s || !s.history) return;
-                
-                const rec = s.history[index];
-                let newUsed = s.used;
-                if (rec.type === 'add') newUsed = Math.max(0, s.used - 1);
-                else if (rec.type === 'absent') newUsed = Math.min(s.total, s.used + 1);
-                
-                const newHistory = s.history.filter((_, i) => i !== index);
-                
-                try {
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { used: newUsed, history: newHistory });
-                    if (editingRecordIndex === index) window.cancelRecordEdit();
-                } catch (err) { console.error("Error deleting record:", err); }
-            });
-        };
-
-        const renderHistoryList = () => {
-            const list = document.getElementById('history-list');
-            const s = students.find(x => x.id === currentHistoryStudentId);
-            const t = tDict[currentLang];
-            
-            if (!s || !s.history || s.history.length === 0) {
-                list.innerHTML = `<div class="text-center py-10 text-slate-300 font-bold flex flex-col items-center"><i data-lucide="inbox" class="w-10 h-10 mb-3 opacity-50"></i>${t.historyEmpty}</div>`;
-                lucide.createIcons();
-                return;
-            }
-
-            const sortedHistory = [...s.history].map((item, index) => ({...item, originalIndex: index})).sort((a, b) => {
-                const timeA = new Date(a.date).getTime();
-                const timeB = new Date(b.date).getTime();
-                if (timeA !== timeB) return timeB - timeA;
-                return b.originalIndex - a.originalIndex;
-            });
-
-            list.innerHTML = sortedHistory.map(item => {
-                const isAdd = item.type === 'add';
-                const isAbsent = item.type === 'absent';
-                const isArchive = item.type === 'archive';
-                const isUnarchive = item.type === 'unarchive';
-                const isFreeze = item.type === 'freeze';
-                const isUnfreeze = item.type === 'unfreeze';
-                const isPayment = item.type === 'payment';
-                
-                const dateObj = new Date(item.date);
-                const dayName = t.days[dateObj.getDay()];
-                const dayNum = String(dateObj.getDate()).padStart(2, '0');
-                const monthName = String(dateObj.getMonth() + 1).padStart(2, '0');
-                const isSystemLog = isArchive || isUnarchive || isFreeze || isUnfreeze || isPayment;
-                
-                let actionDisplay = '';
-                if (isAbsent) actionDisplay = `<span class="text-rose-500 font-bold ml-2 text-xs">${t.absentMark}</span>`;
-                else if (isArchive) actionDisplay = `<span class="text-slate-500 font-bold ml-2 text-xs">[停学归档]</span>`;
-                else if (isUnarchive) actionDisplay = `<span class="text-[#2C5F56] font-bold ml-2 text-xs">[恢复在读]</span>`;
-                else if (isFreeze) actionDisplay = `<span class="text-blue-500 font-bold ml-2 text-xs">[账号冻结]</span>`;
-                else if (isUnfreeze) actionDisplay = `<span class="text-amber-500 font-bold ml-2 text-xs">[解冻恢复]</span>`;
-                else if (isPayment) {
-                    let det = (item.newPayDate && item.newPayDate !== '-') ? item.newPayDate : '';
-                    if (item.newTotal && item.oldTotal !== item.newTotal) det += ` (${item.oldTotal}→${item.newTotal})`;
-                    actionDisplay = `<span class="text-emerald-600 font-bold ml-2 text-[11px] bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 shadow-sm">${t.paymentMark} ${det.trim()}</span>`;
-                }
-
-                return `
-                    <div class="flex items-center justify-between p-4 bg-[#F7FAF9] rounded-3xl border border-transparent hover:border-[#2C5F56]/10 transition-all group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm text-[#1A2E35]">
-                                <span class="text-[10px] font-black uppercase text-slate-400 leading-none">${dayName}</span>
-                                <span class="text-lg font-[900] leading-none mt-0.5">${dayNum}</span>
-                            </div>
-                            <div>
-                                <p class="font-bold text-[#1A2E35] flex items-center">${dateObj.getFullYear()}-${monthName}-${dayNum} ${actionDisplay}</p>
-                                <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest">${isSystemLog ? 'System Log' : (isAdd ? '+1 Class' : 'Status Update')}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            ${!isSystemLog ? `<button onclick="editRecord(${item.originalIndex})" class="p-2 bg-white text-slate-400 hover:text-amber-500 rounded-xl shadow-sm"><i data-lucide="edit-2" class="w-4 h-4"></i></button>` : ''}
-                            <button onclick="deleteRecord(${item.originalIndex})" class="p-2 bg-white text-slate-400 hover:text-rose-500 rounded-xl shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            lucide.createIcons();
-
-            // 自动置顶，确保用户直接看到最新添加的记录
-            setTimeout(() => {
-                list.scrollTop = 0;
-            }, 10);
-        };
-
-        const render = () => {
-            const t = tDict[currentLang];
-            
-            // Translations
-            document.getElementById('portal-title').innerText = t.portalTitle;
-            document.getElementById('portal-subtitle').innerText = t.portalSub;
-            document.getElementById('entry-name').placeholder = t.entryName;
-            document.getElementById('entry-pin').placeholder = t.entryPin;
-            document.getElementById('btn-enter').innerText = t.btnEnter;
-            document.getElementById('auth-error').innerText = t.errPin;
-            
-            document.getElementById('page-title-main').innerText = t.dashboardTitle;
-            document.getElementById('page-subtitle').innerText = t.subtitle;
-            document.getElementById('add-btn-text').innerText = t.addBtn;
-            document.getElementById('current-lang-text').innerText = currentLang.toUpperCase();
-            
-            document.getElementById('stat-total-label').innerText = t.statTotal;
-            document.getElementById('stat-warning-label').innerText = t.statWarning;
-            document.getElementById('stat-overdue-label').innerText = t.statOverdue;
-            document.getElementById('stat-frozen-label').innerText = t.statFrozen;
-            document.getElementById('stat-archived-label').innerText = t.statArchived;
-
-            document.getElementById('filter-label').innerText = t.filterLabel;
-            document.getElementById('filter-class-label').innerText = t.filterClassLabel;
-            document.getElementById('filter-status-label').innerText = t.filterStatusLabel;
-
-            // Form labels
-            document.getElementById('label-name').innerText = t.labelName;
-            document.getElementById('input-name').placeholder = t.placeholderName;
-            document.getElementById('label-contract').innerText = t.labelContract;
-            document.getElementById('input-contract').placeholder = t.placeholderContract;
-            document.getElementById('label-teacher').innerText = t.labelTeacher;
-            document.getElementById('label-class').innerText = t.labelClass;
-            document.getElementById('input-class').placeholder = t.placeholderClass;
-            document.getElementById('label-total').innerText = t.labelTotal;
-            document.getElementById('label-used').innerText = t.labelUsed;
-            document.getElementById('label-date').innerText = t.labelPayDate;
-            document.getElementById('btn-cancel').innerText = t.btnCancel;
-            document.getElementById('btn-save').innerText = t.btnSave;
-            
-            document.getElementById('history-modal-title').innerText = t.historyTitle;
-            document.getElementById('btn-close-history').innerText = t.btnClose;
-            document.getElementById('btn-record-action').innerText = editingRecordIndex > -1 ? t.btnUpdate : t.manualAdd;
-
-            const permittedStudents = (isAdmin || loggedUser === 'Director') ? students : students.filter(s => s.teacher === loggedUser);
-
-            // 1. 获取所有班级集合 (不受当前过滤影响，保证班级过滤按钮始终完整)
-            const classSet = new Set();
-            permittedStudents.filter(s => !s.isArchived).forEach(s => {
-                if (s.class) classSet.add(s.class);
-            });
-
-            // 2. 根据选中的老师和班级，动态计算顶部 5 个统计卡片的数据
-            let statsStudents = permittedStudents;
-            if (selectedTeacher !== 'all') statsStudents = statsStudents.filter(s => s.teacher === selectedTeacher);
-            if (selectedClass !== 'all') statsStudents = statsStudents.filter(s => s.class === selectedClass);
-
-            const activeStatsStudents = statsStudents.filter(s => !s.isArchived);
-            let total = activeStatsStudents.length, warning = 0, overdue = 0, frozen = 0, archived = statsStudents.filter(s => s.isArchived).length;
-            
-            activeStatsStudents.forEach(s => {
-                if (s.isFrozen) frozen++;
-                else {
-                    const rem = s.total - s.used;
-                    if (rem <= 0) overdue++;
-                    else if (rem <= 3) warning++;
-                }
-            });
-
-            document.getElementById('stat-total-label').innerText = selectedTeacher === 'all' ? t.statTotal : `${selectedTeacher} ${t.statTotal}`;
-            document.getElementById('stat-total-val').innerText = total;
-            document.getElementById('stat-warning-val').innerText = warning;
-            document.getElementById('stat-overdue-val').innerText = overdue;
-            document.getElementById('stat-frozen-val').innerText = frozen;
-            document.getElementById('stat-archived-val').innerText = archived;
-
-            // Teacher Filters
-            if (isAdmin) {
-                const tc = document.getElementById('teacher-filter-container');
-                tc.innerHTML = `<button onclick="setTeacherFilter('all')" class="filter-chip ${selectedTeacher === 'all' ? 'active' : 'bg-[#F7FAF9] text-[#2C5F56] hover:bg-[#D1DEDC]'} px-4 py-2 rounded-2xl font-bold text-[10px] uppercase transition-all shadow-sm">${t.filterAll}</button>`;
-                teacherList.forEach(tchr => {
-                    const count = students.filter(s => s.teacher === tchr && !s.isArchived).length;
-                    tc.innerHTML += `<button onclick="setTeacherFilter('${tchr}')" class="filter-chip ${selectedTeacher === tchr ? 'active' : 'bg-[#F7FAF9] text-[#2C5F56] hover:bg-[#D1DEDC]'} px-4 py-2 rounded-2xl font-bold text-[10px] uppercase transition-all shadow-sm">${tchr} <span class="ml-1 opacity-70">(${count})</span></button>`;
-                });
-            }
-
-            // Class Filters
-            const cc = document.getElementById('class-filter-container');
-            cc.innerHTML = `<button onclick="setClassFilter('all')" class="filter-chip ${selectedClass === 'all' ? 'active' : 'bg-[#F7FAF9] text-[#2C5F56] hover:bg-[#D1DEDC]'} px-4 py-2 rounded-2xl font-bold text-[10px] uppercase transition-all shadow-sm">${t.filterAll}</button>`;
-            Array.from(classSet).sort().forEach(cls => {
-                cc.innerHTML += `<button onclick="setClassFilter('${cls}')" class="filter-chip ${selectedClass === cls ? 'active' : 'bg-[#F7FAF9] text-[#2C5F56] hover:bg-[#D1DEDC]'} px-4 py-2 rounded-2xl font-bold text-[10px] uppercase transition-all shadow-sm">${cls}</button>`;
-            });
-            document.getElementById('class-list').innerHTML = Array.from(classSet).map(c => `<option value="${c}">`).join('');
-
-            // Status Filters
-            const sc = document.getElementById('status-filter-container');
-            const statusOpts = [
-                { id: 'all', label: t.filterAll, class: 'text-[#2C5F56]' },
-                { id: 'paid', label: t.statusPaid, class: 'text-emerald-600' },
-                { id: 'warning', label: t.statusWarning, class: 'text-amber-600' },
-                { id: 'overdue', label: t.statusOverdue, class: 'text-rose-600' },
-                { id: 'frozen', label: t.statusFrozen, class: 'text-blue-600' },
-                { id: 'archived', label: t.statusArchived, class: 'text-slate-500' }
-            ];
-            sc.innerHTML = statusOpts.map(opt => `<button onclick="setStatusFilter('${opt.id}')" class="filter-chip ${selectedStatus === opt.id ? 'active' : `bg-[#F7FAF9] ${opt.class} hover:bg-[#D1DEDC]`} px-4 py-2 rounded-2xl font-bold text-[10px] uppercase transition-all shadow-sm">${opt.label}</button>`).join('');
-
-            // Apply Filters
-            let filtered = permittedStudents;
-            
-            // Base structural filter (archived or not)
-            if (selectedStatus === 'archived') {
-                filtered = filtered.filter(s => s.isArchived);
-            } else {
-                // If not viewing archived explicitly, hide them from all other views
-                filtered = filtered.filter(s => !s.isArchived);
-                
-                if (selectedStatus !== 'all') {
-                    filtered = filtered.filter(s => {
-                        const rem = s.total - s.used;
-                        if (selectedStatus === 'frozen') return s.isFrozen;
-                        if (s.isFrozen) return false;
-                        if (selectedStatus === 'overdue') return rem <= 0;
-                        if (selectedStatus === 'warning') return rem > 0 && rem <= 3;
-                        if (selectedStatus === 'paid') return rem > 3;
-                        return true;
-                    });
-                }
-            }
-
-            if (selectedTeacher !== 'all') filtered = filtered.filter(s => s.teacher === selectedTeacher);
-            if (selectedClass !== 'all') filtered = filtered.filter(s => s.class === selectedClass);
-            
-            filtered.sort((a, b) => (a.total - a.used) - (b.total - b.used));
-
-            // Render Table Header
-            document.getElementById('table-head-row').innerHTML = `
-                <th class="p-5 font-[900] text-[#1A2E35] tracking-tight w-1/6 rounded-tl-3xl">${t.thName}</th>
-                <th class="p-5 font-[900] text-[#1A2E35] tracking-tight w-32 hidden md:table-cell">${t.thTeacher}</th>
-                <th class="p-5 font-[900] text-[#1A2E35] tracking-tight w-24 hidden lg:table-cell">${t.thClass}</th>
-                <th class="p-5 font-[900] text-[#1A2E35] tracking-tight w-48">${t.thProgress}</th>
-                <th class="p-5 font-[900] text-[#1A2E35] tracking-tight text-center w-24">${t.thRemaining}</th>
-                <th class="p-5 font-[900] text-[#1A2E35] tracking-tight text-center w-32 hidden sm:table-cell">${t.thLastPay}</th>
-                <th class="p-5 font-[900] text-[#1A2E35] tracking-tight text-center w-24">${t.thStatus}</th>
-                <th class="p-5 font-[900] text-[#1A2E35] tracking-tight text-right rounded-tr-3xl min-w-[280px]">${t.thActions}</th>
-            `;
-
-            // Render Table Body
-            const tbody = document.getElementById('student-table-body');
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="p-16 text-center text-slate-300 font-bold"><div class="flex flex-col items-center justify-center"><i data-lucide="ghost" class="w-12 h-12 mb-4 opacity-30"></i><span>${t.noMatch}</span></div></td></tr>`;
-            } else {
-                tbody.innerHTML = filtered.map(s => {
-                    const rem = s.total - s.used;
-                    const pct = Math.min(100, Math.max(0, (s.used / s.total) * 100));
-                    
-                    let statusLabel = t.statusPaid, statusColor = 'bg-emerald-50 text-emerald-600 border-emerald-200', pbColor = 'bg-emerald-400';
-                    if (s.isArchived) { statusLabel = t.statusArchived; statusColor = 'bg-slate-100 text-slate-500 border-slate-200'; pbColor = 'bg-slate-400'; }
-                    else if (s.isFrozen) { statusLabel = t.statusFrozen; statusColor = 'bg-blue-50 text-blue-600 border-blue-200'; pbColor = 'bg-blue-400'; }
-                    else if (rem <= 0) { statusLabel = t.statusOverdue; statusColor = 'bg-rose-50 text-rose-600 border-rose-200 animate-pulse'; pbColor = 'bg-rose-500'; }
-                    else if (rem <= 3) { statusLabel = t.statusWarning; statusColor = 'bg-amber-50 text-amber-600 border-amber-200'; pbColor = 'bg-amber-400'; }
-
-                    const trClass = s.isArchived ? "table-row-modern opacity-60 hover:opacity-100" : "table-row-modern";
-
-                    let actionBtns = '';
-                    if (!s.isArchived) {
-                        if (!s.isFrozen) {
-                            actionBtns += `
-                                <button onclick="recordClass('${s.id}', 1)" title="${t.actionPlus}" class="w-9 h-9 rounded-full bg-[#F7FAF9] text-[#2C5F56] hover:bg-[#2C5F56] hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-90"><i data-lucide="plus-circle" class="w-4 h-4"></i></button>
-                                <button onclick="recordClass('${s.id}', -1)" title="${t.actionAbsent}" class="w-9 h-9 rounded-full bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-90"><i data-lucide="user-minus" class="w-4 h-4"></i></button>
-                                <button onclick="toggleFreeze('${s.id}')" title="${t.actionFreeze}" class="w-9 h-9 rounded-full bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-90"><i data-lucide="snowflake" class="w-4 h-4"></i></button>
-                            `;
-                        } else {
-                            actionBtns += `
-                                <button onclick="toggleFreeze('${s.id}')" title="${t.actionUnfreeze}" class="w-9 h-9 rounded-full bg-amber-50 text-amber-500 hover:bg-amber-500 hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-90"><i data-lucide="flame" class="w-4 h-4"></i></button>
-                            `;
-                        }
-                    }
-
-                    actionBtns += `
-                        <button onclick="toggleArchive('${s.id}')" title="${s.isArchived ? t.actionUnarchive : t.actionArchive}" class="w-9 h-9 rounded-full ${s.isArchived ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-500' : 'bg-slate-50 text-slate-500 hover:bg-slate-700'} hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-90"><i data-lucide="${s.isArchived ? 'archive-restore' : 'archive'}" class="w-4 h-4"></i></button>
-                        <button onclick="editStudent('${s.id}')" title="${t.actionEdit}" class="w-9 h-9 rounded-full bg-slate-50 text-slate-500 hover:bg-slate-500 hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-90"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                        <button onclick="deleteStudent('${s.id}')" title="${t.actionDelete}" class="w-9 h-9 rounded-full bg-rose-50 text-rose-500 hover:bg-rose-600 hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-90"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    `;
-
-                    return `
-                        <tr class="${trClass}">
-                            <td class="p-4">
-                                <div class="flex items-center gap-2">
-                                    <div onclick="openNoteModal('${s.id}')" class="font-bold text-[#1A2E35] cursor-pointer hover:text-[#2C5F56] transition-colors group flex items-center gap-1.5" title="点击添加/查看备注">
-                                        <span class="truncate max-w-[120px] sm:max-w-[150px] inline-block">${s.name}</span>
-                                        ${s.note ? `<i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>` : `<i data-lucide="plus" class="w-3 h-3 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"></i>`}
-                                    </div>
-                                    <button onclick="openHistoryModal('${s.id}')" title="${t.actionHistory}" class="ml-1 w-7 h-7 rounded-lg bg-[#FFF9EB] text-amber-600 hover:bg-amber-500 hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-90 shrink-0">
-                                        <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                                    </button>
-                                </div>
-                            </td>
-                            <td class="p-4 font-bold text-slate-500 hidden md:table-cell">${s.teacher}</td>
-                            <td class="p-4 hidden lg:table-cell">
-                                <span class="bg-[#F7FAF9] text-[#2C5F56] px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider">${s.class || '-'}</span>
-                            </td>
-                            <td class="p-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner"><div class="h-full ${pbColor} rounded-full" style="width: ${pct}%"></div></div>
-                                    <span class="text-xs font-black text-slate-400 w-12 text-right">${s.used}/${s.total}</span>
-                                </div>
-                            </td>
-                            <td class="p-4 text-center"><span class="text-lg font-[900] ${rem <= 3 && !s.isArchived && !s.isFrozen ? 'text-rose-500' : 'text-[#1A2E35]'}">${rem}</span></td>
-                            <td class="p-4 text-center font-bold text-slate-400 text-xs hidden sm:table-cell">${s.payDate || '-'}</td>
-                            <td class="p-4 text-center">
-                                <span class="px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border ${statusColor}">${statusLabel}</span>
-                            </td>
-                            <td class="p-4 text-right">
-                                <div class="flex items-center justify-end gap-1.5">${actionBtns}</div>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-            lucide.createIcons();
-            if (currentHistoryStudentId && document.getElementById('history-modal-overlay').style.display === 'flex') {
-                renderHistoryList();
-            }
-        };
-
         const startApp = async () => {
             const app = initializeApp(firebaseConfig);
             auth = getAuth(app); 
             db = getFirestore(app);
-
-            // Form Submit Listener
-            document.getElementById('student-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const id = document.getElementById('input-id').value;
-                const data = {
-                    name: document.getElementById('input-name').value.trim(),
-                    contract: document.getElementById('input-contract').value.trim(),
-                    teacher: document.getElementById('input-teacher').value,
-                    class: document.getElementById('input-class').value.trim(),
-                    total: parseInt(document.getElementById('input-total').value),
-                    used: parseInt(document.getElementById('input-used').value),
-                    payDate: document.getElementById('input-date').value
-                };
-
-                try {
-                    if (id) {
-                        const oldS = students.find(s => s.id === id);
-                        let payload = { ...data };
-                        // 自动记录付费日期或总课时的变更（实现“续费/修改”的历史追溯）
-                        if (oldS && ((oldS.payDate || '') !== (data.payDate || '') || oldS.total !== data.total)) {
-                            const dateStr = formatDate(new Date().toISOString());
-                            const newHistory = [...(oldS.history || [])];
-                            newHistory.push({
-                                date: dateStr,
-                                type: 'payment',
-                                newPayDate: data.payDate || '-',
-                                oldTotal: oldS.total || 0,
-                                newTotal: data.total
-                            });
-                            payload.history = newHistory;
-                        }
-                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), payload);
-                    } else {
-                        const newId = generateId();
-                        const initialHistory = [{ 
-                            date: formatDate(new Date().toISOString()), 
-                            type: 'payment', 
-                            newPayDate: data.payDate || '-', 
-                            oldTotal: 0, 
-                            newTotal: data.total 
-                        }];
-                        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', newId), { ...data, history: initialHistory, isFrozen: false, isArchived: false, note: '' });
-                    }
-                    window.toggleModal(false);
-                } catch (err) { console.error("Error saving student:", err); }
-            });
-
+            
+            window.logout = () => { sessionStorage.removeItem('active_staff_session'); location.reload(); };
+            window.setLang = (l) => { currentLang = l; render(); };
+            window.setTeacherFilter = (t) => { selectedTeacher = t; selectedClass = 'all'; render(); };
+            window.setClassFilter = (c) => { selectedClass = c; render(); };
+            window.setStatusFilter = (s) => { selectedStatus = s; render(); };
+            window.toggleModal = (show) => { document.getElementById('modal-overlay').style.display = show ? 'flex' : 'none'; };
+            window.toggleHistoryModal = (show) => { if (!show) window.cancelRecordEdit(); document.getElementById('history-modal-overlay').style.display = show ? 'flex' : 'none'; };
+            window.toggleNoteModal = (show) => { document.getElementById('note-modal-overlay').style.display = show ? 'flex' : 'none'; };
+            
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
@@ -964,6 +318,9 @@
                         });
 
                         render();
+                        if (currentHistoryStudentId && document.getElementById('history-modal-overlay').style.display === 'flex') {
+                            window.openHistoryModal(currentHistoryStudentId);
+                        }
                     }, (error) => {
                         console.error("Firestore snapshot error:", error);
                     });
@@ -1000,6 +357,8 @@
 
         const verifySession = () => {
             let saved = sessionStorage.getItem('active_staff_session');
+            
+            // Auto-migrate local session
             if (saved === 'Anlaoshi') {
                 saved = 'Alaoshi';
                 sessionStorage.setItem('active_staff_session', 'Alaoshi');
@@ -1016,7 +375,335 @@
             }
         };
 
-        startApp();
-    </script>
-</body>
-</html>
+        window.copyContractNumber = () => {
+            const container = document.getElementById('history-contract-container');
+            const textToCopy = container.getAttribute('data-contract');
+            if (!textToCopy) return;
+
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const btn = document.getElementById('btn-copy-contract');
+                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-[#2C5F56]"></i>`;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i>`;
+                    lucide.createIcons();
+                }, 2000);
+            } catch (err) {
+                console.error('Copy failed', err);
+            }
+            document.body.removeChild(textArea);
+        };
+
+        window.openHistoryModal = (id) => {
+            currentHistoryStudentId = id; const s = students.find(item => item.id === id); if (!s) return;
+            const t = tDict[currentLang] || tDict['zh'];
+            document.getElementById('history-modal-title').innerText = `${s.name} - ${t.historyTitle}`;
+            
+            const contractContainer = document.getElementById('history-contract-container');
+            if (s.contractId) {
+                document.getElementById('history-contract-display').innerText = s.contractId;
+                contractContainer.setAttribute('data-contract', s.contractId);
+                contractContainer.classList.remove('hidden');
+            } else {
+                contractContainer.classList.add('hidden');
+            }
+
+            const list = document.getElementById('history-list'); list.innerHTML = '';
+            const history = s.attendanceHistory || [];
+            if (history.length === 0) {
+                if (s.usedLessons > 0) {
+                    list.innerHTML = `<div class="py-12 text-center flex flex-col items-center opacity-60"><i data-lucide="history" class="w-10 h-10 mb-3 text-slate-400"></i><span class="text-sm font-bold text-slate-500">旧版系统已扣除 ${s.usedLessons} 节课</span><span class="text-xs text-slate-400 mt-1">${t.historyEmpty}</span></div>`;
+                } else {
+                    list.innerHTML = `<div class="py-12 text-center text-slate-400 font-bold text-sm">${t.historyEmpty}</div>`;
+                }
+            } else {
+                // Reverse to show newest on top, keep original index for edits
+                const reversed = history.map((record, index) => ({ record, index })).reverse();
+                reversed.forEach(({ record, index }) => {
+                    const isAbsent = record.includes(t.absentMark);
+                    const isFreeze = record.includes(t.statusFrozen) || record.includes(t.actionUnfreeze) || record.includes(t.actionFreeze);
+                    const isArchive = record.includes(t.actionArchive) || record.includes(t.actionUnarchive) || record.includes(t.statArchived);
+                    const isUpdate = record.includes(t.payUpdate);
+
+                    let recordStyling = 'text-[#1A2E35]';
+                    if (isAbsent) recordStyling = 'text-amber-600 bg-amber-50/50';
+                    if (isFreeze) recordStyling = 'text-blue-600 bg-blue-50/50';
+                    if (isArchive) recordStyling = 'text-slate-500 bg-slate-50/50 line-through';
+                    if (isUpdate) recordStyling = 'text-purple-600 bg-purple-50/50';
+
+                    list.innerHTML += `<div class="flex items-center justify-between p-5 lg:p-6 bg-[#F7FAF9] rounded-[24px] border border-white group hover:bg-[#F0F6F5] transition-all">
+                        <div class="flex items-center gap-3 lg:gap-4 w-full">
+                            <div class="w-8 h-8 lg:w-10 lg:h-10 shrink-0 rounded-2xl bg-white text-[#2C5F56] flex items-center justify-center text-xs font-black shadow-sm">${index + 1}</div>
+                            <span class="text-xs lg:text-sm font-bold ${recordStyling} break-words flex-1 px-2 py-1 rounded-xl">${record}</span>
+                        </div>
+                        <div class="flex items-center gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                            <button onclick="startEditRecord(${index}, '${record.replace(/'/g, "\\'")}')" class="p-2 lg:p-2.5 text-slate-300 hover:text-[#2C5F56]"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="deleteRecord(${index})" class="p-2 lg:p-2.5 text-slate-300 hover:text-rose-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div></div>`;
+                });
+            }
+            window.toggleHistoryModal(true); lucide.createIcons();
+            
+            // Scroll history to top automatically
+            setTimeout(() => { document.getElementById('history-list').scrollTop = 0; }, 50);
+        };
+
+        window.startEditRecord = (idx, text) => {
+            editingRecordIndex = idx; const m = text.match(/\d{4}-\d{2}-\d{2}/);
+            if (m) document.getElementById('manual-date-input').value = m[0];
+            document.getElementById('btn-record-action').innerText = tDict[currentLang].btnUpdate;
+            document.getElementById('btn-record-cancel').classList.remove('hidden');
+        };
+        window.cancelRecordEdit = () => { editingRecordIndex = -1; document.getElementById('manual-date-input').value = ""; document.getElementById('btn-record-action').innerText = tDict[currentLang].manualAdd; document.getElementById('btn-record-cancel').classList.add('hidden'); };
+        window.handleRecordAction = () => editingRecordIndex >= 0 ? updateManualRecord() : addManualRecord();
+
+        const addManualRecord = async () => {
+            const d = document.getElementById('manual-date-input').value; if (!d) return;
+            const s = students.find(it => it.id === currentHistoryStudentId);
+            const formatted = `${d} (${tDict[currentLang].days[new Date(d.replace(/-/g, "/")).getDay()]})`;
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { usedLessons: s.usedLessons + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
+            document.getElementById('manual-date-input').value = "";
+        };
+
+        const updateManualRecord = async () => {
+            const d = document.getElementById('manual-date-input').value; if (!d) return;
+            const s = students.find(it => it.id === currentHistoryStudentId);
+            const originalRecord = (s.attendanceHistory || [])[editingRecordIndex];
+            
+            let formatted = `${d} (${tDict[currentLang].days[new Date(d.replace(/-/g, "/")).getDay()]})`;
+            
+            // Retain original tags like absent, freeze, etc.
+            const t = tDict[currentLang];
+            if (originalRecord && originalRecord.includes(t.absentMark)) formatted += ` ${t.absentMark}`;
+            else if (originalRecord && originalRecord.includes(t.actionFreeze)) formatted += ` [${t.actionFreeze}]`;
+            else if (originalRecord && originalRecord.includes(t.actionUnfreeze)) formatted += ` [${t.actionUnfreeze}]`;
+            else if (originalRecord && originalRecord.includes(t.actionArchive)) formatted += ` [${t.actionArchive}]`;
+            else if (originalRecord && originalRecord.includes(t.actionUnarchive)) formatted += ` [${t.actionUnarchive}]`;
+            else if (originalRecord && originalRecord.includes(t.payUpdate)) formatted += ` ${originalRecord.substring(originalRecord.indexOf(t.payUpdate))}`;
+
+            const nh = [...(s.attendanceHistory || [])]; nh[editingRecordIndex] = formatted;
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { attendanceHistory: nh });
+            window.cancelRecordEdit();
+        };
+
+        window.deleteRecord = (idx) => customConfirm(tDict[currentLang].confirmDeleteRecord, async () => {
+            const s = students.find(it => it.id === currentHistoryStudentId);
+            const nh = [...(s.attendanceHistory || [])]; 
+            const isLesson = !nh[idx].includes('[') && !nh[idx].includes(tDict[currentLang].payUpdate); // Simple heuristic to avoid deducting lesson count if deleting a freeze/archive/payment log
+            nh.splice(idx, 1);
+            
+            let updates = { attendanceHistory: nh };
+            if (isLesson) updates.usedLessons = Math.max(0, s.usedLessons - 1);
+
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), updates);
+        });
+
+        window.openNoteModal = (id) => {
+            const s = students.find(it => it.id === id); if (!s) return;
+            currentNoteStudentId = id;
+            document.getElementById('note-modal-title').innerText = `${s.name} - ${tDict[currentLang].noteTitle}`;
+            document.getElementById('input-note').placeholder = tDict[currentLang].notePlaceholder;
+            document.getElementById('input-note').value = s.note || "";
+            document.getElementById('btn-note-cancel').innerText = tDict[currentLang].btnCancel;
+            document.getElementById('btn-note-save').innerText = tDict[currentLang].btnSave;
+            window.toggleNoteModal(true);
+        };
+
+        window.saveNote = async () => {
+            if (!currentNoteStudentId) return;
+            let noteVal = document.getElementById('input-note').value.trim();
+            if (noteVal) {
+                const now = new Date();
+                const sig = `[${loggedUser} ${now.getMonth()+1}/${now.getDate()}]`;
+                if (!noteVal.endsWith(sig)) noteVal += `\n${sig}`;
+            }
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentNoteStudentId), { note: noteVal });
+            window.toggleNoteModal(false);
+        };
+
+        window.openAddModal = () => {
+            document.getElementById('student-form').reset(); document.getElementById('input-id').value = "";
+            const sel = document.getElementById('input-teacher'); 
+            sel.innerHTML = `<option value="" disabled selected>${tDict[currentLang].placeholderTeacher}</option>` + teacherList.map(t => `<option value="${t}">${t}</option>`).join('');
+            if (!isAdmin) { sel.value = loggedUser; sel.disabled = true; } else { sel.value = ""; sel.disabled = false; }
+            const ts = document.getElementById('input-total'); ts.innerHTML = [12,24,36,48,60,72,96].map(v => `<option value="${v}">${v}</option>`).join('');
+            document.getElementById('modal-title').innerText = tDict[currentLang].modalTitleAdd; window.toggleModal(true);
+        };
+
+        window.openEditModal = (id) => {
+            const s = students.find(it => it.id === id); document.getElementById('input-id').value = s.id;
+            document.getElementById('input-name').value = s.name; document.getElementById('input-contract').value = s.contractId || "";
+            document.getElementById('input-class').value = s.studentClass || "";
+            const sel = document.getElementById('input-teacher'); sel.innerHTML = teacherList.map(t => `<option value="${t}">${t}</option>`).join('');
+            sel.value = s.teacher; sel.disabled = !isAdmin;
+            const ts = document.getElementById('input-total'); ts.innerHTML = [12,24,36,48,60,72,96].map(v => `<option value="${v}">${v}</option>`).join('');
+            ts.value = s.totalLessons; document.getElementById('input-used').value = s.usedLessons; document.getElementById('input-date').value = s.lastPaymentDate || "";
+            document.getElementById('modal-title').innerText = tDict[currentLang].modalTitleEdit; window.toggleModal(true);
+        };
+
+        document.getElementById('student-form').onsubmit = async (e) => {
+            e.preventDefault(); const id = document.getElementById('input-id').value, teacherVal = document.getElementById('input-teacher').value; if (!teacherVal) return;
+            const data = { 
+                name: document.getElementById('input-name').value, 
+                contractId: document.getElementById('input-contract').value, 
+                studentClass: document.getElementById('input-class').value, 
+                teacher: teacherVal, 
+                totalLessons: parseInt(document.getElementById('input-total').value), 
+                usedLessons: parseInt(document.getElementById('input-used').value), 
+                lastPaymentDate: document.getElementById('input-date').value, 
+                updatedAt: serverTimestamp() 
+            };
+            
+            window.toggleModal(false);
+            
+            if (id) {
+                const s = students.find(it => it.id === id);
+                let historyUpdate = [];
+                // 如果总课时或付费日期改变了，自动写入一条历史记录
+                if (s && (s.totalLessons !== data.totalLessons || s.lastPaymentDate !== data.lastPaymentDate)) {
+                    const now = new Date();
+                    const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]})`;
+                    const logEntry = `${dStr} ${tDict[currentLang].payUpdate}: ${s.totalLessons} -> ${data.totalLessons} / ${s.lastPaymentDate || '无'} -> ${data.lastPaymentDate || '无'}`;
+                    historyUpdate = [logEntry];
+                }
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), {
+                    ...data,
+                    attendanceHistory: [...(s.attendanceHistory || []), ...historyUpdate]
+                });
+            } else { 
+                data.attendanceHistory = []; 
+                data.isFrozen = false; 
+                data.isArchived = false;
+                await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', 'students')), data); 
+            }
+        };
+
+        window.updateLesson = async (id) => {
+            const s = students.find(it => it.id === id); if (!s) return;
+            const now = new Date(); const formatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]})`;
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { usedLessons: s.usedLessons + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
+        };
+
+        window.markAbsent = async (id) => {
+            const s = students.find(it => it.id === id); if (!s) return;
+            const now = new Date(); 
+            const formatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]}) ${tDict[currentLang].absentMark}`;
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { usedLessons: s.usedLessons + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
+        };
+
+        window.deleteStudent = (id) => customConfirm(tDict[currentLang].confirmDelete, async () => { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id)); });
+
+        window.toggleFreeze = async (id) => {
+            const s = students.find(it => it.id === id); if (!s) return;
+            const t = tDict[currentLang] || tDict['zh'];
+            const newFrozenState = !s.isFrozen;
+            const actionText = newFrozenState ? t.actionFreeze : t.actionUnfreeze;
+            
+            const now = new Date(); 
+            const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${t.days[now.getDay()]})`;
+            const logEntry = `${dateStr} [${actionText}]`;
+            
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { 
+                isFrozen: newFrozenState,
+                attendanceHistory: [...(s.attendanceHistory || []), logEntry]
+            });
+        };
+
+        window.toggleArchive = async (id) => {
+            const s = students.find(it => it.id === id); if (!s) return;
+            const t = tDict[currentLang] || tDict['zh'];
+            const newArchived = !s.isArchived;
+            const actionText = newArchived ? t.actionArchive : t.actionUnarchive;
+            
+            const now = new Date(); 
+            const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${t.days[now.getDay()]})`;
+            const logEntry = `${dateStr} [${actionText}]`;
+            
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { 
+                isArchived: newArchived,
+                isFrozen: false, // 归档时自动解冻以防状态冲突
+                attendanceHistory: [...(s.attendanceHistory || []), logEntry]
+            });
+        };
+
+        const render = () => {
+            const t = tDict[currentLang] || tDict['zh'];
+            document.getElementById('portal-title').innerText = t.portalTitle;
+            document.getElementById('portal-subtitle').innerText = t.portalSub;
+            document.getElementById('entry-name').placeholder = t.entryName;
+            document.getElementById('entry-pin').placeholder = t.entryPin;
+            document.getElementById('btn-enter').innerText = t.btnEnter;
+            document.getElementById('auth-error').innerText = t.errPin;
+            if (!loggedUser) return;
+
+            document.getElementById('current-lang-text').innerText = currentLang.toUpperCase();
+            document.querySelectorAll('.lang-item').forEach(btn => { 
+                btn.classList.toggle('active', btn.onclick.toString().includes(`'${currentLang}'`)); 
+            });
+
+            // Base filter by Teacher
+            let baseFiltered = isAdmin ? (selectedTeacher === 'all' ? students : students.filter(s => s.teacher === selectedTeacher)) : students.filter(s => s.teacher === loggedUser);
+            const classes = [...new Set(baseFiltered.map(s => s.studentClass).filter(c => c))].sort();
+            
+            // Apply Class Filter
+            let classFiltered = selectedClass === 'all' ? baseFiltered : baseFiltered.filter(s => s.studentClass === selectedClass);
+            
+            // Apply Status & Archive Filter
+            let filtered = classFiltered.filter(s => {
+                if (selectedStatus === 'archived') return s.isArchived;
+                if (s.isArchived) return false; // 隐藏归档的学生 (仅在“全部”、“欠费”等筛选中不显示)
+
+                if (selectedStatus === 'all') return true;
+                if (selectedStatus === 'frozen') return s.isFrozen;
+                if (s.isFrozen) return false;
+
+                const r = s.totalLessons - s.usedLessons;
+                if (selectedStatus === 'paid') return r > 3;
+                if (selectedStatus === 'warning') return r > 0 && r <= 3;
+                return r <= 0;
+            });
+
+            document.getElementById('page-title-main').innerText = t.dashboardTitle;
+            document.getElementById('page-subtitle').innerText = t.subtitle;
+            document.getElementById('add-btn-text').innerText = t.addBtn;
+            
+            const prefix = (selectedTeacher === 'all' || !isAdmin) ? '' : `${selectedTeacher} `;
+            document.getElementById('stat-total-label').innerText = prefix + t.statTotal;
+            document.getElementById('stat-warning-label').innerText = prefix + t.statWarning;
+            document.getElementById('stat-overdue-label').innerText = prefix + t.statOverdue;
+            document.getElementById('stat-frozen-label').innerText = prefix + t.statFrozen;
+            document.getElementById('stat-archived-label').innerText = prefix + t.statArchived;
+            
+            const activeStudents = classFiltered.filter(s => !s.isArchived);
+            document.getElementById('stat-total-val').innerText = activeStudents.length;
+            document.getElementById('stat-warning-val').innerText = activeStudents.filter(s => { let r = s.totalLessons - s.usedLessons; return !s.isFrozen && r > 0 && r <= 3; }).length;
+            document.getElementById('stat-overdue-val').innerText = activeStudents.filter(s => !s.isFrozen && (s.totalLessons - s.usedLessons) <= 0).length;
+            document.getElementById('stat-frozen-val').innerText = activeStudents.filter(s => s.isFrozen).length;
+            document.getElementById('stat-archived-val').innerText = classFiltered.filter(s => s.isArchived).length;
+
+            if (isAdmin) {
+                const tc = document.getElementById('teacher-filter-container');
+                tc.innerHTML = `<button onclick="setTeacherFilter('all')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedTeacher==='all'?'active':''}">${t.filterAll}</button>`;
+                teacherList.forEach(n => tc.innerHTML += `<button onclick="setTeacherFilter('${n}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedTeacher===n?'active':''}">${n}</button>`);
+            }
+
+            const cc = document.getElementById('class-filter-container');
+            cc.innerHTML = `<button onclick="setClassFilter('all')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedClass==='all'?'active':''}">${t.filterAll}</button>`;
+            classes.forEach(c => cc.innerHTML += `<button onclick="setClassFilter('${c}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedClass===c?'active':''}">${c}</button>`);
+
+            const sc = document.getElementById('status-filter-container');
+            sc.innerHTML = `<button onclick="setStatusFilter('all')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='all'?'active':''}">${t.filterAll}</button>
+                <button onclick="setStatusFilter('paid')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='paid'?'active':''}">${t.statusPaid}</button>
+                <button onclick="setStatusFilter('warning')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='warning'?'active':''}">${t.statusWarning}</button>
+                <button onclick="setStatusFilter('overdue')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='overdue'?'active':''}">${t.statusOverdue}</button>
+                <button onclick="setStatusFilter('frozen')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='frozen'?'active':''}">${t.statusFrozen}</button>
+                <button onclick="setStatusFilter('archived')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='archived'
