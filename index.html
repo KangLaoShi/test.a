@@ -275,24 +275,19 @@
         const teacherList = ["Kanglaoshi", "Pailaoshi", "Alaoshi", "Tielaoshi", "Lanyinglaoshi", "Tanglaoshi"];
         const teacherPins = { "Director": "1234", "Kanglaoshi": "1234", "Pailaoshi": "1234", "Alaoshi": "1234", "Tielaoshi": "1234", "Lanyinglaoshi": "1234", "Tanglaoshi": "1234" };
 
-        let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedStatus = 'all';
-        let students = [], loggedUser = null, isAdmin = false;
-        let currentHistoryStudentId = null, editingRecordIndex = -1, currentNoteStudentId = null;
-        let db, auth;
-
         const tDict = {
             zh: { 
-                portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名", entryPin: "访问识别码 (PIN)", btnEnter: "进入工作台", errPin: "识别码错误", 
+                portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名 (例如: Kanglaoshi)", entryPin: "访问识别码 (PIN)", btnEnter: "进入工作台", errPin: "识别码错误，请重新输入。", 
                 dashboardTitle: "学生付费跟进管理", subtitle: "协作版 · 实时云同步", addBtn: "添加学生", statTotal: "在读总数", statWarning: "即将到期", statOverdue: "欠费预警", statFrozen: "冻结账户", statArchived: "停学归档", 
                 thName: "学生姓名", thTeacher: "负责", thClass: "班级", thProgress: "进度", thRemaining: "剩余", thLastPay: "最近付费", thStatus: "状态", thActions: "管理", 
                 actionPlus: "+1 记课", actionAbsent: "缺勤扣课", historyTitle: "上课记录", historyEmpty: "暂无记录", btnClose: "关闭窗口", manualAdd: "补签", btnUpdate: "更新", 
                 confirmTitle: "确认操作", confirmDelete: "确定要永久删除该学生吗？", confirmDeleteRecord: "确定删除这条记录吗？", btnOk: "确认", btnAbort: "取消", 
-                labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择", labelTotal: "总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", 
+                labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择老师", labelTotal: "总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", 
                 filterLabel: "负责人:", filterClassLabel: "班级:", filterStatusLabel: "状态:", filterAll: "全部在读", statusPaid: "充足", statusWarning: "预警", statusOverdue: "欠费", statusFrozen: "冻结", statusArchived: "已停学", 
                 actionFreeze: "冻结", actionUnfreeze: "解冻", actionArchive: "停学归档", actionUnarchive: "恢复在读", actionEdit: "编辑", actionHistory: "记录", actionDelete: "删除", 
                 modalTitleAdd: "添加新学生", modalTitleEdit: "编辑信息", days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], 
                 absentMark: "[缺勤]", archiveMark: "[已停学归档]", unarchiveMark: "[恢复在读]", freezeMark: "[账号已冻结]", unfreezeMark: "[账号已解冻]", noMatch: "无匹配记录", 
-                noteTitle: "学生备注", notePlaceholder: "输入学生备注，缺课或请假原因，冻结原因，等...", btnSaveNote: "保存备注", cancelNote: "取消"
+                noteTitle: "学生备注", notePlaceholder: "输入学生备注，缺课或请假原因，冻结原因，等...", btnSaveNote: "保存备注", cancelNote: "取消", paymentMark: "[更新付费/续费]"
             },
             uz: { 
                 portalTitle: "O'qituvchilar Portali", portalSub: "Xususiy Ta'lim Portali", entryName: "O'qituvchi Ismi", entryPin: "Kirish PIN-kodi", btnEnter: "Tizimga kirish", errPin: "PIN noto'g'ri.", 
@@ -305,7 +300,7 @@
                 actionFreeze: "Muzlatish", actionUnfreeze: "Faollashtirish", actionArchive: "Arxivlash", actionUnarchive: "Arxivdan chiqarish", actionEdit: "Tahrir", actionHistory: "Tarix", actionDelete: "O'chirish", 
                 modalTitleAdd: "Yangi talaba", modalTitleEdit: "Tahrirlash", days: ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"], 
                 absentMark: "[Sababsiz]", archiveMark: "[Arxivlangan]", unarchiveMark: "[Faollashtirilgan]", freezeMark: "[Muzlatilgan]", unfreezeMark: "[Muzlatishdan yechilgan]", noMatch: "Topilmadi", 
-                noteTitle: "Talaba Eslatmasi", notePlaceholder: "Talaba eslatmasi, yo'qlik yoki ta'til sababi, muzlatish sababi va hokazolarni kiriting...", btnSaveNote: "Saqlash", cancelNote: "Bekor"
+                noteTitle: "Talaba Eslatmasi", notePlaceholder: "Talaba eslatmasi, yo'qlik yoki ta'til sababi, muzlatish sababi va hokazolarni kiriting...", btnSaveNote: "Saqlash", cancelNote: "Bekor", paymentMark: "[To'lov yangilandi]"
             },
             ru: { 
                 portalTitle: "Рабочая область учителя", portalSub: "Частный Портал", entryName: "Имя учителя", entryPin: "PIN-код доступа", btnEnter: "Войти", errPin: "Неверный PIN-код.", 
@@ -318,7 +313,7 @@
                 actionFreeze: "Заморозить", actionUnfreeze: "Разморозить", actionArchive: "В архив", actionUnarchive: "Восстановить", actionEdit: "Изменить", actionHistory: "Журнал", actionDelete: "Удалить", 
                 modalTitleAdd: "Добавить", modalTitleEdit: "Редактировать", days: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"], 
                 absentMark: "[Пропуск]", archiveMark: "[Добавлен в архив]", unarchiveMark: "[Восстановлен]", freezeMark: "[Заморожен]", unfreezeMark: "[Разморожен]", noMatch: "Нет данных", 
-                noteTitle: "Заметки студента", notePlaceholder: "Введите заметки о студенте, причины пропуска или отпуска, причины заморозки и т.д...", btnSaveNote: "Сохранить", cancelNote: "Отмена"
+                noteTitle: "Заметки студента", notePlaceholder: "Введите заметки о студенте, причины пропуска или отпуска, причины заморозки и т.д...", btnSaveNote: "Сохранить", cancelNote: "Отмена", paymentMark: "[Оплата обновлена]"
             },
             en: { 
                 portalTitle: "Teacher Workspace", portalSub: "Private Portal", entryName: "Teacher Name", entryPin: "Access PIN", btnEnter: "Unlock Dashboard", errPin: "Invalid PIN.", 
@@ -331,9 +326,11 @@
                 actionFreeze: "Freeze", actionUnfreeze: "Unfreeze", actionArchive: "Archive", actionUnarchive: "Restore", actionEdit: "Edit", actionHistory: "Logs", actionDelete: "Delete", 
                 modalTitleAdd: "Add Student", modalTitleEdit: "Edit Info", days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], 
                 absentMark: "[Absence]", archiveMark: "[Archived]", unarchiveMark: "[Restored]", freezeMark: "[Frozen]", unfreezeMark: "[Unfrozen]", noMatch: "No Match", 
-                noteTitle: "Student Note", notePlaceholder: "Enter student notes, reasons for absence or leave, reasons for freezing, etc...", btnSaveNote: "Save Note", cancelNote: "Cancel"
+                noteTitle: "Student Note", notePlaceholder: "Enter student notes, reasons for absence or leave, reasons for freezing, etc...", btnSaveNote: "Save Note", cancelNote: "Cancel", paymentMark: "[Payment Updated]"
             }
         };
+
+        let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedStatus = 'all', students = [], loggedUser = null, isAdmin = false, currentHistoryStudentId = null, editingRecordIndex = -1, currentNoteStudentId = null, db, auth;
 
         const customConfirm = (msg, callback) => {
             const overlay = document.getElementById('confirm-modal-overlay');
@@ -615,12 +612,11 @@
                 return;
             }
 
-            // 修正排序逻辑：优先按日期倒序，若日期相同（如同日记课），则按添加次序倒序（新加的排上面）
             const sortedHistory = [...s.history].map((item, index) => ({...item, originalIndex: index})).sort((a, b) => {
                 const timeA = new Date(a.date).getTime();
                 const timeB = new Date(b.date).getTime();
                 if (timeA !== timeB) return timeB - timeA;
-                return b.originalIndex - a.originalIndex; // 同一天的情况，后添加的 originalIndex 更大，排在前面
+                return b.originalIndex - a.originalIndex;
             });
 
             list.innerHTML = sortedHistory.map(item => {
@@ -630,19 +626,25 @@
                 const isUnarchive = item.type === 'unarchive';
                 const isFreeze = item.type === 'freeze';
                 const isUnfreeze = item.type === 'unfreeze';
+                const isPayment = item.type === 'payment';
                 
                 const dateObj = new Date(item.date);
                 const dayName = t.days[dateObj.getDay()];
                 const dayNum = String(dateObj.getDate()).padStart(2, '0');
                 const monthName = String(dateObj.getMonth() + 1).padStart(2, '0');
-                const isSystemLog = isArchive || isUnarchive || isFreeze || isUnfreeze;
+                const isSystemLog = isArchive || isUnarchive || isFreeze || isUnfreeze || isPayment;
                 
                 let actionDisplay = '';
                 if (isAbsent) actionDisplay = `<span class="text-rose-500 font-bold ml-2 text-xs">${t.absentMark}</span>`;
-                else if (isArchive) actionDisplay = `<span class="text-slate-500 font-bold ml-2 text-xs">${t.archiveMark}</span>`;
-                else if (isUnarchive) actionDisplay = `<span class="text-[#2C5F56] font-bold ml-2 text-xs">${t.unarchiveMark}</span>`;
-                else if (isFreeze) actionDisplay = `<span class="text-blue-500 font-bold ml-2 text-xs">${t.freezeMark}</span>`;
-                else if (isUnfreeze) actionDisplay = `<span class="text-amber-500 font-bold ml-2 text-xs">${t.unfreezeMark}</span>`;
+                else if (isArchive) actionDisplay = `<span class="text-slate-500 font-bold ml-2 text-xs">[停学归档]</span>`;
+                else if (isUnarchive) actionDisplay = `<span class="text-[#2C5F56] font-bold ml-2 text-xs">[恢复在读]</span>`;
+                else if (isFreeze) actionDisplay = `<span class="text-blue-500 font-bold ml-2 text-xs">[账号冻结]</span>`;
+                else if (isUnfreeze) actionDisplay = `<span class="text-amber-500 font-bold ml-2 text-xs">[解冻恢复]</span>`;
+                else if (isPayment) {
+                    let det = (item.newPayDate && item.newPayDate !== '-') ? item.newPayDate : '';
+                    if (item.newTotal && item.oldTotal !== item.newTotal) det += ` (${item.oldTotal}→${item.newTotal})`;
+                    actionDisplay = `<span class="text-emerald-600 font-bold ml-2 text-[11px] bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 shadow-sm">${t.paymentMark} ${det.trim()}</span>`;
+                }
 
                 return `
                     <div class="flex items-center justify-between p-4 bg-[#F7FAF9] rounded-3xl border border-transparent hover:border-[#2C5F56]/10 transition-all group">
@@ -717,12 +719,21 @@
 
             const permittedStudents = (isAdmin || loggedUser === 'Director') ? students : students.filter(s => s.teacher === loggedUser);
 
-            const activeStudents = permittedStudents.filter(s => !s.isArchived);
-            let total = activeStudents.length, warning = 0, overdue = 0, frozen = 0, archived = permittedStudents.filter(s => s.isArchived).length;
+            // 1. 获取所有班级集合 (不受当前过滤影响，保证班级过滤按钮始终完整)
             const classSet = new Set();
-            
-            activeStudents.forEach(s => {
+            permittedStudents.filter(s => !s.isArchived).forEach(s => {
                 if (s.class) classSet.add(s.class);
+            });
+
+            // 2. 根据选中的老师和班级，动态计算顶部 5 个统计卡片的数据
+            let statsStudents = permittedStudents;
+            if (selectedTeacher !== 'all') statsStudents = statsStudents.filter(s => s.teacher === selectedTeacher);
+            if (selectedClass !== 'all') statsStudents = statsStudents.filter(s => s.class === selectedClass);
+
+            const activeStatsStudents = statsStudents.filter(s => !s.isArchived);
+            let total = activeStatsStudents.length, warning = 0, overdue = 0, frozen = 0, archived = statsStudents.filter(s => s.isArchived).length;
+            
+            activeStatsStudents.forEach(s => {
                 if (s.isFrozen) frozen++;
                 else {
                     const rem = s.total - s.used;
@@ -731,6 +742,7 @@
                 }
             });
 
+            document.getElementById('stat-total-label').innerText = selectedTeacher === 'all' ? t.statTotal : `${selectedTeacher} ${t.statTotal}`;
             document.getElementById('stat-total-val').innerText = total;
             document.getElementById('stat-warning-val').innerText = warning;
             document.getElementById('stat-overdue-val').innerText = overdue;
@@ -907,10 +919,32 @@
 
                 try {
                     if (id) {
-                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), data);
+                        const oldS = students.find(s => s.id === id);
+                        let payload = { ...data };
+                        // 自动记录付费日期或总课时的变更（实现“续费/修改”的历史追溯）
+                        if (oldS && ((oldS.payDate || '') !== (data.payDate || '') || oldS.total !== data.total)) {
+                            const dateStr = formatDate(new Date().toISOString());
+                            const newHistory = [...(oldS.history || [])];
+                            newHistory.push({
+                                date: dateStr,
+                                type: 'payment',
+                                newPayDate: data.payDate || '-',
+                                oldTotal: oldS.total || 0,
+                                newTotal: data.total
+                            });
+                            payload.history = newHistory;
+                        }
+                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), payload);
                     } else {
                         const newId = generateId();
-                        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', newId), { ...data, history: [], isFrozen: false, isArchived: false, note: '' });
+                        const initialHistory = [{ 
+                            date: formatDate(new Date().toISOString()), 
+                            type: 'payment', 
+                            newPayDate: data.payDate || '-', 
+                            oldTotal: 0, 
+                            newTotal: data.total 
+                        }];
+                        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', newId), { ...data, history: initialHistory, isFrozen: false, isArchived: false, note: '' });
                     }
                     window.toggleModal(false);
                 } catch (err) { console.error("Error saving student:", err); }
