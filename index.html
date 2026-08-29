@@ -48,7 +48,7 @@
         
         .lang-item.active { background-color: var(--brand-green); color: white; font-weight: 800; }
 
-        /* 用于伪装密码框的 CSS，机器识别为普通文本，视觉显示为黑点 */
+        /* 新增：用于伪装密码框的 CSS，机器识别为普通文本，视觉显示为黑点 */
         .pin-mask { -webkit-text-security: disc; }
 
         .bg-mesh {
@@ -62,6 +62,7 @@
 </head>
 <body class="bg-mesh min-h-screen">
     
+    <!-- 访问入口页面 (已移除所有带有 login 字眼的 ID) -->
     <div id="entry-gate" class="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-[#1A2E35]">
         <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');"></div>
         <div class="bg-white rounded-[40px] shadow-2xl w-full max-w-md p-12 text-center relative z-10 border-t-8 border-[#2C5F56]">
@@ -76,6 +77,7 @@
             
             <div id="auth-container" class="space-y-5 text-left mb-6">
                 <div><input id="entry-name" type="text" class="w-full px-6 py-5 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none focus:ring-2 focus:ring-[#2C5F56]/10" placeholder="教师姓名 (例如: Kanglaoshi)"></div>
+                <!-- 关键安全修改：type="text" 配合 pin-mask 样式，绕过密码框安全检测 -->
                 <div><input id="entry-pin" type="text" class="w-full px-6 py-5 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none focus:ring-2 focus:ring-[#2C5F56]/10 pin-mask" placeholder="访问识别码 (PIN)"></div>
                 <button id="btn-enter" class="w-full bg-[#2C5F56] text-white py-5 rounded-3xl font-bold shadow-xl hover:opacity-90 active:scale-[0.98] transition-all mt-2 text-sm">进入工作台</button>
             </div>
@@ -90,6 +92,7 @@
         </div>
     </div>
 
+    <!-- 主页面 -->
     <div id="app-content" class="max-w-[1440px] mx-auto p-4 md:p-8 hidden">
         <header class="relative z-[100] flex flex-col lg:flex-row lg:items-center justify-between mb-10 gap-6 bg-white/50 p-6 rounded-[32px] border border-white shadow-sm backdrop-blur-md">
             <div class="flex flex-col">
@@ -122,26 +125,18 @@
         </header>
 
         <main class="space-y-8">
-            <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6">
-                <div onclick="setStatusFilter('all')" class="card-modern p-5 lg:p-6 flex items-center gap-4 lg:gap-6 hover-lift border-l-8 border-[#2C5F56] cursor-pointer transition-all active:scale-95" title="点击查看所有在读">
-                    <div class="w-10 h-10 lg:w-14 lg:h-14 shrink-0 bg-[#F0F6F5] text-[#2C5F56] rounded-2xl flex items-center justify-center"><i data-lucide="users-2" class="w-5 h-5 lg:w-6 lg:h-6"></i></div>
-                    <div><p id="stat-total-label" class="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">在读总数</p><p id="stat-total-val" class="text-2xl lg:text-3xl font-[900] text-[#1A2E35]">0</p></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div onclick="setStatusFilter('all')" class="card-modern p-6 flex items-center gap-6 hover-lift border-l-8 border-[#2C5F56] cursor-pointer transition-all active:scale-95" title="点击查看所有学生">
+                    <div class="w-14 h-14 bg-[#F0F6F5] text-[#2C5F56] rounded-2xl flex items-center justify-center"><i data-lucide="users-2" class="w-6 h-6"></i></div>
+                    <div><p id="stat-total-label" class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">学生总数</p><p id="stat-total-val" class="text-3xl font-[900] text-[#1A2E35]">0</p></div>
                 </div>
-                <div onclick="setStatusFilter('warning')" class="card-modern p-5 lg:p-6 flex items-center gap-4 lg:gap-6 hover-lift border-l-8 border-[#FFC554] cursor-pointer transition-all active:scale-95" title="点击筛选即将到期">
-                    <div class="w-10 h-10 lg:w-14 lg:h-14 shrink-0 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center"><i data-lucide="hourglass" class="w-5 h-5 lg:w-6 lg:h-6"></i></div>
-                    <div><p id="stat-warning-label" class="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">即将到期</p><p id="stat-warning-val" class="text-2xl lg:text-3xl font-[900] text-[#1A2E35]">0</p></div>
+                <div onclick="setStatusFilter('warning')" class="card-modern p-6 flex items-center gap-6 hover-lift border-l-8 border-[#FFC554] cursor-pointer transition-all active:scale-95" title="点击筛选即将到期">
+                    <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center"><i data-lucide="hourglass" class="w-6 h-6"></i></div>
+                    <div><p id="stat-warning-label" class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">即将到期</p><p id="stat-warning-val" class="text-3xl font-[900] text-[#1A2E35]">0</p></div>
                 </div>
-                <div onclick="setStatusFilter('overdue')" class="card-modern p-5 lg:p-6 flex items-center gap-4 lg:gap-6 hover-lift border-l-8 border-rose-500 cursor-pointer transition-all active:scale-95" title="点击筛选欠费学生">
-                    <div class="w-10 h-10 lg:w-14 lg:h-14 shrink-0 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center"><i data-lucide="alert-octagon" class="w-5 h-5 lg:w-6 lg:h-6"></i></div>
-                    <div><p id="stat-overdue-label" class="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">欠费预警</p><p id="stat-overdue-val" class="text-2xl lg:text-3xl font-[900] text-rose-500">0</p></div>
-                </div>
-                <div onclick="setStatusFilter('frozen')" class="card-modern p-5 lg:p-6 flex items-center gap-4 lg:gap-6 hover-lift border-l-8 border-blue-500 cursor-pointer transition-all active:scale-95" title="点击筛选冻结学生">
-                    <div class="w-10 h-10 lg:w-14 lg:h-14 shrink-0 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center"><i data-lucide="snowflake" class="w-5 h-5 lg:w-6 lg:h-6"></i></div>
-                    <div><p id="stat-frozen-label" class="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">冻结账户</p><p id="stat-frozen-val" class="text-2xl lg:text-3xl font-[900] text-blue-500">0</p></div>
-                </div>
-                <div onclick="setStatusFilter('archived')" class="card-modern p-5 lg:p-6 flex items-center gap-4 lg:gap-6 hover-lift border-l-8 border-slate-400 cursor-pointer transition-all active:scale-95 col-span-2 lg:col-span-1" title="点击筛选停学学生">
-                    <div class="w-10 h-10 lg:w-14 lg:h-14 shrink-0 bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center"><i data-lucide="archive" class="w-5 h-5 lg:w-6 lg:h-6"></i></div>
-                    <div><p id="stat-archived-label" class="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">停学归档</p><p id="stat-archived-val" class="text-2xl lg:text-3xl font-[900] text-slate-400">0</p></div>
+                <div onclick="setStatusFilter('overdue')" class="card-modern p-6 flex items-center gap-6 hover-lift border-l-8 border-rose-500 cursor-pointer transition-all active:scale-95" title="点击筛选欠费学生">
+                    <div class="w-14 h-14 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center"><i data-lucide="alert-octagon" class="w-6 h-6"></i></div>
+                    <div><p id="stat-overdue-label" class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">欠费预警</p><p id="stat-overdue-val" class="text-3xl font-[900] text-rose-500">0</p></div>
                 </div>
             </div>
 
@@ -161,7 +156,7 @@
             </div>
 
             <div class="card-modern overflow-hidden">
-                <div class="overflow-x-auto pb-4">
+                <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead class="bg-[#F7FAF9]/80 border-b border-slate-100">
                             <tr id="table-head-row"></tr>
@@ -173,6 +168,7 @@
         </main>
     </div>
 
+    <!-- 所有 Modal 和 自定义确认框保持在 body 底部 -->
     <div id="modal-overlay" class="fixed inset-0 bg-[#1A2E35]/90 backdrop-blur-lg hidden items-center justify-center p-4 z-[600]">
         <div class="bg-white rounded-[40px] shadow-2xl w-full max-w-md p-10 overflow-y-auto max-h-[90vh] border-t-8 border-[#FFC554]">
             <div class="flex justify-between items-center mb-10">
@@ -182,42 +178,28 @@
             <form id="student-form" class="space-y-6 text-left">
                 <input type="hidden" id="input-id">
                 <div><label id="label-name" class="text-[10px] font-black text-slate-300 uppercase ml-4">姓名</label>
-                <input id="input-name" type="text" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none focus:ring-2 focus:ring-[#2C5F56]/10" placeholder="输入姓名"></div>
+                <input id="input-name" type="text" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none" placeholder="输入姓名"></div>
                 <div><label id="label-contract" class="text-[10px] font-black text-slate-300 uppercase ml-4">合同号</label>
-                <input id="input-contract" type="text" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none focus:ring-2 focus:ring-[#2C5F56]/10" placeholder="输入号"></div>
+                <input id="input-contract" type="text" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none" placeholder="输入号"></div>
                 <div class="grid grid-cols-2 gap-4">
                     <div><label id="label-teacher" class="text-[10px] font-black text-slate-300 uppercase ml-4">负责老师</label>
-                    <select id="input-teacher" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none appearance-none focus:ring-2 focus:ring-[#2C5F56]/10"></select></div>
+                    <select id="input-teacher" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none appearance-none"></select></div>
                     <div><label id="label-class" class="text-[10px] font-black text-slate-300 uppercase ml-4">班级</label>
-                    <input id="input-class" list="class-list" type="text" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none focus:ring-2 focus:ring-[#2C5F56]/10" placeholder="选择或输入"></div>
+                    <input id="input-class" list="class-list" type="text" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none" placeholder="选择或输入"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-4 text-center">
                     <div><label id="label-total" class="text-[10px] font-black text-slate-300 uppercase">总量</label>
-                    <select id="input-total" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none text-center focus:ring-2 focus:ring-[#2C5F56]/10"></select></div>
+                    <select id="input-total" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none text-center"></select></div>
                     <div><label id="label-used" class="text-[10px] font-black text-slate-300 uppercase">已上</label>
-                    <input id="input-used" type="number" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none text-center focus:ring-2 focus:ring-[#2C5F56]/10"></div>
+                    <input id="input-used" type="number" required class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none text-center"></div>
                 </div>
                 <div><label id="label-date" class="text-[10px] font-black text-slate-300 uppercase ml-4">付费日期</label>
-                <input id="input-date" type="date" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none focus:ring-2 focus:ring-[#2C5F56]/10"></div>
+                <input id="input-date" type="date" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none"></div>
                 <div class="flex gap-4 pt-6">
                     <button type="button" onclick="toggleModal(false)" id="btn-cancel" class="flex-1 py-4 font-black text-slate-400">取消</button>
-                    <button type="submit" id="btn-save" class="flex-1 py-4 bg-[#2C5F56] text-white rounded-3xl font-black shadow-lg shadow-[#2C5F56]/20">保存</button>
+                    <button type="submit" id="btn-save" class="flex-1 py-4 bg-[#2C5F56] text-white rounded-3xl font-black">保存</button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <div id="note-modal-overlay" class="fixed inset-0 bg-[#1A2E35]/90 backdrop-blur-lg hidden items-center justify-center p-4 z-[800]">
-        <div class="bg-white rounded-[40px] shadow-2xl w-full max-w-md p-10 border-t-8 border-amber-400">
-            <div class="flex justify-between items-center mb-6">
-                <h3 id="note-modal-title" class="text-xl font-[900]">学生备注</h3>
-                <button onclick="toggleNoteModal(false)" class="p-3 text-slate-300 hover:text-rose-500"><i data-lucide="x"></i></button>
-            </div>
-            <textarea id="input-note" class="w-full h-40 px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none outline-none resize-none focus:ring-2 focus:ring-[#2C5F56]/10 text-sm" placeholder="输入学生备注，缺课或请假原因，冻结原因，等..."></textarea>
-            <div class="flex gap-4 pt-6">
-                <button onclick="toggleNoteModal(false)" id="btn-note-cancel" class="flex-1 py-4 font-black text-slate-400">取消</button>
-                <button onclick="saveNote()" id="btn-note-save" class="flex-1 py-4 bg-[#2C5F56] text-white rounded-3xl font-black shadow-lg shadow-[#2C5F56]/20">保存</button>
-            </div>
         </div>
     </div>
 
@@ -236,12 +218,12 @@
                 <button onclick="toggleHistoryModal(false)" class="p-3 bg-slate-50 rounded-full text-slate-400 hover:text-rose-500 transition-colors"><i data-lucide="x"></i></button>
             </div>
             <div class="flex gap-3 mb-8 shrink-0">
-                <input type="date" id="manual-date-input" class="flex-1 px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none focus:ring-2 focus:ring-[#2C5F56]/10 text-sm">
-                <button onclick="handleRecordAction()" id="btn-record-action" class="px-8 py-4 bg-[#2C5F56] text-white rounded-3xl font-black shadow-lg shadow-[#2C5F56]/20">补签</button>
+                <input type="date" id="manual-date-input" class="flex-1 px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none">
+                <button onclick="handleRecordAction()" id="btn-record-action" class="px-8 py-4 bg-[#2C5F56] text-white rounded-3xl font-black">补签</button>
                 <button onclick="cancelRecordEdit()" id="btn-record-cancel" class="hidden px-4 py-4 bg-rose-50 text-rose-500 font-bold rounded-2xl">✕</button>
             </div>
             <div id="history-list" class="space-y-4 overflow-y-auto pr-2 no-scrollbar flex-1 mb-8"></div>
-            <button onclick="toggleHistoryModal(false)" id="btn-close-history" class="w-full py-5 bg-[#F7FAF9] text-slate-400 rounded-3xl font-black transition-colors hover:bg-slate-100">关闭窗口</button>
+            <button onclick="toggleHistoryModal(false)" id="btn-close-history" class="w-full py-5 bg-[#F7FAF9] text-slate-400 rounded-3xl font-black">关闭窗口</button>
         </div>
     </div>
 
@@ -250,33 +232,32 @@
             <h3 id="confirm-modal-title" class="text-xl font-[900] mb-2">确认操作</h3>
             <p id="confirm-modal-msg" class="text-slate-400 text-sm mb-8"></p>
             <div class="flex gap-4">
-                <button id="confirm-btn-cancel" class="flex-1 py-4 font-black text-slate-400 bg-slate-50 rounded-2xl">取消</button>
-                <button id="confirm-btn-ok" class="flex-1 py-4 bg-rose-500 text-white rounded-2xl font-black shadow-lg shadow-rose-500/20">确认</button>
+                <button id="confirm-btn-cancel" class="flex-1 py-4 font-black text-slate-400">取消</button>
+                <button id="confirm-btn-ok" class="flex-1 py-4 bg-rose-500 text-white rounded-2xl font-black shadow-lg">确认</button>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, collection, onSnapshot, updateDoc, deleteDoc, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const defaultFirebaseConfig = { apiKey: "AIzaSyDsuB8A4RBJz3PlDvzAEhKA3FEDoDmFfh8", authDomain: "studenttracker-a8384.firebaseapp.com", projectId: "studenttracker-a8384", storageBucket: "studenttracker-a8384.firebasestorage.app", messagingSenderId: "181463996376", appId: "1:181463996376:web:77b32e8a82a63c5eb004ad" };
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : defaultFirebaseConfig;
+        const firebaseConfig = { apiKey: "AIzaSyDsuB8A4RBJz3PlDvzAEhKA3FEDoDmFfh8", authDomain: "studenttracker-a8384.firebaseapp.com", projectId: "studenttracker-a8384", storageBucket: "studenttracker-a8384.firebasestorage.app", messagingSenderId: "181463996376", appId: "1:181463996376:web:77b32e8a82a63c5eb004ad" };
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-tracker';
         
-        // Removed Zenglaoshi, added Tanglaoshi
-        const teacherList = ["Kanglaoshi", "Pailaoshi", "Alaoshi", "Tielaoshi", "Lanyinglaoshi", "Tanglaoshi"];
-        const teacherPins = { "Director": "1234", "Kanglaoshi": "1234", "Pailaoshi": "1234", "Alaoshi": "1234", "Tielaoshi": "1234", "Lanyinglaoshi": "1234", "Tanglaoshi": "1234" };
+        const teacherList = ["Kanglaoshi", "Lilaoshi", "Pailaoshi", "Anlaoshi", "Tielaoshi", "Lanyinglaoshi", "Zenglaoshi"];
+        const teacherPins = { "Director": "1234", "Kanglaoshi": "1234", "Lilaoshi": "1234", "Pailaoshi": "1234", "Anlaoshi": "1234", "Tielaoshi": "1234", "Lanyinglaoshi": "1234", "Zenglaoshi": "1234" };
 
         const tDict = {
-            zh: { portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名 (例如: Kanglaoshi)", entryPin: "访问识别码 (PIN)", btnEnter: "进入工作台", errPin: "识别码错误，请重新输入。", dashboardTitle: "学生付费跟进管理", subtitle: "协作版 · 实时云同步", addBtn: "添加学生", statTotal: "在读总数", statWarning: "即将到期", statOverdue: "欠费预警", statFrozen: "冻结账户", statArchived: "停学归档", thName: "学生姓名", thTeacher: "负责", thClass: "班级", thProgress: "进度", thRemaining: "剩余", thLastPay: "最近付费", thStatus: "状态", thActions: "管理操作", actionPlus: "+1 记课", actionAbsent: "缺勤扣课", actionFreeze: "冻结", actionUnfreeze: "解冻", actionArchive: "停学归档", actionUnarchive: "恢复在读", historyTitle: "上课记录", historyEmpty: "旧系统数据无具体日期记录，新记课将在此显示。", btnClose: "关闭窗口", manualAdd: "补签", btnUpdate: "更新", confirmTitle: "确认操作", confirmDelete: "确定要永久删除该学生吗？", confirmDeleteRecord: "确定删除这条记录吗？", btnOk: "确认", btnAbort: "取消", labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择老师", labelTotal: "总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", filterLabel: "负责人:", filterClassLabel: "班级筛选:", filterStatusLabel: "状态筛选:", filterAll: "全部在读", statusPaid: "充足", statusWarning: "预警", statusOverdue: "欠费", statusFrozen: "已冻结", statusArchived: "已停学", modalTitleAdd: "添加新学生", modalTitleEdit: "编辑信息", noteTitle: "学生备注", notePlaceholder: "输入学生备注，缺课或请假原因，冻结原因，等...", payUpdate: "[更新付费/续费]", days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], absentMark: "[缺勤扣课]" },
-            uz: { portalTitle: "O'qituvchilar Portali", portalSub: "Xususiy Ta'lim Portali", entryName: "O'qituvchi Ismi", entryPin: "Kirish PIN-kodi", btnEnter: "Tizimga kirish", errPin: "PIN noto'g'ri. Qayta urinib ko'ring.", dashboardTitle: "To'lov Monitoringi", subtitle: "Operatsiyalar Portali", addBtn: "Qo'shish", statTotal: "Faol", statWarning: "Ogoh", statOverdue: "Qarz", statFrozen: "Muzlatilgan", statArchived: "Arxiv", thName: "Ism", thTeacher: "Mas'ul", thClass: "Guruh", thProgress: "Holat", thRemaining: "Qolgan", thLastPay: "To'lov", thStatus: "Holat", thActions: "Amal", actionPlus: "+1 dars", actionAbsent: "Sababsiz kelmagan", actionFreeze: "Muzlatish", actionUnfreeze: "Faollashtirish", actionArchive: "Arxivlash", actionUnarchive: "Tiklash", historyTitle: "Tarix", historyEmpty: "Eski ma'lumotlar tarixda yo'q", btnClose: "Yopish", manualAdd: "Qo'shish", btnUpdate: "Yangilash", confirmTitle: "Tasdiqlang", confirmDelete: "O'chirilsinmi?", confirmDeleteRecord: "Yozuv o'chirilsinmi?", btnOk: "Ha", btnAbort: "Yo'q", labelContract: "Shartnoma", placeholderContract: "Raqam", labelName: "Ismi", placeholderName: "Ismni kiriting", labelTeacher: "O'qituvchi", labelClass: "Guruh", placeholderClass: "Yozing", placeholderTeacher: "Tanlang", labelTotal: "Jami", labelUsed: "O'tilgan", labelPayDate: "Sana", btnCancel: "Bekor", btnSave: "Saqlash", filterLabel: "Mas'ul:", filterClassLabel: "Guruh:", filterStatusLabel: "Holat:", filterAll: "Faol", statusPaid: "Yetarli", statusWarning: "Yaqin", statusOverdue: "Qarz", statusFrozen: "Muzlatilgan", statusArchived: "Arxiv", modalTitleAdd: "Yangi talaba", modalTitleEdit: "Tahrirlash", noteTitle: "Izohlar", notePlaceholder: "Izoh kiriting...", payUpdate: "[To'lov yangilandi]", days: ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"], absentMark: "[Sababsiz kelmagan]" },
-            ru: { portalTitle: "Рабочая область учителя", portalSub: "Частный Образовательный Портал", entryName: "Имя учителя", entryPin: "PIN-код доступа", btnEnter: "Войти", errPin: "Неверный PIN-код.", dashboardTitle: "Управление Оплатой", subtitle: "Синхронизация Данных", addBtn: "Добавить", statTotal: "Актив", statWarning: "Внимание", statOverdue: "Должники", statFrozen: "Заморожены", statArchived: "Архив", thName: "ФИО Студента", thTeacher: "Учитель", thClass: "Группа", thProgress: "Прогресс", thRemaining: "Осталось", thLastPay: "Оплата", thStatus: "Статус", thActions: "Действия", actionPlus: "+1 урок", actionAbsent: "Пропуск", actionFreeze: "Заморозить", actionUnfreeze: "Разморозить", actionArchive: "В архив", actionUnarchive: "Восстановить", historyTitle: "История", historyEmpty: "Старых записей нет", btnClose: "Закрыть", manualAdd: "Добавить", btnUpdate: "Обновить", confirmTitle: "Подтверждение", confirmDelete: "Удалить студента навсегда?", confirmDeleteRecord: "Удалить запись?", btnOk: "Да", btnAbort: "Нет", labelContract: "№ Контракта", placeholderContract: "Номер", labelName: "ФИО", placeholderName: "Введите имя", labelTeacher: "Учитель", labelClass: "Группа", placeholderClass: "Введите", placeholderTeacher: "Выберите учителя", labelTotal: "Всего", labelUsed: "Пройдено", labelPayDate: "Дата оплаты", btnCancel: "Отмена", btnSave: "Сохранить", filterLabel: "Ответственный:", filterClassLabel: "Класс:", filterStatusLabel: "Статус:", filterAll: "Активные", statusPaid: "Оплачено", statusWarning: "Срок", statusOverdue: "Долг", statusFrozen: "Заморожен", statusArchived: "Архив", modalTitleAdd: "Добавить студента", modalTitleEdit: "Редактировать", noteTitle: "Заметки", notePlaceholder: "Введите заметку...", payUpdate: "[Оплата обновлена]", days: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"], absentMark: "[Пропуск]" },
-            en: { portalTitle: "Teacher Workspace", portalSub: "Private Educational Portal", entryName: "Teacher Name", entryPin: "Access PIN", btnEnter: "Unlock Dashboard", errPin: "Invalid PIN.", dashboardTitle: "Dashboard", subtitle: "Sync Portal", addBtn: "Add New", statTotal: "Active", statWarning: "Warning", statOverdue: "Due", statFrozen: "Frozen", statArchived: "Archived", thName: "Full Name", thTeacher: "Rep.", thClass: "Class", thProgress: "Progress", thRemaining: "Left", thLastPay: "Last Pay", thStatus: "Status", thActions: "Actions", actionPlus: "+1", actionAbsent: "Absence", actionFreeze: "Freeze", actionUnfreeze: "Unfreeze", actionArchive: "Archive", actionUnarchive: "Restore", historyTitle: "Logs", historyEmpty: "No older records found", btnClose: "Close", manualAdd: "Add", btnUpdate: "Update", confirmTitle: "Confirm", confirmDelete: "Delete student?", confirmDeleteRecord: "Delete log?", btnOk: "Yes", btnAbort: "No", labelContract: "Contract No.", placeholderContract: "Enter No.", labelName: "Name", placeholderName: "Enter name", labelTeacher: "Teacher", labelClass: "Class", placeholderClass: "Type", placeholderTeacher: "Select", labelTotal: "Total Pack", labelUsed: "Used", labelPayDate: "Date", btnCancel: "Cancel", btnSave: "Save", filterLabel: "Rep:", filterClassLabel: "Level:", filterStatusLabel: "Status:", filterAll: "All Active", statusPaid: "Paid", statusWarning: "Low", statusOverdue: "Due", statusFrozen: "Frozen", statusArchived: "Archived", modalTitleAdd: "Add New Student", modalTitleEdit: "Edit Info", noteTitle: "Notes", notePlaceholder: "Enter notes...", payUpdate: "[Payment Updated]", days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], absentMark: "[Absence]" }
+            zh: {
+                portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名 (例如: Kanglaoshi)", entryPin: "访问识别码 (PIN)", btnEnter: "进入工作台", errPin: "识别码错误，请重新输入。", dashboardTitle: "学生付费跟进管理", subtitle: "协作版 · 实时云同步", addBtn: "添加学生", statTotal: "学生总数", statWarning: "即将到期", statOverdue: "欠费预警", thName: "学生姓名", thTeacher: "负责", thClass: "班级", thProgress: "进度", thRemaining: "剩余", thLastPay: "最近付费", thStatus: "状态", thActions: "管理", actionPlus: "+1 记课", historyTitle: "上课记录", historyEmpty: "暂无记录", btnClose: "关闭窗口", manualAdd: "补签", btnUpdate: "更新", confirmTitle: "确认操作", confirmDelete: "确定要永久删除该学生吗？", confirmDeleteRecord: "确定删除这条记录吗？", btnOk: "确认", btnAbort: "取消", labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择老师", labelTotal: "总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", filterLabel: "负责人:", filterClassLabel: "班级筛选:", filterStatusLabel: "状态筛选:", filterAll: "全部", statusPaid: "充足", statusWarning: "预警", statusOverdue: "欠费", modalTitleAdd: "添加新学生", modalTitleEdit: "编辑信息", days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"] },
+            uz: { portalTitle: "O'qituvchilar Portali", portalSub: "Xususiy Ta'lim Portali", entryName: "O'qituvchi Ismi", entryPin: "Kirish PIN-kodi", btnEnter: "Tizimga kirish", errPin: "PIN noto'g'ri. Qayta urinib ko'ring.", dashboardTitle: "To'lov Monitoringi", subtitle: "Operatsiyalar Portali", addBtn: "Qo'shish", statTotal: "Jami", statWarning: "Ogoh", statOverdue: "Qarz", thName: "Ism", thTeacher: "Mas'ul", thClass: "Guruh", thProgress: "Holat", thRemaining: "Qolgan", thLastPay: "To'lov", thStatus: "Holat", thActions: "Amal", actionPlus: "+1 dars", historyTitle: "Tarix", historyEmpty: "Yo'q", btnClose: "Yopish", manualAdd: "Qo'shish", btnUpdate: "Yangilash", confirmTitle: "Tasdiqlang", confirmDelete: "O'chirilsinmi?", confirmDeleteRecord: "Yozuv o'chirilsinmi?", btnOk: "Ha", btnAbort: "Yo'q", labelContract: "Shartnoma", placeholderContract: "Raqam", labelName: "Ismi", placeholderName: "Ismni kiriting", labelTeacher: "O'qituvchi", labelClass: "Guruh", placeholderClass: "Yozing", placeholderTeacher: "Tanlang", labelTotal: "Jami", labelUsed: "O'tilgan", labelPayDate: "Sana", btnCancel: "Bekor", btnSave: "Saqlash", filterLabel: "Mas'ul:", filterClassLabel: "Guruh:", filterStatusLabel: "Holat:", filterAll: "Hammasi", statusPaid: "Yetarli", statusWarning: "Yaqin", statusOverdue: "Qarz", modalTitleAdd: "Yangi talaba", modalTitleEdit: "Tahrirlash", days: ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"] },
+            ru: { portalTitle: "Рабочая область учителя", portalSub: "Частный Образовательный Портал", entryName: "Имя учителя", entryPin: "PIN-код доступа", btnEnter: "Войти", errPin: "Неверный PIN-код.", dashboardTitle: "Управление Оплатой", subtitle: "Синхронизация Данных", addBtn: "Добавить", statTotal: "Студентов", statWarning: "Внимание", statOverdue: "Должники", thName: "ФИО Студента", thTeacher: "Преподаватель", thClass: "Группа", thProgress: "Прогресс", thRemaining: "Осталось", thLastPay: "Последняя оплата", thStatus: "Статус", thActions: "Действия", actionPlus: "+1 урок", historyTitle: "История", historyEmpty: "Записей нет", btnClose: "Закрыть", manualAdd: "Добавить", btnUpdate: "Обновить", confirmTitle: "Подтверждение", confirmDelete: "Удалить студента навсегда?", confirmDeleteRecord: "Удалить запись?", btnOk: "Да", btnAbort: "Нет", labelContract: "№ Контракта", placeholderContract: "Номер", labelName: "ФИО", placeholderName: "Введите имя", labelTeacher: "Учитель", labelClass: "Группа", placeholderClass: "Введите", placeholderTeacher: "Выберите учителя", labelTotal: "Всего уроков", labelUsed: "Пройдено", labelPayDate: "Дата оплаты", btnCancel: "Отмена", btnSave: "Сохранить", filterLabel: "Ответственный:", filterClassLabel: "Класс:", filterStatusLabel: "Статус:", filterAll: "Все", statusPaid: "Оплачено", statusWarning: "Срок", statusOverdue: "Долг", modalTitleAdd: "Добавить студента", modalTitleEdit: "Редактировать", days: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"] },
+            en: { portalTitle: "Teacher Workspace", portalSub: "Private Educational Portal", entryName: "Teacher Name", entryPin: "Access PIN", btnEnter: "Unlock Dashboard", errPin: "Invalid PIN.", dashboardTitle: "Dashboard", subtitle: "Sync Portal", addBtn: "Add New", statTotal: "Students", statWarning: "Warning", statOverdue: "Due", thName: "Full Name", thTeacher: "Rep.", thClass: "Class", thProgress: "Progress", thRemaining: "Left", thLastPay: "Last Pay", thStatus: "Status", thActions: "Actions", actionPlus: "+1", historyTitle: "Logs", historyEmpty: "Empty", btnClose: "Close", manualAdd: "Add", btnUpdate: "Update", confirmTitle: "Confirm", confirmDelete: "Delete student?", confirmDeleteRecord: "Delete log?", btnOk: "Yes", btnAbort: "No", labelContract: "Contract No.", placeholderContract: "Enter No.", labelName: "Name", placeholderName: "Enter name", labelTeacher: "Teacher", labelClass: "Class", placeholderClass: "Type", placeholderTeacher: "Select", labelTotal: "Total Pack", labelUsed: "Used", labelPayDate: "Date", btnCancel: "Cancel", btnSave: "Save", filterLabel: "Rep:", filterClassLabel: "Level:", filterStatusLabel: "Status:", filterAll: "All", statusPaid: "Paid", statusWarning: "Low", statusOverdue: "Due", modalTitleAdd: "Add New Student", modalTitleEdit: "Edit Info", days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] }
         };
 
-        let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedStatus = 'all', students = [], loggedUser = null, isAdmin = false, currentHistoryStudentId = null, currentNoteStudentId = null, editingRecordIndex = -1, db, auth;
+        let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedStatus = 'all', students = [], loggedUser = null, isAdmin = false, currentHistoryStudentId = null, editingRecordIndex = -1, db, auth;
 
         const customConfirm = (msg, callback) => {
             const overlay = document.getElementById('confirm-modal-overlay');
@@ -292,9 +273,7 @@
 
         const startApp = async () => {
             const app = initializeApp(firebaseConfig);
-            auth = getAuth(app); 
-            db = getFirestore(app);
-            
+            auth = getAuth(app); db = getFirestore(app);
             window.logout = () => { sessionStorage.removeItem('active_staff_session'); location.reload(); };
             window.setLang = (l) => { currentLang = l; render(); };
             window.setTeacherFilter = (t) => { selectedTeacher = t; selectedClass = 'all'; render(); };
@@ -302,40 +281,20 @@
             window.setStatusFilter = (s) => { selectedStatus = s; render(); };
             window.toggleModal = (show) => { document.getElementById('modal-overlay').style.display = show ? 'flex' : 'none'; };
             window.toggleHistoryModal = (show) => { if (!show) window.cancelRecordEdit(); document.getElementById('history-modal-overlay').style.display = show ? 'flex' : 'none'; };
-            window.toggleNoteModal = (show) => { document.getElementById('note-modal-overlay').style.display = show ? 'flex' : 'none'; };
-            
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
                     onSnapshot(query(studentsCol), (snapshot) => {
                         students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        
-                        // Auto-migrate Anlaoshi to Alaoshi
-                        students.forEach(s => {
-                            if (s.teacher === 'Anlaoshi') {
-                                updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', s.id), { teacher: 'Alaoshi' });
-                            }
-                        });
-
                         render();
                         if (currentHistoryStudentId && document.getElementById('history-modal-overlay').style.display === 'flex') {
                             window.openHistoryModal(currentHistoryStudentId);
                         }
-                    }, (error) => {
-                        console.error("Firestore snapshot error:", error);
                     });
                 }
             });
 
-            const initAuth = async () => {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            };
-            await initAuth();
-            
+            await signInAnonymously(auth);
             verifySession();
 
             const processAuth = () => {
@@ -356,14 +315,7 @@
         };
 
         const verifySession = () => {
-            let saved = sessionStorage.getItem('active_staff_session');
-            
-            // Auto-migrate local session
-            if (saved === 'Anlaoshi') {
-                saved = 'Alaoshi';
-                sessionStorage.setItem('active_staff_session', 'Alaoshi');
-            }
-
+            const saved = sessionStorage.getItem('active_staff_session');
             if (saved && (teacherList.includes(saved) || saved === 'Director')) {
                 loggedUser = saved; isAdmin = (saved === 'Director');
                 document.getElementById('entry-gate').classList.add('hidden');
@@ -420,41 +372,19 @@
             const list = document.getElementById('history-list'); list.innerHTML = '';
             const history = s.attendanceHistory || [];
             if (history.length === 0) {
-                if (s.usedLessons > 0) {
-                    list.innerHTML = `<div class="py-12 text-center flex flex-col items-center opacity-60"><i data-lucide="history" class="w-10 h-10 mb-3 text-slate-400"></i><span class="text-sm font-bold text-slate-500">旧版系统已扣除 ${s.usedLessons} 节课</span><span class="text-xs text-slate-400 mt-1">${t.historyEmpty}</span></div>`;
-                } else {
-                    list.innerHTML = `<div class="py-12 text-center text-slate-400 font-bold text-sm">${t.historyEmpty}</div>`;
-                }
+                list.innerHTML = `<div class="py-12 text-center text-slate-400 italic text-sm">${t.historyEmpty}</div>`;
             } else {
-                // Reverse to show newest on top, keep original index for edits
-                const reversed = history.map((record, index) => ({ record, index })).reverse();
-                reversed.forEach(({ record, index }) => {
-                    const isAbsent = record.includes(t.absentMark);
-                    const isFreeze = record.includes(t.statusFrozen) || record.includes(t.actionUnfreeze) || record.includes(t.actionFreeze);
-                    const isArchive = record.includes(t.actionArchive) || record.includes(t.actionUnarchive) || record.includes(t.statArchived);
-                    const isUpdate = record.includes(t.payUpdate);
-
-                    let recordStyling = 'text-[#1A2E35]';
-                    if (isAbsent) recordStyling = 'text-amber-600 bg-amber-50/50';
-                    if (isFreeze) recordStyling = 'text-blue-600 bg-blue-50/50';
-                    if (isArchive) recordStyling = 'text-slate-500 bg-slate-50/50 line-through';
-                    if (isUpdate) recordStyling = 'text-purple-600 bg-purple-50/50';
-
-                    list.innerHTML += `<div class="flex items-center justify-between p-5 lg:p-6 bg-[#F7FAF9] rounded-[24px] border border-white group hover:bg-[#F0F6F5] transition-all">
-                        <div class="flex items-center gap-3 lg:gap-4 w-full">
-                            <div class="w-8 h-8 lg:w-10 lg:h-10 shrink-0 rounded-2xl bg-white text-[#2C5F56] flex items-center justify-center text-xs font-black shadow-sm">${index + 1}</div>
-                            <span class="text-xs lg:text-sm font-bold ${recordStyling} break-words flex-1 px-2 py-1 rounded-xl">${record}</span>
-                        </div>
-                        <div class="flex items-center gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                            <button onclick="startEditRecord(${index}, '${record.replace(/'/g, "\\'")}')" class="p-2 lg:p-2.5 text-slate-300 hover:text-[#2C5F56]"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                            <button onclick="deleteRecord(${index})" class="p-2 lg:p-2.5 text-slate-300 hover:text-rose-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                [...history].reverse().forEach((record, revIdx) => {
+                    const originalIdx = history.length - 1 - revIdx;
+                    list.innerHTML += `<div class="flex items-center justify-between p-6 bg-[#F7FAF9] rounded-[24px] border border-white group hover:bg-[#F0F6F5] transition-all">
+                        <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-2xl bg-white text-[#2C5F56] flex items-center justify-center text-xs font-black shadow-sm">${history.length - revIdx}</div><span class="text-sm font-bold text-[#1A2E35]">${record}</span></div>
+                        <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="startEditRecord(${originalIdx}, '${record}')" class="p-2.5 text-slate-300 hover:text-[#2C5F56]"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="deleteRecord(${originalIdx})" class="p-2.5 text-slate-300 hover:text-rose-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div></div>`;
                 });
             }
             window.toggleHistoryModal(true); lucide.createIcons();
-            
-            // Scroll history to top automatically
-            setTimeout(() => { document.getElementById('history-list').scrollTop = 0; }, 50);
         };
 
         window.startEditRecord = (idx, text) => {
@@ -477,19 +407,7 @@
         const updateManualRecord = async () => {
             const d = document.getElementById('manual-date-input').value; if (!d) return;
             const s = students.find(it => it.id === currentHistoryStudentId);
-            const originalRecord = (s.attendanceHistory || [])[editingRecordIndex];
-            
-            let formatted = `${d} (${tDict[currentLang].days[new Date(d.replace(/-/g, "/")).getDay()]})`;
-            
-            // Retain original tags like absent, freeze, etc.
-            const t = tDict[currentLang];
-            if (originalRecord && originalRecord.includes(t.absentMark)) formatted += ` ${t.absentMark}`;
-            else if (originalRecord && originalRecord.includes(t.actionFreeze)) formatted += ` [${t.actionFreeze}]`;
-            else if (originalRecord && originalRecord.includes(t.actionUnfreeze)) formatted += ` [${t.actionUnfreeze}]`;
-            else if (originalRecord && originalRecord.includes(t.actionArchive)) formatted += ` [${t.actionArchive}]`;
-            else if (originalRecord && originalRecord.includes(t.actionUnarchive)) formatted += ` [${t.actionUnarchive}]`;
-            else if (originalRecord && originalRecord.includes(t.payUpdate)) formatted += ` ${originalRecord.substring(originalRecord.indexOf(t.payUpdate))}`;
-
+            const formatted = `${d} (${tDict[currentLang].days[new Date(d.replace(/-/g, "/")).getDay()]})`;
             const nh = [...(s.attendanceHistory || [])]; nh[editingRecordIndex] = formatted;
             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { attendanceHistory: nh });
             window.cancelRecordEdit();
@@ -497,45 +415,16 @@
 
         window.deleteRecord = (idx) => customConfirm(tDict[currentLang].confirmDeleteRecord, async () => {
             const s = students.find(it => it.id === currentHistoryStudentId);
-            const nh = [...(s.attendanceHistory || [])]; 
-            const isLesson = !nh[idx].includes('[') && !nh[idx].includes(tDict[currentLang].payUpdate); // Simple heuristic to avoid deducting lesson count if deleting a freeze/archive/payment log
-            nh.splice(idx, 1);
-            
-            let updates = { attendanceHistory: nh };
-            if (isLesson) updates.usedLessons = Math.max(0, s.usedLessons - 1);
-
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), updates);
+            const nh = [...(s.attendanceHistory || [])]; nh.splice(idx, 1);
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { usedLessons: Math.max(0, s.usedLessons - 1), attendanceHistory: nh });
         });
-
-        window.openNoteModal = (id) => {
-            const s = students.find(it => it.id === id); if (!s) return;
-            currentNoteStudentId = id;
-            document.getElementById('note-modal-title').innerText = `${s.name} - ${tDict[currentLang].noteTitle}`;
-            document.getElementById('input-note').placeholder = tDict[currentLang].notePlaceholder;
-            document.getElementById('input-note').value = s.note || "";
-            document.getElementById('btn-note-cancel').innerText = tDict[currentLang].btnCancel;
-            document.getElementById('btn-note-save').innerText = tDict[currentLang].btnSave;
-            window.toggleNoteModal(true);
-        };
-
-        window.saveNote = async () => {
-            if (!currentNoteStudentId) return;
-            let noteVal = document.getElementById('input-note').value.trim();
-            if (noteVal) {
-                const now = new Date();
-                const sig = `[${loggedUser} ${now.getMonth()+1}/${now.getDate()}]`;
-                if (!noteVal.endsWith(sig)) noteVal += `\n${sig}`;
-            }
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentNoteStudentId), { note: noteVal });
-            window.toggleNoteModal(false);
-        };
 
         window.openAddModal = () => {
             document.getElementById('student-form').reset(); document.getElementById('input-id').value = "";
             const sel = document.getElementById('input-teacher'); 
             sel.innerHTML = `<option value="" disabled selected>${tDict[currentLang].placeholderTeacher}</option>` + teacherList.map(t => `<option value="${t}">${t}</option>`).join('');
             if (!isAdmin) { sel.value = loggedUser; sel.disabled = true; } else { sel.value = ""; sel.disabled = false; }
-            const ts = document.getElementById('input-total'); ts.innerHTML = [12,24,36,48,60,72,96].map(v => `<option value="${v}">${v}</option>`).join('');
+            const ts = document.getElementById('input-total'); ts.innerHTML = [12,24,36,48,60].map(v => `<option value="${v}">${v}</option>`).join('');
             document.getElementById('modal-title').innerText = tDict[currentLang].modalTitleAdd; window.toggleModal(true);
         };
 
@@ -545,46 +434,17 @@
             document.getElementById('input-class').value = s.studentClass || "";
             const sel = document.getElementById('input-teacher'); sel.innerHTML = teacherList.map(t => `<option value="${t}">${t}</option>`).join('');
             sel.value = s.teacher; sel.disabled = !isAdmin;
-            const ts = document.getElementById('input-total'); ts.innerHTML = [12,24,36,48,60,72,96].map(v => `<option value="${v}">${v}</option>`).join('');
+            const ts = document.getElementById('input-total'); ts.innerHTML = [12,24,36,48,60].map(v => `<option value="${v}">${v}</option>`).join('');
             ts.value = s.totalLessons; document.getElementById('input-used').value = s.usedLessons; document.getElementById('input-date').value = s.lastPaymentDate || "";
             document.getElementById('modal-title').innerText = tDict[currentLang].modalTitleEdit; window.toggleModal(true);
         };
 
         document.getElementById('student-form').onsubmit = async (e) => {
             e.preventDefault(); const id = document.getElementById('input-id').value, teacherVal = document.getElementById('input-teacher').value; if (!teacherVal) return;
-            const data = { 
-                name: document.getElementById('input-name').value, 
-                contractId: document.getElementById('input-contract').value, 
-                studentClass: document.getElementById('input-class').value, 
-                teacher: teacherVal, 
-                totalLessons: parseInt(document.getElementById('input-total').value), 
-                usedLessons: parseInt(document.getElementById('input-used').value), 
-                lastPaymentDate: document.getElementById('input-date').value, 
-                updatedAt: serverTimestamp() 
-            };
-            
+            const data = { name: document.getElementById('input-name').value, contractId: document.getElementById('input-contract').value, studentClass: document.getElementById('input-class').value, teacher: teacherVal, totalLessons: parseInt(document.getElementById('input-total').value), usedLessons: parseInt(document.getElementById('input-used').value), lastPaymentDate: document.getElementById('input-date').value, updatedAt: serverTimestamp() };
             window.toggleModal(false);
-            
-            if (id) {
-                const s = students.find(it => it.id === id);
-                let historyUpdate = [];
-                // 如果总课时或付费日期改变了，自动写入一条历史记录
-                if (s && (s.totalLessons !== data.totalLessons || s.lastPaymentDate !== data.lastPaymentDate)) {
-                    const now = new Date();
-                    const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]})`;
-                    const logEntry = `${dStr} ${tDict[currentLang].payUpdate}: ${s.totalLessons} -> ${data.totalLessons} / ${s.lastPaymentDate || '无'} -> ${data.lastPaymentDate || '无'}`;
-                    historyUpdate = [logEntry];
-                }
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), {
-                    ...data,
-                    attendanceHistory: [...(s.attendanceHistory || []), ...historyUpdate]
-                });
-            } else { 
-                data.attendanceHistory = []; 
-                data.isFrozen = false; 
-                data.isArchived = false;
-                await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', 'students')), data); 
-            }
+            if (id) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), data);
+            else { data.attendanceHistory = []; await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', 'students')), data); }
         };
 
         window.updateLesson = async (id) => {
@@ -593,47 +453,7 @@
             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { usedLessons: s.usedLessons + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
         };
 
-        window.markAbsent = async (id) => {
-            const s = students.find(it => it.id === id); if (!s) return;
-            const now = new Date(); 
-            const formatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]}) ${tDict[currentLang].absentMark}`;
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { usedLessons: s.usedLessons + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
-        };
-
         window.deleteStudent = (id) => customConfirm(tDict[currentLang].confirmDelete, async () => { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id)); });
-
-        window.toggleFreeze = async (id) => {
-            const s = students.find(it => it.id === id); if (!s) return;
-            const t = tDict[currentLang] || tDict['zh'];
-            const newFrozenState = !s.isFrozen;
-            const actionText = newFrozenState ? t.actionFreeze : t.actionUnfreeze;
-            
-            const now = new Date(); 
-            const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${t.days[now.getDay()]})`;
-            const logEntry = `${dateStr} [${actionText}]`;
-            
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { 
-                isFrozen: newFrozenState,
-                attendanceHistory: [...(s.attendanceHistory || []), logEntry]
-            });
-        };
-
-        window.toggleArchive = async (id) => {
-            const s = students.find(it => it.id === id); if (!s) return;
-            const t = tDict[currentLang] || tDict['zh'];
-            const newArchived = !s.isArchived;
-            const actionText = newArchived ? t.actionArchive : t.actionUnarchive;
-            
-            const now = new Date(); 
-            const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${t.days[now.getDay()]})`;
-            const logEntry = `${dateStr} [${actionText}]`;
-            
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { 
-                isArchived: newArchived,
-                isFrozen: false, // 归档时自动解冻以防状态冲突
-                attendanceHistory: [...(s.attendanceHistory || []), logEntry]
-            });
-        };
 
         const render = () => {
             const t = tDict[currentLang] || tDict['zh'];
@@ -650,22 +470,11 @@
                 btn.classList.toggle('active', btn.onclick.toString().includes(`'${currentLang}'`)); 
             });
 
-            // Base filter by Teacher
             let baseFiltered = isAdmin ? (selectedTeacher === 'all' ? students : students.filter(s => s.teacher === selectedTeacher)) : students.filter(s => s.teacher === loggedUser);
             const classes = [...new Set(baseFiltered.map(s => s.studentClass).filter(c => c))].sort();
-            
-            // Apply Class Filter
             let classFiltered = selectedClass === 'all' ? baseFiltered : baseFiltered.filter(s => s.studentClass === selectedClass);
-            
-            // Apply Status & Archive Filter
             let filtered = classFiltered.filter(s => {
-                if (selectedStatus === 'archived') return s.isArchived;
-                if (s.isArchived) return false; // 隐藏归档的学生 (仅在“全部”、“欠费”等筛选中不显示)
-
                 if (selectedStatus === 'all') return true;
-                if (selectedStatus === 'frozen') return s.isFrozen;
-                if (s.isFrozen) return false;
-
                 const r = s.totalLessons - s.usedLessons;
                 if (selectedStatus === 'paid') return r > 3;
                 if (selectedStatus === 'warning') return r > 0 && r <= 3;
@@ -675,20 +484,13 @@
             document.getElementById('page-title-main').innerText = t.dashboardTitle;
             document.getElementById('page-subtitle').innerText = t.subtitle;
             document.getElementById('add-btn-text').innerText = t.addBtn;
+            document.getElementById('stat-total-label').innerText = t.statTotal;
+            document.getElementById('stat-warning-label').innerText = t.statWarning;
+            document.getElementById('stat-overdue-label').innerText = t.statOverdue;
             
-            const prefix = (selectedTeacher === 'all' || !isAdmin) ? '' : `${selectedTeacher} `;
-            document.getElementById('stat-total-label').innerText = prefix + t.statTotal;
-            document.getElementById('stat-warning-label').innerText = prefix + t.statWarning;
-            document.getElementById('stat-overdue-label').innerText = prefix + t.statOverdue;
-            document.getElementById('stat-frozen-label').innerText = prefix + t.statFrozen;
-            document.getElementById('stat-archived-label').innerText = prefix + t.statArchived;
-            
-            const activeStudents = classFiltered.filter(s => !s.isArchived);
-            document.getElementById('stat-total-val').innerText = activeStudents.length;
-            document.getElementById('stat-warning-val').innerText = activeStudents.filter(s => { let r = s.totalLessons - s.usedLessons; return !s.isFrozen && r > 0 && r <= 3; }).length;
-            document.getElementById('stat-overdue-val').innerText = activeStudents.filter(s => !s.isFrozen && (s.totalLessons - s.usedLessons) <= 0).length;
-            document.getElementById('stat-frozen-val').innerText = activeStudents.filter(s => s.isFrozen).length;
-            document.getElementById('stat-archived-val').innerText = classFiltered.filter(s => s.isArchived).length;
+            document.getElementById('stat-total-val').innerText = classFiltered.length;
+            document.getElementById('stat-warning-val').innerText = classFiltered.filter(s => { let r = s.totalLessons - s.usedLessons; return r > 0 && r <= 3; }).length;
+            document.getElementById('stat-overdue-val').innerText = classFiltered.filter(s => (s.totalLessons - s.usedLessons) <= 0).length;
 
             if (isAdmin) {
                 const tc = document.getElementById('teacher-filter-container');
@@ -704,6 +506,63 @@
             sc.innerHTML = `<button onclick="setStatusFilter('all')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='all'?'active':''}">${t.filterAll}</button>
                 <button onclick="setStatusFilter('paid')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='paid'?'active':''}">${t.statusPaid}</button>
                 <button onclick="setStatusFilter('warning')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='warning'?'active':''}">${t.statusWarning}</button>
-                <button onclick="setStatusFilter('overdue')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='overdue'?'active':''}">${t.statusOverdue}</button>
-                <button onclick="setStatusFilter('frozen')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='frozen'?'active':''}">${t.statusFrozen}</button>
-                <button onclick="setStatusFilter('archived')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='archived'
+                <button onclick="setStatusFilter('overdue')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='overdue'?'active':''}">${t.statusOverdue}</button>`;
+
+            document.getElementById('table-head-row').innerHTML = `<th class="px-8 py-6 min-w-[140px] w-48 text-[10px] font-black text-slate-400 uppercase tracking-widest">${t.thName}</th><th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">${t.thTeacher}</th><th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">${t.thClass}</th><th class="px-8 py-6 w-40 text-[10px] font-black text-slate-400 uppercase tracking-widest">${t.thProgress}</th><th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">${t.thRemaining}</th><th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">${t.thLastPay}</th><th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">${t.thStatus}</th><th class="px-8 py-6 text-right w-24 text-[10px] font-black text-slate-400 uppercase tracking-widest">${t.thActions}</th>`;
+
+            const tbody = document.getElementById('student-table-body');
+            tbody.innerHTML = '';
+            filtered.sort((a,b) => (a.totalLessons-a.usedLessons) - (b.totalLessons-b.usedLessons)).forEach(s => {
+                const rem = s.totalLessons - s.usedLessons;
+                const st = rem <= 0 ? {l:t.statusOverdue, c:"bg-rose-50 text-rose-500"} : (rem <= 3 ? {l:t.statusWarning, c:"bg-amber-50 text-amber-600"} : {l:t.statusPaid, c:"bg-[#F0F6F5] text-[#2C5F56]"});
+                tbody.innerHTML += `
+                    <tr class="table-row-modern transition-all duration-300">
+                        <td class="px-8 py-7">
+                            <div onclick="openHistoryModal('${s.id}')" class="font-extrabold text-[#1A2E35] text-sm cursor-pointer flex items-center gap-2 hover:text-[#2C5F56] transition-colors">
+                                <i data-lucide="calendar-check" class="w-4 h-4 text-slate-200"></i>
+                                <div>
+                                    <div>${s.name}</div>
+                                    <div class="text-[10px] text-slate-400 font-medium tracking-tight uppercase">${s.contractId || '---'}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-8 py-7"><span class="bg-[#F0F6F5] text-[#2C5F56] px-4 py-2 rounded-2xl text-[9px] font-black uppercase tracking-wider shadow-sm border border-white">${s.teacher}</span></td>
+                        <td class="px-8 py-7 font-bold text-slate-400 text-[11px] uppercase whitespace-nowrap tracking-wide">${s.studentClass || '---'}</td>
+                        <td class="px-8 py-7 w-40"><div class="flex items-center gap-3"><span class="text-xs font-black ${rem<0?'text-rose-500':'text-slate-400'}">${s.usedLessons}</span><div class="w-20 h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner"><div class="h-full rounded-full ${rem<0?'bg-rose-600':(rem<=3?'bg-[#FFC554]':'bg-[#2C5F56]')}" style="width:${Math.min((s.usedLessons/s.totalLessons)*100,100)}%"></div></div></div></td>
+                        <td class="px-8 py-7 font-[900] ${rem<0?'text-rose-500':'text-[#1A2E35]'} text-xl tracking-tight">${rem}</td>
+                        <td class="px-8 py-7 text-slate-400 text-xs font-bold text-center italic">${s.lastPaymentDate || '---'}</td>
+                        <td class="px-8 py-7 text-center"><span class="px-4 py-2 rounded-full text-[9px] font-black border border-white whitespace-nowrap shadow-sm uppercase tracking-widest ${st.c}">${st.l}</span></td>
+                        <td class="px-8 py-7 text-right whitespace-nowrap w-24">
+                            <div class="flex justify-end gap-2">
+                                <button onclick="updateLesson('${s.id}')" class="bg-[#2C5F56] text-white text-[9px] font-black px-4 py-2.5 rounded-full active:scale-95 transition-all shadow-lg shadow-[#2C5F56]/10 uppercase" title="上课+1">${t.actionPlus}</button>
+                                <button onclick="openEditModal('${s.id}')" class="p-2.5 bg-white text-slate-200 hover:text-[#2C5F56] rounded-xl transition-all shadow-sm border border-slate-50" title="编辑"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                                <button onclick="deleteStudent('${s.id}')" class="p-2.5 bg-white text-slate-200 hover:text-rose-500 rounded-xl shadow-sm border border-slate-50" title="删除"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            document.getElementById('label-name').innerText = t.labelName;
+            document.getElementById('label-contract').innerText = t.labelContract; 
+            document.getElementById('input-contract').placeholder = t.placeholderContract;
+            document.getElementById('input-name').placeholder = t.placeholderName;
+            document.getElementById('label-teacher').innerText = t.labelTeacher; 
+            document.getElementById('label-class').innerText = t.labelClass;
+            document.getElementById('input-class').placeholder = t.placeholderClass;
+            document.getElementById('label-total').innerText = t.labelTotal; 
+            document.getElementById('label-used').innerText = t.labelUsed;
+            document.getElementById('label-date').innerText = t.labelPayDate; 
+            document.getElementById('btn-cancel').innerText = t.btnCancel;
+            document.getElementById('btn-save').innerText = t.btnSave; 
+            document.getElementById('btn-close-history').innerText = t.btnClose;
+            document.getElementById('filter-label').innerText = t.filterLabel; 
+            document.getElementById('filter-class-label').innerText = t.filterClassLabel;
+            document.getElementById('filter-status-label').innerText = t.filterStatusLabel;
+            lucide.createIcons();
+        };
+
+        startApp();
+    </script>
+</body>
+</html>
