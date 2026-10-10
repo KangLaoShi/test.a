@@ -150,6 +150,38 @@
                 </div>
             </div>
 
+            <!-- New Class Category Stats Row -->
+            <div class="grid grid-cols-3 md:grid-cols-4 xl:grid-cols-7 gap-4">
+                <div onclick="setCategoryFilter('hsk1')" id="card-hsk1" class="card-modern p-4 flex flex-col items-center justify-center gap-1 hover-lift border-b-4 border-slate-200 cursor-pointer transition-all active:scale-95" title="点击筛选 HSK 1">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">HSK 1</span>
+                    <span id="stat-hsk1-val" class="text-2xl font-[900] text-[#1A2E35]">0</span>
+                </div>
+                <div onclick="setCategoryFilter('hsk2')" id="card-hsk2" class="card-modern p-4 flex flex-col items-center justify-center gap-1 hover-lift border-b-4 border-slate-200 cursor-pointer transition-all active:scale-95" title="点击筛选 HSK 2">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">HSK 2</span>
+                    <span id="stat-hsk2-val" class="text-2xl font-[900] text-[#1A2E35]">0</span>
+                </div>
+                <div onclick="setCategoryFilter('hsk3')" id="card-hsk3" class="card-modern p-4 flex flex-col items-center justify-center gap-1 hover-lift border-b-4 border-slate-200 cursor-pointer transition-all active:scale-95" title="点击筛选 HSK 3">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">HSK 3</span>
+                    <span id="stat-hsk3-val" class="text-2xl font-[900] text-[#1A2E35]">0</span>
+                </div>
+                <div onclick="setCategoryFilter('hsk4')" id="card-hsk4" class="card-modern p-4 flex flex-col items-center justify-center gap-1 hover-lift border-b-4 border-slate-200 cursor-pointer transition-all active:scale-95" title="点击筛选 HSK 4">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">HSK 4</span>
+                    <span id="stat-hsk4-val" class="text-2xl font-[900] text-[#1A2E35]">0</span>
+                </div>
+                <div onclick="setCategoryFilter('hsk5')" id="card-hsk5" class="card-modern p-4 flex flex-col items-center justify-center gap-1 hover-lift border-b-4 border-slate-200 cursor-pointer transition-all active:scale-95" title="点击筛选 HSK 5">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">HSK 5</span>
+                    <span id="stat-hsk5-val" class="text-2xl font-[900] text-[#1A2E35]">0</span>
+                </div>
+                <div onclick="setCategoryFilter('hsk6')" id="card-hsk6" class="card-modern p-4 flex flex-col items-center justify-center gap-1 hover-lift border-b-4 border-slate-200 cursor-pointer transition-all active:scale-95" title="点击筛选 HSK 6">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">HSK 6</span>
+                    <span id="stat-hsk6-val" class="text-2xl font-[900] text-[#1A2E35]">0</span>
+                </div>
+                <div onclick="setCategoryFilter('individual')" id="card-individual" class="card-modern p-4 flex flex-col items-center justify-center gap-1 hover-lift border-b-4 border-slate-200 cursor-pointer transition-all active:scale-95" title="点击筛选 一对一/VIP">
+                    <span id="label-individual" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Individual</span>
+                    <span id="stat-individual-val" class="text-2xl font-[900] text-[#1A2E35]">0</span>
+                </div>
+            </div>
+
             <div class="card-modern p-5 space-y-2">
                 <div id="teacher-filter-wrap" class="hidden flex flex-col gap-1.5">
                     <span id="filter-label" class="text-[9px] font-black text-[#2C5F56]/40 uppercase ml-2">负责人:</span>
@@ -200,7 +232,7 @@
                 
                 <div class="grid grid-cols-2 gap-4 text-center">
                     <div><label id="label-total" class="text-[10px] font-black text-slate-300 uppercase">当前总量</label>
-                    <input id="input-total" type="number" list="total-list" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none text-center" placeholder="选填，默认0"></div>
+                    <input id="input-total" type="text" inputmode="numeric" list="total-list" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none text-center" placeholder="选填，默认0"></div>
                     <div><label id="label-used" class="text-[10px] font-black text-slate-300 uppercase">已上</label>
                     <input id="input-used" type="number" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none text-center" placeholder="选填，默认0"></div>
                 </div>
@@ -223,6 +255,7 @@
     <!-- Datalists for Autocomplete -->
     <datalist id="class-list"></datalist>
     <datalist id="total-list">
+        <option value="0">试听 0</option>
         <option value="12"></option>
         <option value="24"></option>
         <option value="36"></option>
@@ -298,13 +331,13 @@
         const teacherPins = { "Director": "1234", "Kanglaoshi": "1234", "Pailaoshi": "1234", "Alaoshi": "1234", "Tielaoshi": "1234", "Lanyinglaoshi": "1234", "Tanglaoshi": "1234" };
 
         const tDict = {
-            zh: { portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名 (例如: Kanglaoshi)", entryPin: "访问识别码 (PIN)", btnEnter: "进入工作台", errPin: "识别码错误，请重新输入。", dashboardTitle: "学生付费跟进管理", subtitle: "协作版 · 实时云同步", addBtn: "添加学生", statTotal: "学生总数", statWarning: "即将到期", statOverdue: "欠费预警", statFrozen: "冻结账户", statArchived: "停学归档", statTrial: "试听学生", thName: "学生姓名", thTeacher: "负责", thClass: "班级", thProgress: "进度", thRemaining: "剩余", thLastPay: "最近付费", thStatus: "状态", thActions: "管理", actionPlus: "+1 记课", actionAbsent: "缺勤扣课", actionTrial: "记试听", actionFreeze: "冻结", actionUnfreeze: "解冻", actionArchive: "停学归档", actionUnarchive: "恢复学习", historyTitle: "上课记录", historyEmpty: "暂无记录", btnClose: "关闭窗口", manualAdd: "补签", btnUpdate: "更新", confirmTitle: "确认操作", confirmDelete: "确定要永久删除该学生吗？", confirmDeleteRecord: "确定删除这条记录吗？", btnOk: "确认", btnAbort: "取消", labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择老师", labelTotal: "当前总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", filterLabel: "负责人:", filterClassLabel: "班级筛选:", filterStatusLabel: "状态筛选:", filterAll: "全部", statusPaid: "充足", statusWarning: "预警", statusOverdue: "欠费", statusFrozen: "冻结", statusArchived: "归档", statusTrial: "试听", modalTitleAdd: "添加新学生", modalTitleEdit: "编辑信息", days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], absentMark: "[缺勤扣课]", trialMark: "[试听免费]", notesTitle: "学生备注", notesPlaceholder: "输入学生备注，缺课或请假原因，冻结原因，等", btnHistory: "记录", btnAddNote: "添加备注", notesEmpty: "暂无备注", labelAdd: "续费/新增购买" },
-            uz: { portalTitle: "O'qituvchilar Portali", portalSub: "Xususiy Ta'lim Portali", entryName: "O'qituvchi Ismi", entryPin: "Kirish PIN-kodi", btnEnter: "Tizimga kirish", errPin: "PIN noto'g'ri. Qayta urinib ko'ring.", dashboardTitle: "To'lov Monitoringi", subtitle: "Operatsiyalar Portali", addBtn: "Qo'shish", statTotal: "Jami", statWarning: "Ogoh", statOverdue: "Qarz", statFrozen: "Muzlatilgan", statArchived: "Arxivlangan", statTrial: "Sinovdagi", thName: "Ism", thTeacher: "Mas'ul", thClass: "Guruh", thProgress: "Holat", thRemaining: "Qolgan", thLastPay: "To'lov", thStatus: "Holat", thActions: "Amal", actionPlus: "+1 dars", actionAbsent: "Sababsiz kelmagan", actionTrial: "Sinov darsi", actionFreeze: "Muzlatish", actionUnfreeze: "Faollashtirish", actionArchive: "Arxivlash", actionUnarchive: "Qaytarish", historyTitle: "Tarix", historyEmpty: "Yo'q", btnClose: "Yopish", manualAdd: "Qo'shish", btnUpdate: "Yangilash", confirmTitle: "Tasdiqlang", confirmDelete: "O'chirilsinmi?", confirmDeleteRecord: "Yozuv o'chirilsinmi?", btnOk: "Ha", btnAbort: "Yo'q", labelContract: "Shartnoma", placeholderContract: "Raqam", labelName: "Ismi", placeholderName: "Ismni kiriting", labelTeacher: "O'qituvchi", labelClass: "Guruh", placeholderClass: "Yozing", placeholderTeacher: "Tanlang", labelTotal: "Jami", labelUsed: "O'tilgan", labelPayDate: "Sana", btnCancel: "Bekor", btnSave: "Saqlash", filterLabel: "Mas'ul:", filterClassLabel: "Guruh:", filterStatusLabel: "Holat:", filterAll: "Hammasi", statusPaid: "Yetarli", statusWarning: "Yaqin", statusOverdue: "Qarz", statusFrozen: "Muzlatilgan", statusArchived: "Arxiv", statusTrial: "Sinov", modalTitleAdd: "Yangi talaba", modalTitleEdit: "Tahrirlash", days: ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"], absentMark: "[Sababsiz kelmagan]", trialMark: "[Sinov bepul]", notesTitle: "Talaba izohi", notesPlaceholder: "Sabab yoki izoh kiriting...", btnHistory: "Tarix", btnAddNote: "Qo'shish", notesEmpty: "Izohlar yo'q", labelAdd: "Qo'shish" },
-            ru: { portalTitle: "Рабочая область учителя", portalSub: "Частный Образовательный Портал", entryName: "Имя учителя", entryPin: "PIN-код доступа", btnEnter: "Войти", errPin: "Неверный PIN-код.", dashboardTitle: "Управление Оплатой", subtitle: "Синхронизация Данных", addBtn: "Добавить", statTotal: "Студентов", statWarning: "Внимание", statOverdue: "Должники", statFrozen: "Заморожены", statArchived: "В архиве", statTrial: "Пробные", thName: "ФИО Студента", thTeacher: "Преподаватель", thClass: "Группа", thProgress: "Прогресс", thRemaining: "Осталось", thLastPay: "Последняя оплата", thStatus: "Статус", thActions: "Действия", actionPlus: "+1 урок", actionAbsent: "Пропуск", actionTrial: "Пробный", actionFreeze: "Заморозить", actionUnfreeze: "Разморозить", actionArchive: "В архив", actionUnarchive: "Восстановить", historyTitle: "История", historyEmpty: "Записей нет", btnClose: "Закрыть", manualAdd: "Добавить", btnUpdate: "Обновить", confirmTitle: "Подтверждение", confirmDelete: "Удалить студента навсегда?", confirmDeleteRecord: "Удалить запись?", btnOk: "Да", btnAbort: "Нет", labelContract: "№ Контракта", placeholderContract: "Номер", labelName: "ФИО", placeholderName: "Введите имя", labelTeacher: "Учитель", labelClass: "Группа", placeholderClass: "Введите", placeholderTeacher: "Выберите учителя", labelTotal: "Всего", labelUsed: "Пройдено", labelPayDate: "Дата оплаты", btnCancel: "Отмена", btnSave: "Сохранить", filterLabel: "Ответственный:", filterClassLabel: "Класс:", filterStatusLabel: "Статус:", filterAll: "Все", statusPaid: "Оплачено", statusWarning: "Срок", statusOverdue: "Долг", statusFrozen: "Заморожен", statusArchived: "Архив", statusTrial: "Пробный", modalTitleAdd: "Добавить студента", modalTitleEdit: "Редактировать", days: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"], absentMark: "[Пропуск]", trialMark: "[Пробный б/п]", notesTitle: "Заметки студента", notesPlaceholder: "Введите причину отсутствия, заморозки и т.д.", btnHistory: "История", btnAddNote: "Добавить", notesEmpty: "Нет заметок", labelAdd: "Добавить" },
-            en: { portalTitle: "Teacher Workspace", portalSub: "Private Educational Portal", entryName: "Teacher Name", entryPin: "Access PIN", btnEnter: "Unlock Dashboard", errPin: "Invalid PIN.", dashboardTitle: "Dashboard", subtitle: "Sync Portal", addBtn: "Add New", statTotal: "Students", statWarning: "Warning", statOverdue: "Due", statFrozen: "Frozen", statArchived: "Archived", statTrial: "Trials", thName: "Full Name", thTeacher: "Rep.", thClass: "Class", thProgress: "Progress", thRemaining: "Left", thLastPay: "Last Pay", thStatus: "Status", thActions: "Actions", actionPlus: "+1", actionAbsent: "Absence", actionTrial: "Trial Class", actionFreeze: "Freeze", actionUnfreeze: "Unfreeze", actionArchive: "Archive", actionUnarchive: "Restore", historyTitle: "Logs", historyEmpty: "Empty", btnClose: "Close", manualAdd: "Add", btnUpdate: "Update", confirmTitle: "Confirm", confirmDelete: "Delete student?", confirmDeleteRecord: "Delete log?", btnOk: "Yes", btnAbort: "No", labelContract: "Contract No.", placeholderContract: "Enter No.", labelName: "Name", placeholderName: "Enter name", labelTeacher: "Teacher", labelClass: "Class", placeholderClass: "Type", placeholderTeacher: "Select", labelTotal: "Total Pack", labelUsed: "Used", labelPayDate: "Date", btnCancel: "Cancel", btnSave: "Save", filterLabel: "Rep:", filterClassLabel: "Level:", filterStatusLabel: "Status:", filterAll: "All", statusPaid: "Paid", statusWarning: "Low", statusOverdue: "Due", statusFrozen: "Frozen", statusArchived: "Archive", statusTrial: "Trial", modalTitleAdd: "Add New Student", modalTitleEdit: "Edit Info", days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], absentMark: "[Absence]", trialMark: "[Free Trial]", notesTitle: "Student Notes", notesPlaceholder: "Enter absence reason, freeze reason, etc.", btnHistory: "History", btnAddNote: "Add Note", notesEmpty: "No notes yet", labelAdd: "Renew/Add" }
+            zh: { portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名 (例如: Kanglaoshi)", entryPin: "访问识别码 (PIN)", btnEnter: "进入工作台", errPin: "识别码错误，请重新输入。", dashboardTitle: "学生付费跟进管理", subtitle: "协作版 · 实时云同步", addBtn: "添加学生", statTotal: "学生总数", statWarning: "即将到期", statOverdue: "欠费预警", statFrozen: "冻结账户", statArchived: "停学归档", statTrial: "试听学生", thName: "学生姓名", thTeacher: "负责", thClass: "班级", thProgress: "进度", thRemaining: "剩余", thLastPay: "最近付费", thStatus: "状态", thActions: "管理", actionPlus: "+1 记课", actionAbsent: "缺勤扣课", actionTrial: "记试听", actionFreeze: "冻结", actionUnfreeze: "解冻", actionArchive: "停学归档", actionUnarchive: "恢复学习", historyTitle: "上课记录", historyEmpty: "暂无记录", btnClose: "关闭窗口", manualAdd: "补签", btnUpdate: "更新", confirmTitle: "确认操作", confirmDelete: "确定要永久删除该学生吗？", confirmDeleteRecord: "确定删除这条记录吗？", btnOk: "确认", btnAbort: "取消", labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择老师", labelTotal: "当前总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", filterLabel: "负责人:", filterClassLabel: "班级筛选:", filterStatusLabel: "状态筛选:", filterAll: "全部", statusPaid: "充足", statusWarning: "预警", statusOverdue: "欠费", statusFrozen: "冻结", statusArchived: "归档", statusTrial: "试听", modalTitleAdd: "添加新学生", modalTitleEdit: "编辑信息", days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], absentMark: "[缺勤扣课]", trialMark: "[试听免费]", notesTitle: "学生备注", notesPlaceholder: "输入学生备注，缺课或请假原因，冻结原因，等", btnHistory: "记录", btnAddNote: "添加备注", notesEmpty: "暂无备注", labelAdd: "续费/新增购买", labelIndividual: "一对一" },
+            uz: { portalTitle: "O'qituvchilar Portali", portalSub: "Xususiy Ta'lim Portali", entryName: "O'qituvchi Ismi", entryPin: "Kirish PIN-kodi", btnEnter: "Tizimga kirish", errPin: "PIN noto'g'ri. Qayta urinib ko'ring.", dashboardTitle: "To'lov Monitoringi", subtitle: "Operatsiyalar Portali", addBtn: "Qo'shish", statTotal: "Jami", statWarning: "Ogoh", statOverdue: "Qarz", statFrozen: "Muzlatilgan", statArchived: "Arxivlangan", statTrial: "Sinovdagi", thName: "Ism", thTeacher: "Mas'ul", thClass: "Guruh", thProgress: "Holat", thRemaining: "Qolgan", thLastPay: "To'lov", thStatus: "Holat", thActions: "Amal", actionPlus: "+1 dars", actionAbsent: "Sababsiz kelmagan", actionTrial: "Sinov darsi", actionFreeze: "Muzlatish", actionUnfreeze: "Faollashtirish", actionArchive: "Arxivlash", actionUnarchive: "Qaytarish", historyTitle: "Tarix", historyEmpty: "Yo'q", btnClose: "Yopish", manualAdd: "Qo'shish", btnUpdate: "Yangilash", confirmTitle: "Tasdiqlang", confirmDelete: "O'chirilsinmi?", confirmDeleteRecord: "Yozuv o'chirilsinmi?", btnOk: "Ha", btnAbort: "Yo'q", labelContract: "Shartnoma", placeholderContract: "Raqam", labelName: "Ismi", placeholderName: "Ismni kiriting", labelTeacher: "O'qituvchi", labelClass: "Guruh", placeholderClass: "Yozing", placeholderTeacher: "Tanlang", labelTotal: "Jami", labelUsed: "O'tilgan", labelPayDate: "Sana", btnCancel: "Bekor", btnSave: "Saqlash", filterLabel: "Mas'ul:", filterClassLabel: "Guruh:", filterStatusLabel: "Holat:", filterAll: "Hammasi", statusPaid: "Yetarli", statusWarning: "Yaqin", statusOverdue: "Qarz", statusFrozen: "Muzlatilgan", statusArchived: "Arxiv", statusTrial: "Sinov", modalTitleAdd: "Yangi talaba", modalTitleEdit: "Tahrirlash", days: ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"], absentMark: "[Sababsiz kelmagan]", trialMark: "[Sinov bepul]", notesTitle: "Talaba izohi", notesPlaceholder: "Sabab yoki izoh kiriting...", btnHistory: "Tarix", btnAddNote: "Qo'shish", notesEmpty: "Izohlar yo'q", labelAdd: "Qo'shish", labelIndividual: "Yakka" },
+            ru: { portalTitle: "Рабочая область учителя", portalSub: "Частный Образовательный Портал", entryName: "Имя учителя", entryPin: "PIN-код доступа", btnEnter: "Войти", errPin: "Неверный PIN-код.", dashboardTitle: "Управление Оплатой", subtitle: "Синхронизация Данных", addBtn: "Добавить", statTotal: "Студентов", statWarning: "Внимание", statOverdue: "Должники", statFrozen: "Заморожены", statArchived: "В архиве", statTrial: "Пробные", thName: "ФИО Студента", thTeacher: "Преподаватель", thClass: "Группа", thProgress: "Прогресс", thRemaining: "Осталось", thLastPay: "Последняя оплата", thStatus: "Статус", thActions: "Действия", actionPlus: "+1 урок", actionAbsent: "Пропуск", actionTrial: "Пробный", actionFreeze: "Заморозить", actionUnfreeze: "Разморозить", actionArchive: "В архив", actionUnarchive: "Восстановить", historyTitle: "История", historyEmpty: "Записей нет", btnClose: "Закрыть", manualAdd: "Добавить", btnUpdate: "Обновить", confirmTitle: "Подтверждение", confirmDelete: "Удалить студента навсегда?", confirmDeleteRecord: "Удалить запись?", btnOk: "Да", btnAbort: "Нет", labelContract: "№ Контракта", placeholderContract: "Номер", labelName: "ФИО", placeholderName: "Введите имя", labelTeacher: "Учитель", labelClass: "Группа", placeholderClass: "Введите", placeholderTeacher: "Выберите учителя", labelTotal: "Всего", labelUsed: "Пройдено", labelPayDate: "Дата оплаты", btnCancel: "Отмена", btnSave: "Сохранить", filterLabel: "Ответственный:", filterClassLabel: "Класс:", filterStatusLabel: "Статус:", filterAll: "Все", statusPaid: "Оплачено", statusWarning: "Срок", statusOverdue: "Долг", statusFrozen: "Заморожен", statusArchived: "Архив", statusTrial: "Пробный", modalTitleAdd: "Добавить студента", modalTitleEdit: "Редактировать", days: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"], absentMark: "[Пропуск]", trialMark: "[Пробный б/п]", notesTitle: "Заметки студента", notesPlaceholder: "Введите причину отсутствия, заморозки и т.д.", btnHistory: "История", btnAddNote: "Добавить", notesEmpty: "Нет заметок", labelAdd: "Добавить", labelIndividual: "Индив." },
+            en: { portalTitle: "Teacher Workspace", portalSub: "Private Educational Portal", entryName: "Teacher Name", entryPin: "Access PIN", btnEnter: "Unlock Dashboard", errPin: "Invalid PIN.", dashboardTitle: "Dashboard", subtitle: "Sync Portal", addBtn: "Add New", statTotal: "Students", statWarning: "Warning", statOverdue: "Due", statFrozen: "Frozen", statArchived: "Archived", statTrial: "Trials", thName: "Full Name", thTeacher: "Rep.", thClass: "Class", thProgress: "Progress", thRemaining: "Left", thLastPay: "Last Pay", thStatus: "Status", thActions: "Actions", actionPlus: "+1", actionAbsent: "Absence", actionTrial: "Trial Class", actionFreeze: "Freeze", actionUnfreeze: "Unfreeze", actionArchive: "Archive", actionUnarchive: "Restore", historyTitle: "Logs", historyEmpty: "Empty", btnClose: "Close", manualAdd: "Add", btnUpdate: "Update", confirmTitle: "Confirm", confirmDelete: "Delete student?", confirmDeleteRecord: "Delete log?", btnOk: "Yes", btnAbort: "No", labelContract: "Contract No.", placeholderContract: "Enter No.", labelName: "Name", placeholderName: "Enter name", labelTeacher: "Teacher", labelClass: "Class", placeholderClass: "Type", placeholderTeacher: "Select", labelTotal: "Total Pack", labelUsed: "Used", labelPayDate: "Date", btnCancel: "Cancel", btnSave: "Save", filterLabel: "Rep:", filterClassLabel: "Level:", filterStatusLabel: "Status:", filterAll: "All", statusPaid: "Paid", statusWarning: "Low", statusOverdue: "Due", statusFrozen: "Frozen", statusArchived: "Archive", statusTrial: "Trial", modalTitleAdd: "Add New Student", modalTitleEdit: "Edit Info", days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], absentMark: "[Absence]", trialMark: "[Free Trial]", notesTitle: "Student Notes", notesPlaceholder: "Enter absence reason, freeze reason, etc.", btnHistory: "History", btnAddNote: "Add Note", notesEmpty: "No notes yet", labelAdd: "Renew/Add", labelIndividual: "Individual" }
         };
 
-        let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedStatus = 'all', students = [], loggedUser = null, isAdmin = false, currentHistoryStudentId = null, currentNotesStudentId = null, editingRecordIndex = -1, db, auth;
+        let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedCategory = 'all', selectedStatus = 'all', students = [], loggedUser = null, isAdmin = false, currentHistoryStudentId = null, currentNotesStudentId = null, editingRecordIndex = -1, db, auth;
 
         const customConfirm = (msg, callback) => {
             const overlay = document.getElementById('confirm-modal-overlay');
@@ -325,8 +358,9 @@
             
             window.logout = () => { sessionStorage.removeItem('active_staff_session'); location.reload(); };
             window.setLang = (l) => { currentLang = l; render(); };
-            window.setTeacherFilter = (t) => { selectedTeacher = t; selectedClass = 'all'; render(); };
-            window.setClassFilter = (c) => { selectedClass = c; render(); };
+            window.setTeacherFilter = (t) => { selectedTeacher = t; selectedClass = 'all'; selectedCategory = 'all'; render(); };
+            window.setClassFilter = (c) => { selectedClass = c; selectedCategory = 'all'; render(); };
+            window.setCategoryFilter = (cat) => { selectedCategory = selectedCategory === cat ? 'all' : cat; selectedClass = 'all'; render(); };
             window.setStatusFilter = (s) => { selectedStatus = s; render(); };
             window.toggleModal = (show) => { document.getElementById('modal-overlay').style.display = show ? 'flex' : 'none'; };
             window.toggleHistoryModal = (show) => { if (!show) window.cancelRecordEdit(); document.getElementById('history-modal-overlay').style.display = show ? 'flex' : 'none'; };
@@ -627,7 +661,7 @@
             document.getElementById('student-form').reset(); 
             document.getElementById('input-id').value = "";
             document.getElementById('add-lesson-container').classList.add('hidden'); // Hide Renew input for New Students
-            document.getElementById('input-total').value = ""; // Default empty, acts as 0
+            document.getElementById('input-total').value = ""; // Default empty, acts as 0 (Trial)
             document.getElementById('input-used').value = "0";
 
             const sel = document.getElementById('input-teacher'); 
@@ -658,7 +692,8 @@
             const teacherVal = document.getElementById('input-teacher').value; 
             if (!teacherVal) return;
             
-            let baseTotal = parseInt(document.getElementById('input-total').value) || 0;
+            let rawTotal = document.getElementById('input-total').value;
+            let baseTotal = parseInt(rawTotal.replace(/\D/g, '')) || 0;
             const addLessons = parseInt(document.getElementById('input-add').value) || 0;
             const now = new Date();
             const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]})`;
@@ -690,7 +725,13 @@
                 }
                 await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), data);
             } else { 
-                data.attendanceHistory = []; 
+                // 新增试听学生时，自动在记录中打卡当天的试听时间
+                if (baseTotal === 0) {
+                    data.attendanceHistory = [`${dateStr} ${tDict[currentLang].trialMark}`];
+                } else {
+                    data.attendanceHistory = []; 
+                }
+                
                 data.isFrozen = false; 
                 data.isArchived = false; 
                 data.remarks = []; 
@@ -702,14 +743,6 @@
             const s = students.find(it => it.id === id); if (!s) return;
             const now = new Date(); const formatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]})`;
             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { usedLessons: s.usedLessons + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
-        };
-
-        window.markTrial = async (id) => {
-            const s = students.find(it => it.id === id); if (!s) return;
-            const now = new Date(); 
-            const formatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]}) ${tDict[currentLang].trialMark}`;
-            // 试听课不增加已上课时 (usedLessons remains unchanged)
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { attendanceHistory: [...(s.attendanceHistory || []), formatted] });
         };
 
         window.markAbsent = async (id) => {
@@ -773,7 +806,21 @@
             const classes = [...new Set(baseFiltered.map(s => s.studentClass).filter(c => c))].sort();
             document.getElementById('class-list').innerHTML = classes.map(c => `<option value="${c}">`).join('');
 
-            let classFiltered = selectedClass === 'all' ? baseFiltered : baseFiltered.filter(s => s.studentClass === selectedClass);
+            // Helper to check if a student's class matches the category keyword
+            const matchesCategory = (className, cat) => {
+                if (!className) return false;
+                const nc = className.toLowerCase().replace(/\s/g, '');
+                if (cat === 'individual') return nc.includes('individual') || nc.includes('1v1') || nc.includes('vip') || nc.includes('一对一');
+                return nc.includes(cat);
+            };
+
+            let classFiltered = baseFiltered;
+            if (selectedClass !== 'all') {
+                classFiltered = classFiltered.filter(s => s.studentClass === selectedClass);
+            } else if (selectedCategory !== 'all') {
+                classFiltered = classFiltered.filter(s => matchesCategory(s.studentClass, selectedCategory));
+            }
+
             let filtered = classFiltered.filter(s => {
                 if (selectedStatus === 'archived') return s.isArchived;
                 if (s.isArchived) return false; // Hide archived students from other filters to keep main view clean
@@ -810,6 +857,24 @@
             document.getElementById('stat-overdue-val').innerText = classFiltered.filter(s => !s.isFrozen && !s.isArchived && (s.totalLessons || 0) > 0 && ((s.totalLessons || 0) - (s.usedLessons || 0)) <= 0).length;
             document.getElementById('stat-frozen-val').innerText = classFiltered.filter(s => s.isFrozen && !s.isArchived).length;
             document.getElementById('stat-archived-val').innerText = classFiltered.filter(s => s.isArchived).length;
+
+            // Compute Category Stats (Based on active base to persistently show counts globally)
+            const activeBase = baseFiltered.filter(s => !s.isArchived);
+            const catNames = ['hsk1', 'hsk2', 'hsk3', 'hsk4', 'hsk5', 'hsk6', 'individual'];
+            catNames.forEach(cat => {
+                document.getElementById(`stat-${cat}-val`).innerText = activeBase.filter(s => matchesCategory(s.studentClass, cat)).length;
+                const card = document.getElementById(`card-${cat}`);
+                if (card) {
+                    if (selectedCategory === cat) {
+                        card.classList.add('border-[#2C5F56]', 'bg-[#2C5F56]/5');
+                        card.classList.remove('border-slate-200');
+                    } else {
+                        card.classList.remove('border-[#2C5F56]', 'bg-[#2C5F56]/5');
+                        card.classList.add('border-slate-200');
+                    }
+                }
+            });
+            document.getElementById('label-individual').innerText = t.labelIndividual;
 
             if (isAdmin) {
                 const tc = document.getElementById('teacher-filter-container');
@@ -890,9 +955,6 @@
                                 <button onclick="updateLesson('${s.id}')" class="bg-[#2C5F56] text-white text-[9px] font-black px-3 py-2.5 rounded-full active:scale-95 transition-all shadow-lg shadow-[#2C5F56]/10 uppercase ${s.isFrozen || s.isArchived || isTrial ? 'opacity-50 cursor-not-allowed' : ''}" title="${t.actionPlus}" ${s.isFrozen || s.isArchived || isTrial ? 'disabled' : ''}>${t.actionPlus}</button>
                                 <button onclick="markAbsent('${s.id}')" class="bg-amber-100 text-amber-700 text-[9px] font-black px-3 py-2.5 rounded-full active:scale-95 transition-all shadow-sm border border-amber-200 uppercase ${s.isFrozen || s.isArchived || isTrial ? 'opacity-50 cursor-not-allowed' : 'hover:bg-amber-200'}" title="${t.actionAbsent}" ${s.isFrozen || s.isArchived || isTrial ? 'disabled' : ''}>
                                     <i data-lucide="user-x" class="w-3.5 h-3.5 inline-block -mt-0.5"></i>
-                                </button>
-                                <button onclick="markTrial('${s.id}')" class="bg-purple-100 text-purple-700 text-[9px] font-black px-3 py-2.5 rounded-full active:scale-95 transition-all shadow-sm border border-purple-200 uppercase ${s.isFrozen || s.isArchived ? 'opacity-50 cursor-not-allowed' : 'hover:bg-purple-200'}" title="${t.actionTrial}" ${s.isFrozen || s.isArchived ? 'disabled' : ''}>
-                                    <i data-lucide="headphones" class="w-3.5 h-3.5 inline-block -mt-0.5"></i>
                                 </button>
                                 <div class="w-px h-5 bg-slate-200 mx-1"></div>
                                 <button onclick="toggleFreeze('${s.id}')" class="p-2.5 bg-white ${s.isFrozen ? 'text-orange-500 hover:text-orange-600' : 'text-blue-500 hover:text-blue-600'} rounded-xl transition-all shadow-sm border border-slate-50 ${s.isArchived ? 'opacity-50 cursor-not-allowed' : ''}" title="${s.isFrozen ? t.actionUnfreeze : t.actionFreeze}" ${s.isArchived ? 'disabled' : ''}><i data-lucide="${s.isFrozen ? 'flame' : 'snowflake'}" class="w-4 h-4"></i></button>
