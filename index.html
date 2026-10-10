@@ -725,13 +725,7 @@
                 }
                 await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), data);
             } else { 
-                // 新增试听学生时，自动在记录中打卡当天的试听时间
-                if (baseTotal === 0) {
-                    data.attendanceHistory = [`${dateStr} ${tDict[currentLang].trialMark}`];
-                } else {
-                    data.attendanceHistory = []; 
-                }
-                
+                data.attendanceHistory = []; 
                 data.isFrozen = false; 
                 data.isArchived = false; 
                 data.remarks = []; 
@@ -750,6 +744,14 @@
             const now = new Date(); 
             const formatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]}) ${tDict[currentLang].absentMark}`;
             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { usedLessons: s.usedLessons + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
+        };
+
+        window.markTrial = async (id) => {
+            const s = students.find(it => it.id === id); if (!s) return;
+            const now = new Date(); 
+            const formatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]}) ${tDict[currentLang].trialMark}`;
+            // 记试听只会增加历史记录，绝对不会扣除正常课时
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { attendanceHistory: [...(s.attendanceHistory || []), formatted] });
         };
 
         window.deleteStudent = (id) => customConfirm(tDict[currentLang].confirmDelete, async () => { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id)); });
@@ -952,10 +954,16 @@
                         <td class="px-8 py-7 text-center"><span class="px-4 py-2 rounded-full text-[9px] font-black border border-white whitespace-nowrap shadow-sm uppercase tracking-widest ${st.c}">${st.l}</span></td>
                         <td class="px-8 py-7 text-right whitespace-nowrap w-[300px]">
                             <div class="flex justify-end gap-1.5 items-center">
-                                <button onclick="updateLesson('${s.id}')" class="bg-[#2C5F56] text-white text-[9px] font-black px-3 py-2.5 rounded-full active:scale-95 transition-all shadow-lg shadow-[#2C5F56]/10 uppercase ${s.isFrozen || s.isArchived || isTrial ? 'opacity-50 cursor-not-allowed' : ''}" title="${t.actionPlus}" ${s.isFrozen || s.isArchived || isTrial ? 'disabled' : ''}>${t.actionPlus}</button>
-                                <button onclick="markAbsent('${s.id}')" class="bg-amber-100 text-amber-700 text-[9px] font-black px-3 py-2.5 rounded-full active:scale-95 transition-all shadow-sm border border-amber-200 uppercase ${s.isFrozen || s.isArchived || isTrial ? 'opacity-50 cursor-not-allowed' : 'hover:bg-amber-200'}" title="${t.actionAbsent}" ${s.isFrozen || s.isArchived || isTrial ? 'disabled' : ''}>
-                                    <i data-lucide="user-x" class="w-3.5 h-3.5 inline-block -mt-0.5"></i>
-                                </button>
+                                ${isTrial ? `
+                                    <button onclick="markTrial('${s.id}')" class="bg-purple-500 text-white text-[9px] font-black px-4 py-2.5 rounded-full active:scale-95 transition-all shadow-lg shadow-purple-500/20 uppercase ${s.isFrozen || s.isArchived ? 'opacity-50 cursor-not-allowed' : 'hover:bg-purple-600'}" title="${t.actionTrial}" ${s.isFrozen || s.isArchived ? 'disabled' : ''}>
+                                        <i data-lucide="headphones" class="w-3 h-3 inline-block -mt-0.5 mr-1"></i>${t.actionTrial}
+                                    </button>
+                                ` : `
+                                    <button onclick="updateLesson('${s.id}')" class="bg-[#2C5F56] text-white text-[9px] font-black px-3 py-2.5 rounded-full active:scale-95 transition-all shadow-lg shadow-[#2C5F56]/10 uppercase ${s.isFrozen || s.isArchived || isTrial ? 'opacity-50 cursor-not-allowed' : ''}" title="${t.actionPlus}" ${s.isFrozen || s.isArchived || isTrial ? 'disabled' : ''}>${t.actionPlus}</button>
+                                    <button onclick="markAbsent('${s.id}')" class="bg-amber-100 text-amber-700 text-[9px] font-black px-3 py-2.5 rounded-full active:scale-95 transition-all shadow-sm border border-amber-200 uppercase ${s.isFrozen || s.isArchived || isTrial ? 'opacity-50 cursor-not-allowed' : 'hover:bg-amber-200'}" title="${t.actionAbsent}" ${s.isFrozen || s.isArchived || isTrial ? 'disabled' : ''}>
+                                        <i data-lucide="user-x" class="w-3.5 h-3.5 inline-block -mt-0.5"></i>
+                                    </button>
+                                `}
                                 <div class="w-px h-5 bg-slate-200 mx-1"></div>
                                 <button onclick="toggleFreeze('${s.id}')" class="p-2.5 bg-white ${s.isFrozen ? 'text-orange-500 hover:text-orange-600' : 'text-blue-500 hover:text-blue-600'} rounded-xl transition-all shadow-sm border border-slate-50 ${s.isArchived ? 'opacity-50 cursor-not-allowed' : ''}" title="${s.isFrozen ? t.actionUnfreeze : t.actionFreeze}" ${s.isArchived ? 'disabled' : ''}><i data-lucide="${s.isFrozen ? 'flame' : 'snowflake'}" class="w-4 h-4"></i></button>
                                 <button onclick="toggleArchive('${s.id}')" class="p-2.5 bg-white ${s.isArchived ? 'text-emerald-500 hover:text-emerald-600' : 'text-slate-900 hover:text-black'} rounded-xl transition-all shadow-sm border border-slate-50" title="${s.isArchived ? t.actionUnarchive : t.actionArchive}"><i data-lucide="${s.isArchived ? 'archive-restore' : 'archive'}" class="w-4 h-4"></i></button>
