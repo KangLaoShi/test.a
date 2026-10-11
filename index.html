@@ -339,6 +339,33 @@
 
         let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedCategory = 'all', selectedStatus = 'all', students = [], loggedUser = null, isAdmin = false, currentHistoryStudentId = null, currentNotesStudentId = null, editingRecordIndex = -1, db, auth;
 
+        // 将班级列表和智能归类函数提升为全局变量，供界面和数据库自动清理程序同时使用
+        const standardClasses = ["HSK1-1", "HSK1-2", "HSK1-3", "HSK2-1", "HSK2-2", "HSK2-3", "HSK3-1", "HSK3-2", "HSK3-3", "HSK4-1", "HSK4-2", "HSK5-1", "HSK5-2", "Individual-1", "Individual-2"];
+
+        const getStandardClass = (raw) => {
+            if (!raw) return 'Other';
+            let s = String(raw).toUpperCase().replace(/\s+/g, '').replace(/[._]/g, '-');
+            s = s.replace(/HSK-/g, 'HSK'); 
+            
+            if (s.includes('INDIVIDUAL') || s.includes('1V1') || s.includes('VIP') || s.includes('一对一')) {
+                return s.includes('-2') || s.includes('2') ? 'Individual-2' : 'Individual-1';
+            }
+            
+            if (s.includes('HSK')) {
+                const match = s.match(/HSK(\d)(?:-(\d))?/);
+                if (match) {
+                    const lvl = match[1];
+                    let sub = match[2] || '1';
+                    if (['1','2','3'].includes(lvl)) sub = Math.min(3, Math.max(1, parseInt(sub)));
+                    else if (['4','5'].includes(lvl)) sub = Math.min(2, Math.max(1, parseInt(sub)));
+                    
+                    const std = `HSK${lvl}-${sub}`;
+                    if (standardClasses.includes(std)) return std;
+                }
+            }
+            return 'Other';
+        };
+
         const customConfirm = (msg, callback) => {
             const overlay = document.getElementById('confirm-modal-overlay');
             const t = tDict[currentLang] || tDict['zh'];
@@ -381,13 +408,24 @@
             onSnapshot(query(studentsCol), (snapshot) => {
                 students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 
-                // Auto-migrate old teachers to new
+                // 后台静默扫描：自动升级旧版数据格式
                 students.forEach(s => {
-                    if (s.teacher === 'Anlaoshi') {
-                        updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', s.id), { teacher: 'Alaoshi' });
+                    let updates = {};
+                    
+                    // 历史老师名字清理
+                    if (s.teacher === 'Anlaoshi') updates.teacher = 'Alaoshi';
+                    if (s.teacher === 'Zenglaoshi') updates.teacher = 'Tanglaoshi';
+
+                    // 历史班级名字自动清洗升级，永久保存回数据库
+                    if (s.studentClass) {
+                        const stdClass = getStandardClass(s.studentClass);
+                        if (stdClass !== 'Other' && stdClass !== s.studentClass) {
+                            updates.studentClass = stdClass;
+                        }
                     }
-                    if (s.teacher === 'Zenglaoshi') {
-                        updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', s.id), { teacher: 'Tanglaoshi' });
+                    
+                    if (Object.keys(updates).length > 0) {
+                        updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', s.id), updates);
                     }
                 });
 
@@ -805,20 +843,19 @@
             });
 
             let baseFiltered = isAdmin ? (selectedTeacher === 'all' ? students : students.filter(s => s.teacher === selectedTeacher)) : students.filter(s => s.teacher === loggedUser);
-            const classes = [...new Set(baseFiltered.map(s => s.studentClass).filter(c => c))].sort();
-            document.getElementById('class-list').innerHTML = classes.map(c => `<option value="${c}">`).join('');
+            
+            document.getElementById('class-list').innerHTML = standardClasses.map(c => `<option value="${c}">`).join('');
 
             // Helper to check if a student's class matches the category keyword
             const matchesCategory = (className, cat) => {
-                if (!className) return false;
-                const nc = className.toLowerCase().replace(/\s/g, '');
-                if (cat === 'individual') return nc.includes('individual') || nc.includes('1v1') || nc.includes('vip') || nc.includes('一对一');
-                return nc.includes(cat);
+                const std = getStandardClass(className);
+                if (cat === 'individual') return std.includes('Individual');
+                return std.toLowerCase().includes(cat);
             };
 
             let classFiltered = baseFiltered;
             if (selectedClass !== 'all') {
-                classFiltered = classFiltered.filter(s => s.studentClass === selectedClass);
+                classFiltered = classFiltered.filter(s => getStandardClass(s.studentClass) === selectedClass);
             } else if (selectedCategory !== 'all') {
                 classFiltered = classFiltered.filter(s => matchesCategory(s.studentClass, selectedCategory));
             }
@@ -886,7 +923,7 @@
 
             const cc = document.getElementById('class-filter-container');
             cc.innerHTML = `<button onclick="setClassFilter('all')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedClass==='all'?'active':''}">${t.filterAll}</button>`;
-            classes.forEach(c => cc.innerHTML += `<button onclick="setClassFilter('${c}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedClass===c?'active':''}">${c}</button>`);
+            standardClasses.forEach(c => cc.innerHTML += `<button onclick="setClassFilter('${c}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedClass===c?'active':''}">${c}</button>`);
 
             const sc = document.getElementById('status-filter-container');
             sc.innerHTML = `<button onclick="setStatusFilter('all')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='all'?'active':''}">${t.filterAll}</button>
@@ -909,6 +946,9 @@
                 const sTot = s.totalLessons || 0;
                 const sUsed = s.usedLessons || 0;
                 const rem = sTot - sUsed;
+                
+                const stdClass = getStandardClass(s.studentClass);
+                const displayClass = stdClass === 'Other' ? (s.studentClass || '---') : stdClass;
                 
                 let st;
                 if (sTot === 0) {
@@ -947,7 +987,7 @@
                             </div>
                         </td>
                         <td class="px-8 py-7"><span class="bg-[#F0F6F5] text-[#2C5F56] px-4 py-2 rounded-2xl text-[9px] font-black uppercase tracking-wider shadow-sm border border-white">${s.teacher}</span></td>
-                        <td class="px-8 py-7 font-bold text-slate-400 text-[11px] uppercase whitespace-nowrap tracking-wide">${s.studentClass || '---'}</td>
+                        <td class="px-8 py-7 font-bold text-slate-400 text-[11px] uppercase whitespace-nowrap tracking-wide">${displayClass}</td>
                         <td class="px-8 py-7 w-40"><div class="flex items-center gap-3"><span class="text-xs font-black ${rem<0?'text-rose-500':(isTrial?'text-purple-600':'text-slate-400')}">${sUsed}</span><div class="w-20 h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner"><div class="h-full rounded-full ${rem<0?'bg-rose-600':(isTrial?'bg-purple-500':(rem<=3?'bg-[#FFC554]':'bg-[#2C5F56]'))}" style="width:${isTrial ? 100 : Math.min((sUsed/sTot)*100,100)}%"></div></div></div></td>
                         <td class="px-8 py-7 font-[900] ${rem<0?'text-rose-500':(isTrial?'text-purple-600':'text-[#1A2E35]')} text-xl tracking-tight">${isTrial ? '---' : rem}</td>
                         <td class="px-8 py-7 text-slate-400 text-xs font-bold text-center italic">${s.lastPaymentDate || '---'}</td>
