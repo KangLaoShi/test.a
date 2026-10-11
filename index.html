@@ -75,10 +75,11 @@
             <p id="portal-subtitle" class="text-[#2C5F56] font-bold mb-10 text-xs uppercase tracking-[0.2em]">私有教学管理面板</p>
             
             <div id="auth-container" class="space-y-5 text-left mb-6">
-                <div><input id="entry-name" type="text" class="w-full px-6 py-5 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none focus:ring-2 focus:ring-[#2C5F56]/10" placeholder="教师姓名 (例如: Kanglaoshi)"></div>
-                <div><input id="entry-pin" type="text" class="w-full px-6 py-5 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none focus:ring-2 focus:ring-[#2C5F56]/10 pin-mask" placeholder="访问识别码 (PIN)"></div>
+                <div><input id="entry-name" list="login-teacher-list" type="text" class="w-full px-6 py-5 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none focus:ring-2 focus:ring-[#2C5F56]/10" placeholder="教师姓名 (例如: Kanglaoshi)"></div>
+                <div><input id="entry-pin" type="password" class="w-full px-6 py-5 bg-[#F7FAF9] rounded-3xl font-bold outline-none border-none focus:ring-2 focus:ring-[#2C5F56]/10" placeholder="访问识别码 (PIN)"></div>
                 <button id="btn-enter" class="w-full bg-[#2C5F56] text-white py-5 rounded-3xl font-bold shadow-xl hover:opacity-90 active:scale-[0.98] transition-all mt-2 text-sm">进入工作台</button>
             </div>
+            <datalist id="login-teacher-list"></datalist>
 
             <div class="flex justify-center gap-3 border-t border-slate-50 pt-6">
                 <button onclick="setLang('zh')" class="text-[10px] font-black text-slate-400 hover:text-[#2C5F56]">ZH</button>
@@ -86,7 +87,7 @@
                 <button onclick="setLang('ru')" class="text-[10px] font-black text-slate-400 hover:text-[#2C5F56]">RU</button>
                 <button onclick="setLang('en')" class="text-[10px] font-black text-slate-400 hover:text-[#2C5F56]">EN</button>
             </div>
-            <p id="auth-error" class="text-rose-500 text-xs font-bold mt-6 hidden">识别码错误，请重新输入。</p>
+            <p id="auth-error" class="text-rose-500 text-xs font-bold mt-6 hidden">识别码或姓名错误，请重新检查。</p>
         </div>
     </div>
 
@@ -116,6 +117,9 @@
                     <span id="logged-user-name" class="text-[11px] font-bold text-white tracking-tight">---</span>
                     <button onclick="logout()" class="ml-1 text-slate-500 hover:text-rose-400 transition-colors"><i data-lucide="power" class="w-3.5 h-3.5"></i></button>
                 </div>
+                <button id="btn-manage-teachers" onclick="openTeacherAdmin()" class="hidden items-center gap-2 bg-white text-[#1A2E35] px-5 h-[52px] rounded-full shadow-xl shadow-slate-200/50 font-bold text-xs border border-slate-100 transition-all hover:bg-slate-50">
+                    <i data-lucide="settings-2" class="w-4 h-4"></i><span class="hidden md:inline">管理老师</span>
+                </button>
                 <button onclick="openAddModal()" class="btn-active flex items-center gap-2 bg-[#2C5F56] text-white px-6 h-[52px] rounded-full shadow-xl shadow-[#2C5F56]/20 font-bold text-xs">
                     <i data-lucide="plus-circle" class="w-4 h-4"></i><span id="add-btn-text">添加学生</span>
                 </button>
@@ -317,6 +321,27 @@
         </div>
     </div>
 
+    <!-- Teacher Admin Modal -->
+    <div id="teacher-admin-overlay" class="fixed inset-0 bg-[#1A2E35]/95 backdrop-blur-xl hidden items-center justify-center p-4 z-[900]">
+        <div class="bg-white rounded-[40px] shadow-2xl w-full max-w-lg p-10 flex flex-col max-h-[90vh] border-t-8 border-slate-700">
+            <div class="flex justify-between items-center mb-6 shrink-0">
+                <h3 class="text-xl font-[900] text-[#1A2E35] tracking-tight">管理老师名单</h3>
+                <button onclick="toggleTeacherAdmin(false)" class="p-3 bg-slate-50 rounded-full text-slate-400 hover:text-rose-500 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <div id="teacher-admin-list" class="space-y-3 overflow-y-auto pr-2 no-scrollbar flex-1 mb-6">
+                <!-- rows of teachers -->
+            </div>
+            <div class="flex flex-col gap-3 shrink-0 bg-[#F7FAF9] p-5 rounded-3xl border border-slate-100">
+                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 ml-1">新增入职老师</h4>
+                <div class="flex gap-2">
+                    <input id="new-t-name" class="flex-1 px-4 py-3 bg-white rounded-2xl font-bold border-none outline-none focus:ring-2 focus:ring-[#2C5F56]/10 text-sm" placeholder="拼音姓名 (如: Wanglaoshi)">
+                    <!-- 移除了新增老师时的 PIN 码输入框 -->
+                    <button onclick="addNewTeacher()" class="px-5 py-3 bg-[#2C5F56] text-white rounded-2xl font-black shadow-lg shadow-[#2C5F56]/20 hover:opacity-90 active:scale-[0.98] transition-all">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -327,17 +352,18 @@
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : defaultFirebaseConfig;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-tracker';
         
-        const teacherList = ["Kanglaoshi", "Pailaoshi", "Alaoshi", "Tielaoshi", "Lanyinglaoshi", "Tanglaoshi"];
-        const teacherPins = { "Director": "1234", "Kanglaoshi": "1234", "Pailaoshi": "1234", "Alaoshi": "1234", "Tielaoshi": "1234", "Lanyinglaoshi": "1234", "Tanglaoshi": "1234" };
-
         const tDict = {
-            zh: { portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名 (例如: Kanglaoshi)", entryPin: "访问识别码 (PIN)", btnEnter: "进入工作台", errPin: "识别码错误，请重新输入。", dashboardTitle: "学生付费跟进管理", subtitle: "协作版 · 实时云同步", addBtn: "添加学生", statTotal: "学生总数", statWarning: "即将到期", statOverdue: "欠费预警", statFrozen: "冻结账户", statArchived: "停学归档", statTrial: "试听学生", thName: "学生姓名", thTeacher: "负责", thClass: "班级", thProgress: "进度", thRemaining: "剩余", thLastPay: "最近付费", thStatus: "状态", thActions: "管理", actionPlus: "+1 记课", actionAbsent: "缺勤扣课", actionTrial: "记试听", actionFreeze: "冻结", actionUnfreeze: "解冻", actionArchive: "停学归档", actionUnarchive: "恢复学习", historyTitle: "上课记录", historyEmpty: "暂无记录", btnClose: "关闭窗口", manualAdd: "补签", btnUpdate: "更新", confirmTitle: "确认操作", confirmDelete: "确定要永久删除该学生吗？", confirmDeleteRecord: "确定删除这条记录吗？", btnOk: "确认", btnAbort: "取消", labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择老师", labelTotal: "当前总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", filterLabel: "负责人:", filterClassLabel: "班级筛选:", filterStatusLabel: "状态筛选:", filterAll: "全部", statusPaid: "充足", statusWarning: "预警", statusOverdue: "欠费", statusFrozen: "冻结", statusArchived: "归档", statusTrial: "试听", modalTitleAdd: "添加新学生", modalTitleEdit: "编辑信息", days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], absentMark: "[缺勤扣课]", trialMark: "[试听免费]", notesTitle: "学生备注", notesPlaceholder: "输入学生备注，缺课或请假原因，冻结原因，等", btnHistory: "记录", btnAddNote: "添加备注", notesEmpty: "暂无备注", labelAdd: "续费/新增购买", labelIndividual: "一对一" },
-            uz: { portalTitle: "O'qituvchilar Portali", portalSub: "Xususiy Ta'lim Portali", entryName: "O'qituvchi Ismi", entryPin: "Kirish PIN-kodi", btnEnter: "Tizimga kirish", errPin: "PIN noto'g'ri. Qayta urinib ko'ring.", dashboardTitle: "To'lov Monitoringi", subtitle: "Operatsiyalar Portali", addBtn: "Qo'shish", statTotal: "Jami", statWarning: "Ogoh", statOverdue: "Qarz", statFrozen: "Muzlatilgan", statArchived: "Arxivlangan", statTrial: "Sinovdagi", thName: "Ism", thTeacher: "Mas'ul", thClass: "Guruh", thProgress: "Holat", thRemaining: "Qolgan", thLastPay: "To'lov", thStatus: "Holat", thActions: "Amal", actionPlus: "+1 dars", actionAbsent: "Sababsiz kelmagan", actionTrial: "Sinov darsi", actionFreeze: "Muzlatish", actionUnfreeze: "Faollashtirish", actionArchive: "Arxivlash", actionUnarchive: "Qaytarish", historyTitle: "Tarix", historyEmpty: "Yo'q", btnClose: "Yopish", manualAdd: "Qo'shish", btnUpdate: "Yangilash", confirmTitle: "Tasdiqlang", confirmDelete: "O'chirilsinmi?", confirmDeleteRecord: "Yozuv o'chirilsinmi?", btnOk: "Ha", btnAbort: "Yo'q", labelContract: "Shartnoma", placeholderContract: "Raqam", labelName: "Ismi", placeholderName: "Ismni kiriting", labelTeacher: "O'qituvchi", labelClass: "Guruh", placeholderClass: "Yozing", placeholderTeacher: "Tanlang", labelTotal: "Jami", labelUsed: "O'tilgan", labelPayDate: "Sana", btnCancel: "Bekor", btnSave: "Saqlash", filterLabel: "Mas'ul:", filterClassLabel: "Guruh:", filterStatusLabel: "Holat:", filterAll: "Hammasi", statusPaid: "Yetarli", statusWarning: "Yaqin", statusOverdue: "Qarz", statusFrozen: "Muzlatilgan", statusArchived: "Arxiv", statusTrial: "Sinov", modalTitleAdd: "Yangi talaba", modalTitleEdit: "Tahrirlash", days: ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"], absentMark: "[Sababsiz kelmagan]", trialMark: "[Sinov bepul]", notesTitle: "Talaba izohi", notesPlaceholder: "Sabab yoki izoh kiriting...", btnHistory: "Tarix", btnAddNote: "Qo'shish", notesEmpty: "Izohlar yo'q", labelAdd: "Qo'shish", labelIndividual: "Yakka" },
-            ru: { portalTitle: "Рабочая область учителя", portalSub: "Частный Образовательный Портал", entryName: "Имя учителя", entryPin: "PIN-код доступа", btnEnter: "Войти", errPin: "Неверный PIN-код.", dashboardTitle: "Управление Оплатой", subtitle: "Синхронизация Данных", addBtn: "Добавить", statTotal: "Студентов", statWarning: "Внимание", statOverdue: "Должники", statFrozen: "Заморожены", statArchived: "В архиве", statTrial: "Пробные", thName: "ФИО Студента", thTeacher: "Преподаватель", thClass: "Группа", thProgress: "Прогресс", thRemaining: "Осталось", thLastPay: "Последняя оплата", thStatus: "Статус", thActions: "Действия", actionPlus: "+1 урок", actionAbsent: "Пропуск", actionTrial: "Пробный", actionFreeze: "Заморозить", actionUnfreeze: "Разморозить", actionArchive: "В архив", actionUnarchive: "Восстановить", historyTitle: "История", historyEmpty: "Записей нет", btnClose: "Закрыть", manualAdd: "Добавить", btnUpdate: "Обновить", confirmTitle: "Подтверждение", confirmDelete: "Удалить студента навсегда?", confirmDeleteRecord: "Удалить запись?", btnOk: "Да", btnAbort: "Нет", labelContract: "№ Контракта", placeholderContract: "Номер", labelName: "ФИО", placeholderName: "Введите имя", labelTeacher: "Учитель", labelClass: "Группа", placeholderClass: "Введите", placeholderTeacher: "Выберите учителя", labelTotal: "Всего", labelUsed: "Пройдено", labelPayDate: "Дата оплаты", btnCancel: "Отмена", btnSave: "Сохранить", filterLabel: "Ответственный:", filterClassLabel: "Класс:", filterStatusLabel: "Статус:", filterAll: "Все", statusPaid: "Оплачено", statusWarning: "Срок", statusOverdue: "Долг", statusFrozen: "Заморожен", statusArchived: "Архив", statusTrial: "Пробный", modalTitleAdd: "Добавить студента", modalTitleEdit: "Редактировать", days: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"], absentMark: "[Пропуск]", trialMark: "[Пробный б/п]", notesTitle: "Заметки студента", notesPlaceholder: "Введите причину отсутствия, заморозки и т.д.", btnHistory: "История", btnAddNote: "Добавить", notesEmpty: "Нет заметок", labelAdd: "Добавить", labelIndividual: "Индив." },
-            en: { portalTitle: "Teacher Workspace", portalSub: "Private Educational Portal", entryName: "Teacher Name", entryPin: "Access PIN", btnEnter: "Unlock Dashboard", errPin: "Invalid PIN.", dashboardTitle: "Dashboard", subtitle: "Sync Portal", addBtn: "Add New", statTotal: "Students", statWarning: "Warning", statOverdue: "Due", statFrozen: "Frozen", statArchived: "Archived", statTrial: "Trials", thName: "Full Name", thTeacher: "Rep.", thClass: "Class", thProgress: "Progress", thRemaining: "Left", thLastPay: "Last Pay", thStatus: "Status", thActions: "Actions", actionPlus: "+1", actionAbsent: "Absence", actionTrial: "Trial Class", actionFreeze: "Freeze", actionUnfreeze: "Unfreeze", actionArchive: "Archive", actionUnarchive: "Restore", historyTitle: "Logs", historyEmpty: "Empty", btnClose: "Close", manualAdd: "Add", btnUpdate: "Update", confirmTitle: "Confirm", confirmDelete: "Delete student?", confirmDeleteRecord: "Delete log?", btnOk: "Yes", btnAbort: "No", labelContract: "Contract No.", placeholderContract: "Enter No.", labelName: "Name", placeholderName: "Enter name", labelTeacher: "Teacher", labelClass: "Class", placeholderClass: "Type", placeholderTeacher: "Select", labelTotal: "Total Pack", labelUsed: "Used", labelPayDate: "Date", btnCancel: "Cancel", btnSave: "Save", filterLabel: "Rep:", filterClassLabel: "Level:", filterStatusLabel: "Status:", filterAll: "All", statusPaid: "Paid", statusWarning: "Low", statusOverdue: "Due", statusFrozen: "Frozen", statusArchived: "Archive", statusTrial: "Trial", modalTitleAdd: "Add New Student", modalTitleEdit: "Edit Info", days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], absentMark: "[Absence]", trialMark: "[Free Trial]", notesTitle: "Student Notes", notesPlaceholder: "Enter absence reason, freeze reason, etc.", btnHistory: "History", btnAddNote: "Add Note", notesEmpty: "No notes yet", labelAdd: "Renew/Add", labelIndividual: "Individual" }
+            zh: { portalTitle: "内部教学记录系统", portalSub: "私有教学管理面板", entryName: "教师姓名 (例如: Kanglaoshi)", btnEnter: "进入工作台", errPin: "找不到该教师姓名，请检查拼写。", dashboardTitle: "学生付费跟进管理", subtitle: "协作版 · 实时云同步", addBtn: "添加学生", statTotal: "学生总数", statWarning: "即将到期", statOverdue: "欠费预警", statFrozen: "冻结账户", statArchived: "停学归档", statTrial: "试听学生", thName: "学生姓名", thTeacher: "负责", thClass: "班级", thProgress: "进度", thRemaining: "剩余", thLastPay: "最近付费", thStatus: "状态", thActions: "管理", actionPlus: "+1 记课", actionAbsent: "缺勤扣课", actionTrial: "记试听", actionFreeze: "冻结", actionUnfreeze: "解冻", actionArchive: "停学归档", actionUnarchive: "恢复学习", historyTitle: "上课记录", historyEmpty: "暂无记录", btnClose: "关闭窗口", manualAdd: "补签", btnUpdate: "更新", confirmTitle: "确认操作", confirmDelete: "确定要永久删除该学生吗？", confirmDeleteRecord: "确定删除这条记录吗？", btnOk: "确认", btnAbort: "取消", labelContract: "合同号", placeholderContract: "输入号", labelName: "姓名", placeholderName: "输入姓名", labelTeacher: "负责老师", labelClass: "班级", placeholderClass: "选择或输入", placeholderTeacher: "请选择老师", labelTotal: "当前总量", labelUsed: "已上", labelPayDate: "付费日期", btnCancel: "取消", btnSave: "保存", filterLabel: "负责人:", filterClassLabel: "班级筛选:", filterStatusLabel: "状态筛选:", filterAll: "全部", statusPaid: "充足", statusWarning: "预警", statusOverdue: "欠费", statusFrozen: "冻结", statusArchived: "归档", statusTrial: "试听", modalTitleAdd: "添加新学生", modalTitleEdit: "编辑信息", days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], absentMark: "[缺勤扣课]", trialMark: "[试听免费]", notesTitle: "学生备注", notesPlaceholder: "输入学生备注，缺课或请假原因，冻结原因，等", btnHistory: "记录", btnAddNote: "添加备注", notesEmpty: "暂无备注", labelAdd: "续费/新增购买", labelIndividual: "一对一" },
+            uz: { portalTitle: "O'qituvchilar Portali", portalSub: "Xususiy Ta'lim Portali", entryName: "O'qituvchi Ismi", btnEnter: "Tizimga kirish", errPin: "O'qituvchi topilmadi.", dashboardTitle: "To'lov Monitoringi", subtitle: "Operatsiyalar Portali", addBtn: "Qo'shish", statTotal: "Jami", statWarning: "Ogoh", statOverdue: "Qarz", statFrozen: "Muzlatilgan", statArchived: "Arxivlangan", statTrial: "Sinovdagi", thName: "Ism", thTeacher: "Mas'ul", thClass: "Guruh", thProgress: "Holat", thRemaining: "Qolgan", thLastPay: "To'lov", thStatus: "Holat", thActions: "Amal", actionPlus: "+1 dars", actionAbsent: "Sababsiz kelmagan", actionTrial: "Sinov darsi", actionFreeze: "Muzlatish", actionUnfreeze: "Faollashtirish", actionArchive: "Arxivlash", actionUnarchive: "Qaytarish", historyTitle: "Tarix", historyEmpty: "Yo'q", btnClose: "Yopish", manualAdd: "Qo'shish", btnUpdate: "Yangilash", confirmTitle: "Tasdiqlang", confirmDelete: "O'chirilsinmi?", confirmDeleteRecord: "Yozuv o'chirilsinmi?", btnOk: "Ha", btnAbort: "Yo'q", labelContract: "Shartnoma", placeholderContract: "Raqam", labelName: "Ismi", placeholderName: "Ismni kiriting", labelTeacher: "O'qituvchi", labelClass: "Guruh", placeholderClass: "Yozing", placeholderTeacher: "Tanlang", labelTotal: "Jami", labelUsed: "O'tilgan", labelPayDate: "Sana", btnCancel: "Bekor", btnSave: "Saqlash", filterLabel: "Mas'ul:", filterClassLabel: "Guruh:", filterStatusLabel: "Holat:", filterAll: "Hammasi", statusPaid: "Yetarli", statusWarning: "Yaqin", statusOverdue: "Qarz", statusFrozen: "Muzlatilgan", statusArchived: "Arxiv", statusTrial: "Sinov", modalTitleAdd: "Yangi talaba", modalTitleEdit: "Tahrirlash", days: ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"], absentMark: "[Sababsiz kelmagan]", trialMark: "[Sinov bepul]", notesTitle: "Talaba izohi", notesPlaceholder: "Sabab yoki izoh kiriting...", btnHistory: "Tarix", btnAddNote: "Qo'shish", notesEmpty: "Izohlar yo'q", labelAdd: "Qo'shish", labelIndividual: "Yakka" },
+            ru: { portalTitle: "Рабочая область учителя", portalSub: "Частный Образовательный Портал", entryName: "Имя учителя", btnEnter: "Войти", errPin: "Учитель не найден.", dashboardTitle: "Управление Оплатой", subtitle: "Синхронизация Данных", addBtn: "Добавить", statTotal: "Студентов", statWarning: "Внимание", statOverdue: "Должники", statFrozen: "Заморожены", statArchived: "В архиве", statTrial: "Пробные", thName: "ФИО Студента", thTeacher: "Преподаватель", thClass: "Группа", thProgress: "Прогресс", thRemaining: "Осталось", thLastPay: "Последняя оплата", thStatus: "Статус", thActions: "Действия", actionPlus: "+1 урок", actionAbsent: "Пропуск", actionTrial: "Пробный", actionFreeze: "Заморозить", actionUnfreeze: "Разморозить", actionArchive: "В архив", actionUnarchive: "Восстановить", historyTitle: "История", historyEmpty: "Записей нет", btnClose: "Закрыть", manualAdd: "Добавить", btnUpdate: "Обновить", confirmTitle: "Подтверждение", confirmDelete: "Удалить студента навсегда?", confirmDeleteRecord: "Удалить запись?", btnOk: "Да", btnAbort: "Нет", labelContract: "№ Контракта", placeholderContract: "Номер", labelName: "ФИО", placeholderName: "Введите имя", labelTeacher: "Учитель", labelClass: "Группа", placeholderClass: "Введите", placeholderTeacher: "Выберите учителя", labelTotal: "Всего", labelUsed: "Пройдено", labelPayDate: "Дата оплаты", btnCancel: "Отмена", btnSave: "Сохранить", filterLabel: "Ответственный:", filterClassLabel: "Класс:", filterStatusLabel: "Статус:", filterAll: "Все", statusPaid: "Оплачено", statusWarning: "Срок", statusOverdue: "Долг", statusFrozen: "Заморожен", statusArchived: "Архив", statusTrial: "Пробный", modalTitleAdd: "Добавить студента", modalTitleEdit: "Редактировать", days: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"], absentMark: "[Пропуск]", trialMark: "[Пробный б/п]", notesTitle: "Заметки студента", notesPlaceholder: "Введите причину отсутствия, заморозки и т.д.", btnHistory: "История", btnAddNote: "Добавить", notesEmpty: "Нет заметок", labelAdd: "Добавить", labelIndividual: "Индив." },
+            en: { portalTitle: "Teacher Workspace", portalSub: "Private Educational Portal", entryName: "Teacher Name", btnEnter: "Unlock Dashboard", errPin: "Teacher not found.", dashboardTitle: "Dashboard", subtitle: "Sync Portal", addBtn: "Add New", statTotal: "Students", statWarning: "Warning", statOverdue: "Due", statFrozen: "Frozen", statArchived: "Archived", statTrial: "Trials", thName: "Full Name", thTeacher: "Rep.", thClass: "Class", thProgress: "Progress", thRemaining: "Left", thLastPay: "Last Pay", thStatus: "Status", thActions: "Actions", actionPlus: "+1", actionAbsent: "Absence", actionTrial: "Trial Class", actionFreeze: "Freeze", actionUnfreeze: "Unfreeze", actionArchive: "Archive", actionUnarchive: "Restore", historyTitle: "Logs", historyEmpty: "Empty", btnClose: "Close", manualAdd: "Add", btnUpdate: "Update", confirmTitle: "Confirm", confirmDelete: "Delete student?", confirmDeleteRecord: "Delete log?", btnOk: "Yes", btnAbort: "No", labelContract: "Contract No.", placeholderContract: "Enter No.", labelName: "Name", placeholderName: "Enter name", labelTeacher: "Teacher", labelClass: "Class", placeholderClass: "Type", placeholderTeacher: "Select", labelTotal: "Total Pack", labelUsed: "Used", labelPayDate: "Date", btnCancel: "Cancel", btnSave: "Save", filterLabel: "Rep:", filterClassLabel: "Level:", filterStatusLabel: "Status:", filterAll: "All", statusPaid: "Paid", statusWarning: "Low", statusOverdue: "Due", statusFrozen: "Frozen", statusArchived: "Archive", statusTrial: "Trial", modalTitleAdd: "Add New Student", modalTitleEdit: "Edit Info", days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], absentMark: "[Absence]", trialMark: "[Free Trial]", notesTitle: "Student Notes", notesPlaceholder: "Enter absence reason, freeze reason, etc.", btnHistory: "History", btnAddNote: "Add Note", notesEmpty: "No notes yet", labelAdd: "Renew/Add", labelIndividual: "Individual" }
         };
 
         let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedCategory = 'all', selectedStatus = 'all', students = [], loggedUser = null, isAdmin = false, currentHistoryStudentId = null, currentNotesStudentId = null, editingRecordIndex = -1, db, auth;
+
+        // Dynamic Teacher System
+        let teacherList = []; // Now it's just a list of strings
+        let activeTeachers = []; // Store non-departed teachers
 
         // 将班级列表和智能归类函数提升为全局变量，供界面和数据库自动清理程序同时使用
         const standardClasses = ["HSK1-1", "HSK1-2", "HSK1-3", "HSK2-1", "HSK2-2", "HSK2-3", "HSK3-1", "HSK3-2", "HSK3-3", "HSK4-1", "HSK4-2", "HSK5-1", "HSK5-2", "Individual-1", "Individual-2"];
@@ -392,6 +418,8 @@
             window.toggleModal = (show) => { document.getElementById('modal-overlay').style.display = show ? 'flex' : 'none'; };
             window.toggleHistoryModal = (show) => { if (!show) window.cancelRecordEdit(); document.getElementById('history-modal-overlay').style.display = show ? 'flex' : 'none'; };
             window.toggleNotesModal = (show) => { document.getElementById('notes-modal-overlay').style.display = show ? 'flex' : 'none'; };
+            window.toggleTeacherAdmin = (show) => { document.getElementById('teacher-admin-overlay').style.display = show ? 'flex' : 'none'; if(show) window.renderTeacherAdminList(); };
+            window.openTeacherAdmin = () => window.toggleTeacherAdmin(true);
 
             const initAuth = async () => {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -404,11 +432,53 @@
             await initAuth();
             if (!auth.currentUser) return; // Strict Guard
 
+            const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'config', 'teachersConfig');
+            onSnapshot(configDocRef, (snap) => {
+                if (snap.exists()) {
+                    // Extract just the names. Support old dict format {name: pin} for backward compatibility during transition.
+                    const data = snap.data();
+                    if (Array.isArray(data.list)) {
+                        teacherList = data.list;
+                    } else {
+                        // Migration from old PIN dict format
+                        teacherList = Object.keys(data).filter(t => t !== 'Director');
+                        if(teacherList.length > 0) {
+                            // Optionally auto-migrate the cloud doc to the new Array format here to clean it up
+                            setDoc(configDocRef, { list: teacherList }); 
+                        }
+                    }
+                } else {
+                    const defaultList = ["Kanglaoshi", "Pailaoshi", "Alaoshi", "Tielaoshi", "Lanyinglaoshi", "Tanglaoshi"];
+                    setDoc(configDocRef, { list: defaultList });
+                    teacherList = defaultList;
+                }
+                
+                // Populate the datalist for easy login
+                document.getElementById('login-teacher-list').innerHTML = `<option value="Director">` + teacherList.map(t => `<option value="${t}">`).join('');
+
+                // Security check: if current user was deleted remotely, force logout
+                if (loggedUser && loggedUser !== 'Director' && !teacherList.includes(loggedUser)) {
+                    window.logout();
+                } else {
+                    verifySession();
+                    render();
+                }
+                if (document.getElementById('teacher-admin-overlay').style.display === 'flex') {
+                    window.renderTeacherAdminList();
+                }
+            }, (error) => {
+                console.error("Teachers Config error:", error);
+                if (error.code === 'permission-denied') {
+                    customConfirm("Firebase权限被拒绝！\n请检查后台 Firestore Rules 规则配置是否已过期。", () => {});
+                }
+            });
+
             const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
             onSnapshot(query(studentsCol), (snapshot) => {
                 students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 
-                // 后台静默扫描：自动升级旧版数据格式
+                // 后台静默扫描：自动升级旧版数据格式（优化版批量收集写入防止循环）
+                let updatesNeeded = [];
                 students.forEach(s => {
                     let updates = {};
                     
@@ -425,8 +495,13 @@
                     }
                     
                     if (Object.keys(updates).length > 0) {
-                        updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', s.id), updates);
+                        updatesNeeded.push({ id: s.id, data: updates });
                     }
+                });
+                
+                // Only push genuine corrections securely
+                updatesNeeded.forEach(up => {
+                    updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', up.id), up.data).catch(e => console.log(e));
                 });
 
                 render();
@@ -438,15 +513,19 @@
                 }
             }, (error) => {
                 console.error("Firestore snapshot error:", error);
+                if (error.code === 'permission-denied') {
+                    customConfirm("Firebase数据读取被拒绝！\n这通常是因为您 Firebase 后台的30天试用期已过期。\n请前往 Firebase 控制台 -> Firestore -> Rules 修改规则为允许读写。", () => {});
+                }
             });
-
-            verifySession();
 
             const processAuth = () => {
                 const name = document.getElementById('entry-name').value.trim();
                 const pin = document.getElementById('entry-pin').value.trim();
-                if (teacherPins[name] === pin) {
+                
+                // Allow 'Director' or anyone in the teacher list to login WITH the universal PIN '1234'
+                if ((name === 'Director' || teacherList.includes(name)) && pin === '1234') {
                     sessionStorage.setItem('active_staff_session', name);
+                    document.getElementById('entry-pin').value = ''; // clear pin on success
                     verifySession();
                 } else {
                     document.getElementById('auth-error').classList.remove('hidden');
@@ -456,7 +535,7 @@
 
             document.getElementById('btn-enter').onclick = processAuth;
             document.getElementById('entry-pin').onkeypress = (e) => { if (e.key === 'Enter') processAuth(); };
-            document.getElementById('entry-name').onkeypress = (e) => { if (e.key === 'Enter') processAuth(); };
+            document.getElementById('entry-name').onkeypress = (e) => { if (e.key === 'Enter') document.getElementById('entry-pin').focus(); };
         };
 
         const verifySession = () => {
@@ -476,8 +555,54 @@
                 document.getElementById('logged-user-name').innerText = isAdmin ? 'Director' : saved;
                 document.getElementById('user-avatar').innerText = isAdmin ? 'D' : saved[0].toUpperCase();
                 document.getElementById('teacher-filter-wrap').classList.toggle('hidden', !isAdmin);
+                
+                if (isAdmin) {
+                    document.getElementById('btn-manage-teachers').classList.remove('hidden');
+                    document.getElementById('btn-manage-teachers').classList.add('flex');
+                }
                 render();
             }
+        };
+
+        window.renderTeacherAdminList = () => {
+            const list = document.getElementById('teacher-admin-list');
+            list.innerHTML = '';
+            teacherList.forEach(t => {
+                // Determine logic for Auto-Departed
+                const tStudents = students.filter(s => s.teacher === t);
+                const isDeparted = tStudents.length > 0 && tStudents.every(s => s.isArchived);
+                const badge = isDeparted ? `<span class="px-2 py-1 bg-rose-50 text-rose-500 rounded-lg text-[9px] font-black uppercase">全部归档(系统默认离职)</span>` : `<span class="px-2 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[9px] font-black uppercase">在职</span>`;
+                
+                list.innerHTML += `
+                    <div class="flex items-center justify-between p-4 bg-[#F7FAF9] rounded-2xl border border-slate-50">
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-sm text-[#1A2E35]">${t}</span>
+                            ${badge}
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button onclick="deleteTeacher('${t}')" class="p-2 text-slate-300 hover:text-rose-500 transition-colors" title="删除该账号权限"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        };
+
+        window.addNewTeacher = async () => {
+            const name = document.getElementById('new-t-name').value.trim();
+            if (!name) return customConfirm("老师姓名不能为空！", () => {});
+            if (teacherList.includes(name) || name === 'Director') return customConfirm("该老师名称已存在或被保留，请更换拼音！", () => {});
+            
+            const newList = [...teacherList, name];
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'config', 'teachersConfig'), { list: newList });
+            document.getElementById('new-t-name').value = '';
+        };
+
+        window.deleteTeacher = (name) => {
+            customConfirm(`确定要永久吊销老师 [${name}] 的系统登录权限吗？历史学生记录不会受影响。`, async () => {
+                const newList = teacherList.filter(t => t !== name);
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'config', 'teachersConfig'), { list: newList });
+            });
         };
 
         window.openNotesModal = (id) => {
@@ -574,6 +699,7 @@
 
         // 动态翻译记录字符串
         const translateRecord = (record, targetLang) => {
+            if (!record) return { text: '', type: 'normal' };
             const t = tDict[targetLang];
             const dateMatch = record.match(/\d{4}-\d{2}-\d{2}/);
             if (!dateMatch) return { text: record, type: 'normal' };
@@ -640,23 +766,30 @@
                         recordStyling = 'text-slate-500 bg-slate-50 border border-slate-200'; // 停学归档为灰色
                     }
 
+                    // BUG FIX: 移除了在 HTML onclick 里面直接注入 originalRecord 的危险做法，避免单引号/换行引起的代码崩溃。
                     list.innerHTML += `<div class="flex items-center justify-between p-6 bg-[#F7FAF9] rounded-[24px] border border-white group hover:bg-[#F0F6F5] transition-all">
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 rounded-2xl bg-white text-[#2C5F56] flex items-center justify-center text-xs font-black shadow-sm">${history.length - revIdx}</div>
                             <span class="text-sm font-bold ${recordStyling} px-3 py-1 rounded-lg">${translated.text}</span>
                         </div>
                         <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onclick="startEditRecord(${originalIdx}, '${originalRecord}')" class="p-2.5 text-slate-300 hover:text-[#2C5F56]"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                            <button onclick="deleteRecord(${originalIdx})" class="p-2.5 text-slate-300 hover:text-rose-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="startEditRecord(${originalIdx})" class="p-2.5 text-slate-300 hover:text-[#2C5F56]" title="编辑日期"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="deleteRecord(${originalIdx})" class="p-2.5 text-slate-300 hover:text-rose-500" title="删除记录"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div></div>`;
                 });
             }
             window.toggleHistoryModal(true); lucide.createIcons();
         };
 
-        window.startEditRecord = (idx, text) => {
-            editingRecordIndex = idx; const m = text.match(/\d{4}-\d{2}-\d{2}/);
+        window.startEditRecord = (idx) => {
+            const s = students.find(it => it.id === currentHistoryStudentId);
+            if (!s || !s.attendanceHistory || !s.attendanceHistory[idx]) return;
+            const text = s.attendanceHistory[idx];
+            
+            editingRecordIndex = idx; 
+            const m = text.match(/\d{4}-\d{2}-\d{2}/);
             if (m) document.getElementById('manual-date-input').value = m[0];
+            
             document.getElementById('btn-record-action').innerText = tDict[currentLang].btnUpdate;
             document.getElementById('btn-record-cancel').classList.remove('hidden');
         };
@@ -667,24 +800,37 @@
             const d = document.getElementById('manual-date-input').value; if (!d) return;
             const s = students.find(it => it.id === currentHistoryStudentId);
             const formatted = `${d} (${tDict[currentLang].days[new Date(d.replace(/-/g, "/")).getDay()]})`;
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { usedLessons: s.usedLessons + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { usedLessons: (s.usedLessons || 0) + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
             document.getElementById('manual-date-input').value = "";
         };
 
         const updateManualRecord = async () => {
             const d = document.getElementById('manual-date-input').value; if (!d) return;
             const s = students.find(it => it.id === currentHistoryStudentId);
+            if (!s || !s.attendanceHistory) return;
             
-            // 使用跨语言解析方法，保证在编辑时原本的动作标签不会丢失，同时按照当前语言重组
-            const originalRecord = (s.attendanceHistory || [])[editingRecordIndex];
+            // 使用跨语言解析方法，保证在编辑时原本的动作标签不会丢失
+            const originalRecord = s.attendanceHistory[editingRecordIndex];
             const originalAction = checkAction(originalRecord);
             
             let formatted = `${d} (${tDict[currentLang].days[new Date(d.replace(/-/g, "/")).getDay()]})`;
+            
             if (originalAction.key) {
                 formatted += originalAction.isBracketed ? ` ${tDict[currentLang][originalAction.key]}` : ` [${tDict[currentLang][originalAction.key]}]`;
+            } else {
+                // BUG FIX: 提取未识别的额外附加文字（例如 [+12 续费] ），确保它们不会在更新日期时被意外删除！
+                const bracketMatch = originalRecord.match(/\[(.*?)\]/);
+                if (bracketMatch) {
+                    formatted += ` [${bracketMatch[1]}]`;
+                } else {
+                    const parts = originalRecord.split(')');
+                    if (parts.length > 1 && parts[1].trim() !== '') {
+                        formatted += ` ${parts[1].trim()}`;
+                    }
+                }
             }
 
-            const nh = [...(s.attendanceHistory || [])]; nh[editingRecordIndex] = formatted;
+            const nh = [...s.attendanceHistory]; nh[editingRecordIndex] = formatted;
             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { attendanceHistory: nh });
             window.cancelRecordEdit();
         };
@@ -692,7 +838,7 @@
         window.deleteRecord = (idx) => customConfirm(tDict[currentLang].confirmDeleteRecord, async () => {
             const s = students.find(it => it.id === currentHistoryStudentId);
             const nh = [...(s.attendanceHistory || [])]; nh.splice(idx, 1);
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { usedLessons: Math.max(0, s.usedLessons - 1), attendanceHistory: nh });
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { usedLessons: Math.max(0, (s.usedLessons || 0) - 1), attendanceHistory: nh });
         });
 
         window.openAddModal = () => {
@@ -703,17 +849,34 @@
             document.getElementById('input-used').value = "0";
 
             const sel = document.getElementById('input-teacher'); 
-            sel.innerHTML = `<option value="" disabled selected>${tDict[currentLang].placeholderTeacher}</option>` + teacherList.map(t => `<option value="${t}">${t}</option>`).join('');
-            if (!isAdmin) { sel.value = loggedUser; sel.disabled = true; } else { sel.value = ""; sel.disabled = false; }
+            sel.innerHTML = `<option value="" disabled selected>${tDict[currentLang].placeholderTeacher}</option>` + activeTeachers.map(t => `<option value="${t}">${t}</option>`).join('');
+            if (!isAdmin) { 
+                sel.innerHTML = `<option value="${loggedUser}" selected>${loggedUser}</option>`;
+                sel.value = loggedUser; 
+                sel.disabled = true; 
+            } else { 
+                sel.value = ""; 
+                sel.disabled = false; 
+            }
             document.getElementById('modal-title').innerText = tDict[currentLang].modalTitleAdd; window.toggleModal(true);
         };
 
         window.openEditModal = (id) => {
-            const s = students.find(it => it.id === id); document.getElementById('input-id').value = s.id;
-            document.getElementById('input-name').value = s.name; document.getElementById('input-contract').value = s.contractId || "";
+            const s = students.find(it => it.id === id); 
+            if (!s) return;
+            document.getElementById('input-id').value = s.id;
+            document.getElementById('input-name').value = s.name || ""; 
+            document.getElementById('input-contract').value = s.contractId || "";
             document.getElementById('input-class').value = s.studentClass || "";
-            const sel = document.getElementById('input-teacher'); sel.innerHTML = teacherList.map(t => `<option value="${t}">${t}</option>`).join('');
-            sel.value = s.teacher; sel.disabled = !isAdmin;
+            
+            const sel = document.getElementById('input-teacher'); 
+            // 完美处理离职老师的旧学生读取
+            let options = [...activeTeachers];
+            if (s.teacher && !options.includes(s.teacher)) options.unshift(s.teacher);
+            
+            sel.innerHTML = options.map(t => `<option value="${t}">${t}</option>`).join('');
+            sel.value = s.teacher || ""; 
+            sel.disabled = !isAdmin;
             
             document.getElementById('add-lesson-container').classList.remove('hidden'); // Show Renew input
             document.getElementById('input-add').value = ""; // Reset Renew Input
@@ -730,7 +893,7 @@
             const teacherVal = document.getElementById('input-teacher').value; 
             if (!teacherVal) return;
             
-            let rawTotal = document.getElementById('input-total').value;
+            let rawTotal = document.getElementById('input-total').value || "0";
             let baseTotal = parseInt(rawTotal.replace(/\D/g, '')) || 0;
             const addLessons = parseInt(document.getElementById('input-add').value) || 0;
             const now = new Date();
@@ -774,14 +937,14 @@
         window.updateLesson = async (id) => {
             const s = students.find(it => it.id === id); if (!s) return;
             const now = new Date(); const formatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]})`;
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { usedLessons: s.usedLessons + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { usedLessons: (s.usedLessons || 0) + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
         };
 
         window.markAbsent = async (id) => {
             const s = students.find(it => it.id === id); if (!s) return;
             const now = new Date(); 
             const formatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]}) ${tDict[currentLang].absentMark}`;
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { usedLessons: s.usedLessons + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', id), { usedLessons: (s.usedLessons || 0) + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
         };
 
         window.markTrial = async (id) => {
@@ -832,14 +995,21 @@
             document.getElementById('portal-title').innerText = t.portalTitle;
             document.getElementById('portal-subtitle').innerText = t.portalSub;
             document.getElementById('entry-name').placeholder = t.entryName;
-            document.getElementById('entry-pin').placeholder = t.entryPin;
+            document.getElementById('entry-pin').placeholder = currentLang === 'zh' ? "访问识别码 (PIN)" : (currentLang === 'en' ? "Access PIN" : (currentLang === 'ru' ? "PIN-код доступа" : "Kirish PIN-kodi"));
             document.getElementById('btn-enter').innerText = t.btnEnter;
-            document.getElementById('auth-error').innerText = t.errPin;
+            document.getElementById('auth-error').innerText = currentLang === 'zh' ? "识别码或姓名错误，请重新输入。" : (currentLang === 'en' ? "Invalid PIN or Name." : "PIN noto'g'ri.");
             if (!loggedUser) return;
 
             document.getElementById('current-lang-text').innerText = currentLang.toUpperCase();
             document.querySelectorAll('.lang-item').forEach(btn => { 
                 btn.classList.toggle('active', btn.onclick.toString().includes(`'${currentLang}'`)); 
+            });
+
+            // Calculate active teachers (exclude those where ALL their students are archived)
+            activeTeachers = teacherList.filter(teacher => {
+                const tStudents = students.filter(s => s.teacher === teacher);
+                if (tStudents.length === 0) return true; // Newly joined, no students yet, keep active
+                return tStudents.some(s => !s.isArchived); // Active if at least 1 student is not archived
             });
 
             let baseFiltered = isAdmin ? (selectedTeacher === 'all' ? students : students.filter(s => s.teacher === selectedTeacher)) : students.filter(s => s.teacher === loggedUser);
@@ -918,7 +1088,7 @@
             if (isAdmin) {
                 const tc = document.getElementById('teacher-filter-container');
                 tc.innerHTML = `<button onclick="setTeacherFilter('all')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedTeacher==='all'?'active':''}">${t.filterAll}</button>`;
-                teacherList.forEach(n => tc.innerHTML += `<button onclick="setTeacherFilter('${n}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedTeacher===n?'active':''}">${n}</button>`);
+                activeTeachers.forEach(n => tc.innerHTML += `<button onclick="setTeacherFilter('${n}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedTeacher===n?'active':''}">${n}</button>`);
             }
 
             // 动态提取当前选定老师名下实际存在的标准班级
