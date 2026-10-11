@@ -921,9 +921,13 @@
                 teacherList.forEach(n => tc.innerHTML += `<button onclick="setTeacherFilter('${n}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedTeacher===n?'active':''}">${n}</button>`);
             }
 
+            // 动态提取当前选定老师名下实际存在的标准班级
+            const activeClassesSet = new Set(baseFiltered.map(s => getStandardClass(s.studentClass)));
+            const availableClasses = standardClasses.filter(c => activeClassesSet.has(c));
+
             const cc = document.getElementById('class-filter-container');
             cc.innerHTML = `<button onclick="setClassFilter('all')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedClass==='all'?'active':''}">${t.filterAll}</button>`;
-            standardClasses.forEach(c => cc.innerHTML += `<button onclick="setClassFilter('${c}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedClass===c?'active':''}">${c}</button>`);
+            availableClasses.forEach(c => cc.innerHTML += `<button onclick="setClassFilter('${c}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedClass===c?'active':''}">${c}</button>`);
 
             const sc = document.getElementById('status-filter-container');
             sc.innerHTML = `<button onclick="setStatusFilter('all')" class="filter-chip px-6 py-3 rounded-full text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${selectedStatus==='all'?'active':''}">${t.filterAll}</button>
