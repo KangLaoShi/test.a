@@ -484,6 +484,11 @@
             en: { portalTitle: "Teacher Workspace", portalSub: "Private Portal", entryName: "Teacher Name", btnEnter: "Unlock", errPin: "Not found.", dashboardTitle: "Dashboard", subtitle: "Sync Portal", addBtn: "Add New", statTotal: "Students", statWarning: "Warning", statOverdue: "Due", statFrozen: "Frozen", statArchived: "Archived", statTrial: "Trials", thName: "Name", thTeacher: "Rep.", thClass: "Class", thProgress: "Progress", thRemaining: "Left", thLastPay: "Pay Date", thStatus: "Status", thActions: "Actions", actionPlus: "+1", actionAbsent: "Absence", actionTrial: "Trial", actionFreeze: "Freeze", actionUnfreeze: "Unfreeze", actionArchive: "Archive", actionUnarchive: "Restore", historyTitle: "Logs", historyEmpty: "Empty", btnClose: "Close", manualAdd: "Add", btnUpdate: "Update", confirmTitle: "Confirm", confirmDelete: "Delete?", confirmDeleteRecord: "Delete?", btnOk: "Yes", btnAbort: "No", labelContract: "Contract No.", placeholderContract: "Enter No.", labelName: "Name", placeholderName: "Enter name", labelTeacher: "Teacher", labelClass: "Class", placeholderClass: "Type", placeholderTeacher: "Select", labelTotal: "Total", labelUsed: "Used", labelPayDate: "Date", btnCancel: "Cancel", btnSave: "Save", filterLabel: "Rep:", filterClassLabel: "Level:", filterStatusLabel: "Status:", filterAll: "All", statusPaid: "Paid", statusWarning: "Low", statusOverdue: "Due", statusFrozen: "Frozen", statusArchived: "Archive", statusTrial: "Trial", modalTitleAdd: "Add Student", modalTitleEdit: "Edit Info", days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], absentMark: "[Absence]", trialMark: "[Trial]", notesTitle: "Notes", notesPlaceholder: "Enter notes...", btnHistory: "History", btnAddNote: "Add", notesEmpty: "No notes", labelAdd: "Renew", labelIndividual: "Individual", tabStudents: "Students", tabSchedule: "Schedule", tabTeachers: "Teachers", schedTitle: "Weekly Schedule", schedSub: "Haftalik Dars Jadvali", mwfTitle: "Odd Days (Mon, Wed, Fri)", mwfSub: "Toq kunlar", ttsTitle: "Even Days (Tue, Thu, Sat)", ttsSub: "Juft kunlar", noneTitle: "Pending Classes", noneSub: "Kutayotgan darslar", phTime: "Time", phClass: "Enter or select class", noProgress: "No progress, click to add...", progTitle: "Class Progress", progSub: "Course Progress", progEmpty: "No progress records for this class", progPlaceholder: "Enter today's progress...", btnProg: "Save Progress", teacherTitle: "Teacher Management", teacherSub: "Management", addTeacherTitle: "Add New Teacher", phTeacherName: "Name (e.g. Wanglaoshi)", btnAddTeacher: "Add to System" }
         };
 
+        tDict.zh.unspecified = "未注明";
+        tDict.uz.unspecified = "Noma'lum";
+        tDict.ru.unspecified = "Не указано";
+        tDict.en.unspecified = "Unspecified";
+
         let currentLang = 'zh', selectedTeacher = 'all', selectedClass = 'all', selectedCategory = 'all', selectedStatus = 'all';
         let schedFilterTeacher = 'all', schedFilterCat = 'all';
         let students = [], classesData = [], teacherList = [], activeTeachers = [];
@@ -711,7 +716,7 @@
                 const dbClass = classesData.find(cd => cd.id === def.id);
                 visualClasses.push({
                     id: def.id,
-                    name: def.name, // Display name
+                    name: dbClass?.name || def.name, // 优先读取云端修改后的名字，否则使用默认
                     teacher: dbClass?.teacher || def.teacher,
                     time: dbClass?.time || def.time,
                     schedule: dbClass?.scheduleType || def.scheduleType,
@@ -725,12 +730,17 @@
                     visualClasses.push({
                         id: cd.id,
                         name: cd.name || cd.id,
-                        teacher: cd.teacher || '待定',
+                        teacher: cd.teacher || '未注明',
                         time: cd.time || '待定',
                         schedule: cd.scheduleType || 'NONE',
                         logs: cd.logs || []
                     });
                 }
+            });
+
+            // 将所有 “待定” 的老师统一归置为 “未注明”
+            visualClasses.forEach(vc => {
+                if (!vc.teacher || vc.teacher === '待定') vc.teacher = '未注明';
             });
 
             // 3. 按照上课时间早晚严格排序 (瀑布流展示)
@@ -745,18 +755,24 @@
             document.getElementById('col-none').innerHTML = '';
 
             // 强制四重扫描：确保拉取系统内绝对完整的老师名单
-            const allTeachersSet = new Set(['待定', '未注明', 'Bobur']);
+            const allTeachersSet = new Set(['未注明', 'Bobur']);
             if (Array.isArray(teacherList)) teacherList.forEach(t => allTeachersSet.add(t));
             if (Array.isArray(activeTeachers)) activeTeachers.forEach(t => allTeachersSet.add(t));
             if (Array.isArray(students)) students.forEach(s => { if (s.teacher) allTeachersSet.add(s.teacher); });
             visualClasses.forEach(vc => { if (vc.teacher) allTeachersSet.add(vc.teacher); });
+            
+            // 清除可能残留的“待定”选项
+            if (allTeachersSet.has('待定')) allTeachersSet.delete('待定'); 
 
             // 渲染筛选面板按钮
             const t = tDict[currentLang] || tDict['zh'];
             const stc = document.getElementById('sched-teacher-filter-container');
             if(stc) {
                 stc.innerHTML = `<button onclick="setSchedTeacherFilter('all')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${schedFilterTeacher==='all'?'active':''}">${t.filterAll}</button>`;
-                Array.from(allTeachersSet).sort().forEach(n => stc.innerHTML += `<button onclick="setSchedTeacherFilter('${n}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${schedFilterTeacher===n?'active':''}">${n}</button>`);
+                Array.from(allTeachersSet).sort().forEach(n => {
+                    const displayName = n === '未注明' ? (t.unspecified || '未注明') : n;
+                    stc.innerHTML += `<button onclick="setSchedTeacherFilter('${n}')" class="filter-chip px-5 py-2.5 rounded-2xl text-[10px] font-black border border-[#D1DEDC] bg-white shadow-sm transition-all ${schedFilterTeacher===n?'active':''}">${displayName}</button>`;
+                });
             }
 
             const scc = document.getElementById('sched-cat-filter-container');
@@ -792,7 +808,10 @@
                 if (vc.schedule === 'MWF') { themeColor = '#8DC63F'; themeBg = 'bg-[#8DC63F]'; themeText = 'text-[#8DC63F]'; } 
                 else if (vc.schedule === 'TTS') { themeColor = '#3B82F6'; themeBg = 'bg-[#3B82F6]'; themeText = 'text-[#3B82F6]'; }
                 
-                const teacherOpts = Array.from(allTeachersSet).map(t => `<option value="${t}" ${vc.teacher === t ? 'selected' : ''}>${t}</option>`).join('');
+                const teacherOpts = Array.from(allTeachersSet).map(tch => {
+                    const displayName = tch === '未注明' ? (t.unspecified || '未注明') : tch;
+                    return `<option value="${tch}" ${vc.teacher === tch ? 'selected' : ''}>${displayName}</option>`;
+                }).join('');
 
                 return `
                     <div class="relative pl-6 sm:pl-8 py-6 group w-full">
