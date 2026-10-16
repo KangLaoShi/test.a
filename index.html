@@ -354,9 +354,12 @@
             
             <div class="flex flex-col gap-3 shrink-0">
                 <textarea id="progress-input" rows="3" class="w-full px-6 py-4 bg-[#F7FAF9] rounded-3xl font-bold border-none outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm resize-none" placeholder="输入今天的教学进度，例如：Lesson 4, 生词1-15..."></textarea>
-                <button onclick="addProgressLog()" id="btn-add-progress" class="w-full py-4 bg-indigo-500 text-white rounded-3xl font-black shadow-lg shadow-indigo-500/20 hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                    <i data-lucide="send" class="w-4 h-4"></i>录入进度
-                </button>
+                <div class="flex gap-2">
+                    <button onclick="cancelProgressEdit()" id="btn-cancel-progress-edit" class="hidden px-5 py-4 bg-rose-50 text-rose-500 rounded-3xl font-black shadow-sm transition-all active:scale-95"><i data-lucide="x" class="w-5 h-5"></i></button>
+                    <button onclick="addProgressLog()" id="btn-add-progress" class="flex-1 py-4 bg-indigo-500 text-white rounded-3xl font-black shadow-lg shadow-indigo-500/20 hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="send" class="w-4 h-4"></i>录入进度
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -493,7 +496,7 @@
         let schedFilterTeacher = 'all', schedFilterCat = 'all';
         let students = [], classesData = [], teacherList = [], activeTeachers = [];
         let loggedUser = null, isAdmin = false;
-        let currentHistoryStudentId = null, currentNotesStudentId = null, editingRecordIndex = -1, currentProgressClassId = null;
+        let currentHistoryStudentId = null, currentNotesStudentId = null, editingRecordIndex = -1, currentProgressClassId = null, currentProgressEditIndex = -1;
         let db, auth;
 
         const standardClasses = ["HSK1-1", "HSK1-2", "HSK1-3", "HSK2-1", "HSK2-2", "HSK2-3", "HSK3-1", "HSK3-2", "HSK3-3", "HSK4-1", "HSK4-2", "HSK5-1", "HSK5-2", "Individual-1", "Individual-2", "xitoy uzb"];
@@ -548,7 +551,7 @@
             window.toggleModal = (show) => { document.getElementById('modal-overlay').style.display = show ? 'flex' : 'none'; };
             window.toggleHistoryModal = (show) => { if (!show) window.cancelRecordEdit(); document.getElementById('history-modal-overlay').style.display = show ? 'flex' : 'none'; };
             window.toggleNotesModal = (show) => { document.getElementById('notes-modal-overlay').style.display = show ? 'flex' : 'none'; };
-            window.toggleProgressModal = (show) => { document.getElementById('progress-modal-overlay').style.display = show ? 'flex' : 'none'; };
+            window.toggleProgressModal = (show) => { if (!show && window.cancelProgressEdit) window.cancelProgressEdit(); document.getElementById('progress-modal-overlay').style.display = show ? 'flex' : 'none'; };
 
             // Tab Switching Logic
             window.switchTab = (tabId) => {
@@ -883,12 +886,19 @@
             if (!dbClass || !dbClass.logs || dbClass.logs.length === 0) {
                 list.innerHTML = `<div class="py-12 text-center text-slate-400 italic text-sm font-medium">${tDict[currentLang].progEmpty}</div>`;
             } else {
-                [...dbClass.logs].reverse().forEach(log => {
+                [...dbClass.logs].reverse().forEach((log, revIdx) => {
+                    const originalIdx = dbClass.logs.length - 1 - revIdx;
                     list.innerHTML += `
-                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2 relative">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2 relative group hover:border-indigo-100 transition-colors">
                             <div class="flex justify-between items-center border-b border-slate-50 pb-2">
-                                <span class="text-[10px] font-black text-indigo-600 uppercase bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100">${log.author}</span>
-                                <span class="text-[10px] font-bold text-slate-400">${log.date}</span>
+                                <div class="flex gap-2 items-center">
+                                    <span class="text-[10px] font-black text-indigo-600 uppercase bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100">${log.author}</span>
+                                    <span class="text-[10px] font-bold text-slate-400">${log.date}</span>
+                                </div>
+                                <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button onclick="startEditProgress(${originalIdx})" class="p-1.5 text-slate-300 hover:text-indigo-500 bg-slate-50 hover:bg-indigo-50 rounded-lg transition-all" title="编辑"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+                                    <button onclick="deleteProgress(${originalIdx})" class="p-1.5 text-slate-300 hover:text-rose-500 bg-slate-50 hover:bg-rose-50 rounded-lg transition-all" title="删除"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                                </div>
                             </div>
                             <p class="text-sm font-bold text-[#1A2E35] whitespace-pre-wrap">${log.text}</p>
                         </div>
@@ -896,9 +906,42 @@
                 });
             }
             
-            document.getElementById('progress-input').value = '';
+            if (currentProgressEditIndex === -1) {
+                document.getElementById('progress-input').value = '';
+            }
             window.toggleProgressModal(true);
             lucide.createIcons();
+        };
+
+        window.startEditProgress = (idx) => {
+            currentProgressEditIndex = idx;
+            const dbClass = classesData.find(cd => cd.id === currentProgressClassId);
+            if (!dbClass || !dbClass.logs || !dbClass.logs[idx]) return;
+            document.getElementById('progress-input').value = dbClass.logs[idx].text;
+            document.getElementById('btn-add-progress').innerHTML = `<i data-lucide="edit-2" class="w-4 h-4"></i>${tDict[currentLang].btnUpdate}`;
+            document.getElementById('btn-cancel-progress-edit').classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.cancelProgressEdit = () => {
+            currentProgressEditIndex = -1;
+            document.getElementById('progress-input').value = '';
+            document.getElementById('btn-add-progress').innerHTML = `<i data-lucide="send" class="w-4 h-4"></i>${tDict[currentLang].btnProg}`;
+            document.getElementById('btn-cancel-progress-edit').classList.add('hidden');
+            lucide.createIcons();
+        };
+
+        window.deleteProgress = (idx) => {
+            const t = tDict[currentLang] || tDict['zh'];
+            customConfirm(t.confirmDeleteRecord, async () => {
+                const dbClass = classesData.find(cd => cd.id === currentProgressClassId);
+                if (!dbClass || !dbClass.logs) return;
+                const updatedLogs = [...dbClass.logs];
+                updatedLogs.splice(idx, 1);
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'classes', currentProgressClassId), { logs: updatedLogs }, { merge: true });
+                if (currentProgressEditIndex === idx) window.cancelProgressEdit();
+                window.openProgressModal(currentProgressClassId);
+            });
         };
 
         window.addProgressLog = async () => {
@@ -906,19 +949,25 @@
             const text = input.value.trim();
             if (!text || !currentProgressClassId) return;
 
-            const now = new Date();
-            const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-            
-            const newLog = { author: loggedUser || 'Admin', date: dateStr, text: text };
-            
             const dbClass = classesData.find(cd => cd.id === currentProgressClassId) || { logs: [] };
-            const updatedLogs = [...(dbClass.logs || []), newLog];
+            const updatedLogs = [...(dbClass.logs || [])];
+
+            if (currentProgressEditIndex >= 0) {
+                // Update existing
+                updatedLogs[currentProgressEditIndex].text = text;
+            } else {
+                // Add new
+                const now = new Date();
+                const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+                const newLog = { author: loggedUser || 'Admin', date: dateStr, text: text };
+                updatedLogs.push(newLog);
+            }
             
             await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'classes', currentProgressClassId), { 
                 logs: updatedLogs 
             }, { merge: true });
             
-            input.value = "";
+            window.cancelProgressEdit();
             window.openProgressModal(currentProgressClassId); // refresh
         };
 
