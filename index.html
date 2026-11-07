@@ -95,7 +95,7 @@
     </div>
 
     <!-- 主页面 -->
-    <div id="app-content" class="max-w-[1440px] mx-auto p-4 md:p-8 hidden">
+    <div id="app-content" class="max-w-[1800px] w-full mx-auto p-4 md:p-8 2xl:p-12 hidden">
         <header class="relative z-[100] flex flex-col lg:flex-row lg:items-center justify-between mb-8 gap-6 bg-white/50 p-6 rounded-[32px] border border-white shadow-sm backdrop-blur-md">
             <div class="flex flex-col gap-4">
                 <div>
@@ -137,7 +137,7 @@
         <main class="space-y-8">
             
             <!-- 模块 1：课表与进度管理 (默认隐藏) -->
-            <div id="schedule-dashboard" class="hidden w-full max-w-7xl mx-auto pb-12">
+            <div id="schedule-dashboard" class="hidden w-full max-w-[1700px] mx-auto pb-12">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
                     <div>
                         <div class="flex items-center gap-2 text-[#8DC63F] mb-2">
@@ -633,6 +633,14 @@
                 
                 render();
                 if (document.getElementById('schedule-dashboard').style.display === 'block') renderSchedule();
+
+                // 实时同步弹窗数据 (修复删除/修改记录后不实时刷新的问题)
+                if (document.getElementById('history-modal-overlay') && document.getElementById('history-modal-overlay').style.display === 'flex' && currentHistoryStudentId) {
+                    window.openHistoryModal(currentHistoryStudentId);
+                }
+                if (document.getElementById('notes-modal-overlay') && document.getElementById('notes-modal-overlay').style.display === 'flex' && currentNotesStudentId) {
+                    window.openNotesModal(currentNotesStudentId);
+                }
             }, (err) => { if(err.code === 'permission-denied') customConfirm("Firebase数据读取被拒绝！请检查数据库试用期是否已过期。", ()=>{}); });
 
             // Load Classes Progress Data
@@ -1117,7 +1125,7 @@
             const d = document.getElementById('manual-date-input').value; if (!d) return;
             const s = students.find(it => it.id === currentHistoryStudentId);
             const formatted = `${d} (${tDict[currentLang].days[new Date(d.replace(/-/g, "/")).getDay()]})`;
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { usedLessons: (s.usedLessons || 0) + 1, attendanceHistory: [...(s.attendanceHistory || []), formatted] });
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { attendanceHistory: [...(s.attendanceHistory || []), formatted] });
             document.getElementById('manual-date-input').value = "";
         };
 
@@ -1141,7 +1149,7 @@
         window.deleteRecord = (idx) => customConfirm(tDict[currentLang].confirmDeleteRecord, async () => {
             const s = students.find(it => it.id === currentHistoryStudentId);
             const nh = [...(s.attendanceHistory || [])]; nh.splice(idx, 1);
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { usedLessons: Math.max(0, (s.usedLessons || 0) - 1), attendanceHistory: nh });
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', currentHistoryStudentId), { attendanceHistory: nh });
         });
 
         window.openAddModal = () => {
@@ -1176,7 +1184,20 @@
             e.preventDefault(); const id = document.getElementById('input-id').value, teacherVal = document.getElementById('input-teacher').value; if (!teacherVal) return;
             let rawTotal = document.getElementById('input-total').value || "0"; let baseTotal = parseInt(rawTotal.replace(/\D/g, '')) || 0;
             const addLessons = parseInt(document.getElementById('input-add').value) || 0; const now = new Date(); const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} (${tDict[currentLang].days[now.getDay()]})`;
-            let additionalHistory = []; if (id && addLessons > 0) { baseTotal += addLessons; additionalHistory.push(`${dateStr} [+${addLessons} 续费]`); }
+            
+            let additionalHistory = []; 
+            if (id && addLessons > 0) { 
+                const s = students.find(it => it.id === id);
+                const currentRem = (s.totalLessons || 0) - (s.usedLessons || 0);
+                let arrearText = "";
+                if (currentRem < 0) {
+                    const arrearLabels = { zh: "含补缴欠课", uz: "Qarz to'landi", ru: "Погашен долг", en: "Arrears paid" };
+                    const label = arrearLabels[currentLang] || "含补缴欠课";
+                    arrearText = ` (${label}: ${Math.abs(currentRem)})`;
+                }
+                baseTotal += addLessons; 
+                additionalHistory.push(`${dateStr} [+${addLessons} 续费${arrearText}]`); 
+            }
 
             const data = { name: document.getElementById('input-name').value, contractId: document.getElementById('input-contract').value, studentClass: getStandardClass(document.getElementById('input-class').value), teacher: teacherVal, totalLessons: baseTotal, usedLessons: parseInt(document.getElementById('input-used').value) || 0, lastPaymentDate: document.getElementById('input-date').value, updatedAt: serverTimestamp() };
             window.toggleModal(false);
